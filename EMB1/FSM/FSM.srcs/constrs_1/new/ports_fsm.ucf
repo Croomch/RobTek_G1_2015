@@ -1,0 +1,13 @@
+NET "CLK" LOC = P60;
+
+NET "LED[0]" LOC = P42;
+NET "LED[1]" LOC = P43;
+NET "LED[2]" LOC = P44;
+NET "LED[3]" LOC = P45;
+NET "LED[4]" LOC = P49;
+NET "LED[5]" LOC = P50;
+
+NET "SW[0]" LOC = P51;
+NET "SW[1]" LOC = P57;
+
+NET "ALIVE" LOC = P47;
