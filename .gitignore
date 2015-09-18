@@ -8,3 +8,15 @@
 *.aux
 *.gz
 *.pdf
+*.exe
+*.prj
+*.xmsgs
+*.cmd
+*.dll
+*.dat
+*.obj
+*.didat
+*.vdb
+*.bat
+*.ini
+*.sh
