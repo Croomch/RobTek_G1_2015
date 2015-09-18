@@ -5,3 +5,6 @@
 *.log
 *.runs
 *.Xil
+*.aux
+*.gz
+*.pdf
