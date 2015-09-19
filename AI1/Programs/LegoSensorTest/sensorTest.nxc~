@@ -1,0 +1,59 @@
+
+// motor defines
+#define MOTOR_L OUT_A
+#define MOTOR_R OUT_B
+#define MOTOR OUT_AB
+
+// light sensor defines
+#define SENSE_LIGHT_L IN_2
+#define SENSE_LIGHT_C IN_3
+#define SENSE_LIGHT_R IN_4
+
+// touch sensor define
+#define SENSE_TOUCH IN_1
+
+// value defines
+#define SENSOR_TRESHOLD 11 // high ~14, low ~ 8
+
+
+task main()
+{
+	// set sensors
+	SetSensor(SENSE_TOUCH, SENSOR_TOUCH);	
+	SetSensor(SENSE_LIGHT_L, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_C, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_R, SENSOR_LIGHT);
+
+	//OnFwd(MOTOR, 25); // set motors on port A and B to speed in percentage (75%)
+	//Wait(2000); // wait in ms (motors still running)
+	//OnRev(MOTOR, 25); // reverse the motors A and B
+	//Wait(2000);
+	//Off(MOTOR); // turn the two motors off
+
+
+    while(true){
+        ClearScreen();
+        TextOut(0, LCD_LINE1, "L-Left:");
+        NumOut(55,LCD_LINE1, Sensor(SENSE_LIGHT_L)); // Sensor(SENSE_LIGHT_C)
+        TextOut(0, LCD_LINE2, "L-Center:");
+        NumOut(55,LCD_LINE2, Sensor(SENSE_LIGHT_C)); 
+        TextOut(0, LCD_LINE3, "L-Right:");  
+        NumOut(55,LCD_LINE3, Sensor(SENSE_LIGHT_R));
+        
+        TextOut(0, LCD_LINE5, "Touch:");
+        if(Sensor(SENSE_TOUCH) == 1){
+            TextOut(55, LCD_LINE5, "On");
+        }
+        else {
+            TextOut(55, LCD_LINE5, "Off");
+        }
+        
+        Wait(200);
+    }
+
+	//TextOut(0, 0, "HelloWorld!");
+	//Wait(2000);
+
+}
+
+
