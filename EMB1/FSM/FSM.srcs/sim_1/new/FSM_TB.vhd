@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 18.09.2015 08:11:44
+-- Create Date: 22.09.2015 08:46:21
 -- Design Name: 
--- Module Name: BTN_TB - Behavioral
+-- Module Name: FSM_TB - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,36 +31,36 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity BTN_TB is
-end BTN_TB;
+entity FSM_TB is
+end FSM_TB;
 
-architecture Behavioral of BTN_TB is
+architecture Behavioral of FSM_TB is
 
-COMPONENT BTN_debounce
-    Port ( CLK : in STD_LOGIC;
-           CLK_SLOW : in STD_LOGIC;
-           PULSE : out STD_LOGIC;
-           BTN : in STD_LOGIC
+COMPONENT FSM
+    Port ( LED : out STD_LOGIC_VECTOR (5 downto 0);
+           SW : in STD_LOGIC_VECTOR (1 downto 0);
+           CLK : in STD_LOGIC;
+           ALIVE : out STD_LOGIC
            );
 END COMPONENT;
 
+    SIGNAL LED : STD_LOGIC_VECTOR (5 downto 0) := "000000";
+    SIGNAL SW : STD_LOGIC_VECTOR (1 downto 0) := "00";
     SIGNAL CLK : STD_LOGIC := '0';
-    SIGNAL CLK_SLOW : STD_LOGIC := '0';
-    SIGNAL PULSE : STD_LOGIC := '0';
-    SIGNAL BTN : STD_LOGIC := '0';
+    SIGNAL ALIVE : STD_LOGIC := '0';
 
     CONSTANT CLK_PER : TIME := 20ns;
-    CONSTANT CLK_SLOW_PER : TIME := 40ns;
-    CONSTANT BTN_PER : TIME := 800ns; 
+    CONSTANT SW_TOGGLE_PER : TIME := 20ms;
+    CONSTANT SW_RST_PER : TIME := 200ms;
+
 
 begin
 
-
-uut : BTN_debounce PORT MAP (
+uut : FSM PORT MAP (
+    LED => LED,
+    SW => SW,
     CLK => CLK,
-    CLK_SLOW => CLK_SLOW,
-    PULSE => PULSE,
-    BTN => BTN
+    ALIVE => ALIVE
 );
 
 
@@ -72,20 +72,20 @@ BEGIN
     WAIT FOR CLK_PER/2; 
 END PROCESS;
 
-slow_clk_p : PROCESS
+sw_rst_p : PROCESS
 BEGIN
-    CLK_SLOW <= '0';
-    WAIT FOR CLK_SLOW_PER/2;
-    CLK_SLOW <= '1';
-    WAIT FOR CLK_SLOW_PER/2; 
+    SW(1) <= '0';
+    WAIT FOR SW_RST_PER*0.9;
+    SW(1) <= '1';
+    WAIT FOR SW_RST_PER*0.1; 
 END PROCESS;
 
-btn_p : PROCESS
+sw_toggle_p : PROCESS
 BEGIN
-    BTN <= '0';
-    WAIT FOR BTN_PER/2;
-    BTN <= '1';
-    WAIT FOR BTN_PER/2; 
+    SW(0) <= '0';
+    WAIT FOR SW_TOGGLE_PER/2;
+    SW(0) <= '1';
+    WAIT FOR SW_TOGGLE_PER/2; 
 END PROCESS;
 
 end Behavioral;
