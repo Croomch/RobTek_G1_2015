@@ -1,0 +1,86 @@
+
+// motor defines
+#define MOTOR_L OUT_A
+#define MOTOR_R OUT_B
+#define MOTOR OUT_AB
+
+// light sensor defines
+#define SENSE_LIGHT_L IN_2
+#define SENSE_LIGHT_C IN_3
+#define SENSE_LIGHT_R IN_4
+
+
+// value defines
+#define SENSOR_TRESHOLD 1.1 // how step the function is
+
+
+task main()
+{
+	// set sensors
+	//SetSensor(SENSE_TOUCH, SENSOR_TOUCH);	
+	SetSensor(SENSE_LIGHT_L, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_C, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_R, SENSOR_LIGHT);
+    
+    SetSensorLight(SENSE_LIGHT_L);
+    SetSensorLight(SENSE_LIGHT_R);
+    SetSensorLight(SENSE_LIGHT_C);
+    
+    
+	//OnFwd(MOTOR, 25); // set motors on port A and B to speed in percentage (75%)
+	//Wait(2000); // wait in ms (motors still running)
+	//OnRev(MOTOR, 25); // reverse the motors A and B
+	//Wait(2000);
+	//Off(MOTOR); // turn the two motors off
+
+    bool stop_robot = false;
+    
+    TextOut(0, LCD_LINE1, "Offset:");
+    TextOut(0, LCD_LINE2, "Turn:");
+    
+    float y0, y1, y2;
+    
+    float speed = 30;
+    float P = 10;
+    
+    while(!stop_robot){
+        // find the sensor values (act)
+        y0 = Sensor(SENSE_LIGHT_L);
+        y1 = Sensor(SENSE_LIGHT_C);
+        y2 = Sensor(SENSE_LIGHT_R);
+        
+        float a = (y2  - 2* y1 + y0)/2;
+        float b = (y1 - y0 - (y2 - 2*y1 + y0)/2 );
+        
+        float x_max = -b/ (2 * a);
+        
+        float x_off = x_max - 1.0; // offset from the line
+        
+        NumOut(40,LCD_LINE1, x_off);
+        
+        if(x_off > 0){
+            TextOut(40, LCD_LINE2, "Left");
+        } 
+        else {
+            TextOut(40, LCD_LINE2, "Right");
+        }
+        
+        float left_m = speed - x_off * P;
+        float right_m = speed + x_off * P;
+        
+        if(left_m < 10){
+            left_m = 10;
+        }
+        if(right_m < 10){
+            right_m = 10;
+        }
+        
+        OnFwd(MOTOR_L, left_m);
+        OnFwd(MOTOR_R, right_m);
+        
+        
+        Wait(50);
+    }
+}
+
+
