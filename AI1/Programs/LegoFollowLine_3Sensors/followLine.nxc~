@@ -11,7 +11,7 @@
 
 
 // value defines
-#define SENSOR_TRESHOLD 1.1 // how step the function is
+#define SENSOR_TRESHOLD 0 // how step the function is (a-val)
 
 
 task main()
@@ -40,14 +40,14 @@ task main()
     
     float y0, y1, y2;
     
-    float speed = 30;
-    float P = 10;
+    float speed = 40;
+    float P = 30;
     
     while(!stop_robot){
         // find the sensor values (act)
-        y0 = Sensor(SENSE_LIGHT_L);
-        y1 = Sensor(SENSE_LIGHT_C);
-        y2 = Sensor(SENSE_LIGHT_R);
+        y0 = GetInput(SENSE_LIGHT_L,RawValueField);
+        y1 = GetInput(SENSE_LIGHT_C,RawValueField);
+        y2 = GetInput(SENSE_LIGHT_R,RawValueField);
         
         float a = (y2  - 2* y1 + y0)/2;
         float b = (y1 - y0 - (y2 - 2*y1 + y0)/2 );
@@ -65,21 +65,21 @@ task main()
             TextOut(40, LCD_LINE2, "Right");
         }
         
-        float left_m = speed - x_off * P;
-        float right_m = speed + x_off * P;
+        float left_m = left_m - x_off * P;
+        float right_m = right_m + x_off * P;
         
-        if(left_m < 10){
-            left_m = 10;
+        if(left_m < 0){
+            left_m = 0;
         }
-        if(right_m < 10){
-            right_m = 10;
+        if(right_m < 0){
+            right_m = 0;
         }
         
         OnFwd(MOTOR_L, left_m);
         OnFwd(MOTOR_R, right_m);
         
         
-        Wait(50);
+        Wait(0);
     }
 }
 

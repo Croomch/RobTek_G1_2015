@@ -1,0 +1,56 @@
+
+// motor defines
+#define MOTOR_L OUT_A
+#define MOTOR_R OUT_B
+#define MOTOR OUT_AB
+
+// light sensor defines
+#define SENSE_LIGHT_L IN_1
+#define SENSE_LIGHT_R IN_2
+
+
+task main()
+{
+	// set sensors
+	SetSensor(SENSE_LIGHT_L, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_R, SENSOR_LIGHT);
+
+    SetSensorLight(SENSE_LIGHT_L);
+    SetSensorLight(SENSE_LIGHT_R);
+    
+    float light_l, light_r;
+    
+    while(true){
+        ClearScreen();
+
+        TextOut(0, LCD_LINE1, "L-Left:");
+        TextOut(0, LCD_LINE2, "L-Right:");  
+
+        TextOut(0, LCD_LINE4, "Offset:");
+        TextOut(0, LCD_LINE5, "Turn:");
+
+        light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+
+        NumOut(55,LCD_LINE1, light_l); // Sensor(SENSE_LIGHT_C)
+        NumOut(55,LCD_LINE2, light_r);        
+        
+                
+        float x_off = light_l - light_r; // offset from the line
+        
+        NumOut(40,LCD_LINE4, x_off);
+        
+        if(x_off > 0){
+            TextOut(40, LCD_LINE5, "Left");
+        } 
+        else {
+            TextOut(40, LCD_LINE5, "Right");
+        }
+        
+   
+        
+        Wait(200);
+    }
+}
+
+

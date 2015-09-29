@@ -1,0 +1,72 @@
+
+// motor defines
+#define MOTOR_L OUT_A
+#define MOTOR_R OUT_B
+#define MOTOR OUT_AB
+
+// light sensor defines
+#define SENSE_LIGHT_L IN_2
+#define SENSE_LIGHT_C IN_3
+#define SENSE_LIGHT_R IN_4
+
+
+task main()
+{
+	// set sensors
+	SetSensor(SENSE_LIGHT_L, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_C, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_R, SENSOR_LIGHT);
+
+    SetSensorLight(SENSE_LIGHT_L);
+    SetSensorLight(SENSE_LIGHT_R);
+    SetSensorLight(SENSE_LIGHT_C);
+    
+    float y0, y1, y2;
+
+    while(true){
+        ClearScreen();
+
+        TextOut(0, LCD_LINE1, "L-Left:");
+        TextOut(0, LCD_LINE2, "L-Center:");
+        TextOut(0, LCD_LINE3, "L-Right:");  
+
+        TextOut(0, LCD_LINE5, "Offset:");
+        TextOut(0, LCD_LINE6, "Turn:");
+        TextOut(0, LCD_LINE7, "a-val:");
+
+        NumOut(55,LCD_LINE1, Sensor(SENSE_LIGHT_L)); // Sensor(SENSE_LIGHT_C)
+        NumOut(55,LCD_LINE2, Sensor(SENSE_LIGHT_C)); 
+        NumOut(55,LCD_LINE3, Sensor(SENSE_LIGHT_R));
+        
+        y0 = GetInput(SENSE_LIGHT_L,RawValueField);
+        y1 = GetInput(SENSE_LIGHT_C,RawValueField);
+        y2 = GetInput(SENSE_LIGHT_R,RawValueField);
+        
+        float a = (y2  - 2* y1 + y0)/2;
+        float b = (y1 - y0 - (y2 - 2*y1 + y0)/2 );
+        
+        float x_max = -b/ (2 * a);
+        
+        float x_off = x_max - 1.0; // offset from the line
+        
+        NumOut(40,LCD_LINE5, x_off);
+        
+        if(x_off > 0){
+            TextOut(40, LCD_LINE6, "Left");
+        } 
+        else {
+            TextOut(40, LCD_LINE6, "Right");
+        }
+        
+        
+        NumOut(40,LCD_LINE7, a);
+        
+   
+        
+   
+        
+        Wait(200);
+    }
+}
+
+
