@@ -1,0 +1,11 @@
+report
+ - behaviours - L
+ - structure - A
+ 
+lego
+ - turns (l,r,b,f) - A
+
+c++
+ - load map - L
+ - find path - L
+ - path to robot - A
