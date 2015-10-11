@@ -24,5 +24,7 @@
 *.dgb
 *.html
 *.sim
-
+*.b##
+*.s*
+*.b#*
 AI1/Programs/sokoban/build-main-Desktop-Default
