@@ -8,25 +8,21 @@
 
 #include "graph.h"
 
-#define MAP_FREE 0
-#define MAP_WALL 1
-#define MAP_GOAl 2
-
 
 
 class Sokoban
 {
 public:
     Sokoban() {
-        map_size_.y = 0;
-        map_size_.x = 0;
+        map_size_.y_ = 0;
+        map_size_.x_ = 0;
 
         path_ = "";
     }
 
     Sokoban(std::string filename) {
-        map_size_.y = 0;
-        map_size_.x = 0;
+        map_size_.y_ = 0;
+        map_size_.x_ = 0;
 
         path_ = "";
 
@@ -52,8 +48,8 @@ public:
     void pathToRobot();
 
     void printMap(){
-        for(int y = 0; y < map_size_.y; y++){
-            for(int x = 0; x < map_size_.x; x++){
+        for(int y = 0; y < map_size_.y_; y++){
+            for(int x = 0; x < map_size_.x_; x++){
                 char e = map_[y][x];
                 if(e == MAP_WALL){
                     std::cout << "X";
@@ -61,8 +57,11 @@ public:
                 else if(e == MAP_FREE){
                     std::cout << " ";
                 }
-                else if(e == MAP_GOAl){
+                else if(e == MAP_GOAL){
                     std::cout << "G";
+                }
+                else {
+                    std::cout << (int)e;
                 }
 
             }
@@ -72,9 +71,13 @@ public:
 
 private:
     // takes in a map of chars to generate a wavefront map with no-go-pos=0, and rest the cost to go there
-    void wavefront(std::vector< std::vector<char> > &map_out, std::vector<pos_t> * diamonds, pos_t * robot_pos);
+    void wavefront(std::vector< std::vector<char> > &map_out, node * &state);
     // takes in a wavefronted map and the position of diamonds to output a vector of possible moves
-    void possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vector<pos_t> &diamonds, std::vector< node > &moves);
+    void possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vector<pos_t> * &diamonds, std::vector< node > &moves, node* &origo);
+    // checks if all the diamonds are placed on valid spots, takes the diamonds in and a map where the diamond positions are set to walls
+    bool validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in);
+    // checks if this node has been encountered earlier
+    bool uniqueNode(node* &origo);
 
     // map of the lane (walls, empty and goals)
     // 2d vector of chars (free, goal and wall)
