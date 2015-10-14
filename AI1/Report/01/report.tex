@@ -5,6 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\graphicspath{ {./} }
 
 \usepackage{fullpage}
 
@@ -76,7 +77,16 @@ Follow & Makes the robot follow the line till next intersection.
 With these five behaviours the robot should then be able to navigate around the map and when a tomato can is encountered, push it to its destination.
 
 \subsection{Physical Structure}
+The structure of the robot should allow the movement of the robot across the map. That means, the robot should have at least 2 motors to move in the plane of the circuit and a minimum of 2 light sensors to check its position refered to the black lines of the map and check when the robot has arrived to a crossroad.
 
+The chosen motor configuration consist in the use of 2 motors that move 2 parallel wheels. This allows us to change the direction of the movement of the robot setting a different motor speed in each motor.
+
+Two light sensors are used in this configuration. In the position control, the value of the sensors is compared, and the robot is controlled having in mind that the value of the sensors should be the same when the robot is centered on the line.
+When the value of both sensors is low, the robot is facing a crossroad.
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{Robot1.jpg}
+\end{figure}
 % img of robot (schematic)
 
 \end{document}
