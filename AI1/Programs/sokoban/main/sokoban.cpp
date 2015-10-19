@@ -118,6 +118,8 @@ bool Sokoban::findPath(){
     std::cout << "Init. finding paths..." << std::endl;
     // graph to store the tree of possibilities
     graph paths;
+    // make hash table for lookup if element exists
+    std::unordered_map<std::string,std::string> exists;
     // has a solution been found
     bool solution_found = false;
 
@@ -168,6 +170,8 @@ bool Sokoban::findPath(){
             // check that the node is valid (all diamonds are in valid positions)
             acceptableNode = acceptableNode & validNode(diamonds, wf_map); // takes the diamonds and the map with all diamonds set to wall
             if(acceptableNode){
+                // add the node to the list of existing nodes
+                // todo <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 // make wavefront from pos to see the distance to the diamonds
                 wavefront(wf_map, cheapest_leaf);
                 // find the diamonds that can be moved
@@ -362,8 +366,24 @@ bool Sokoban::validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector
 }
 
 
+int Sokoban::keyGenerator(node* &element){
+   // calculate the key for the robot (to be added to total key later)
+   int key_robot = element->getRobotPos()->x_ * map_size_.x_ + element->getRobotPos()->y_;
+   // calc diamonds
+   int key_diamonds = 0;
+   std::vector< pos_t > * dims = element->getDiamonds();
+   for(int i = 0; i < dims->size(); i++){
+        key_diamonds += (pow(2, i) - 1) * (map_size_.x_ * map_size_.y_) +  ((*dims)[i].x_ * map_size_.x_ + (*dims)[i].y_);
+   }
+   int key = key_diamonds + key_robot + (pow(2, dims->size()) - 1) * (map_size_.x_ * map_size_.y_);
+}
+
 // checks if this node has been encountered earlier
 bool Sokoban::uniqueNode(node* &origo){
+    int key = keyGenerator(origo);
+
+    std::cout << key << std::endl;
+
     return true;
 }
 

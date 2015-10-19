@@ -5,7 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\graphicspath{ {./} }
+\graphicspath{ {./graphics/} }
 
 \usepackage{fullpage}
 
@@ -77,19 +77,25 @@ Follow & Makes the robot follow the line till next intersection.
 With these five behaviours the robot should then be able to navigate around the map and when a tomato can is encountered, push it to its destination.
 
 \subsection{Physical Structure}
-The structure of the robot should allow the movement of the robot across the map. That means, the robot should have at least 2 motors to move in the plane of the circuit and a minimum of 2 light sensors to check its position refered to the black lines of the map and check when the robot has arrived to a crossroad.
+The structure of the robot should allow the movement of the robot across the map. 
+That means, the robot should have at least two motors to move in the plane of the circuit and a minimum of two light sensors to check its position referred to the black lines of the map and check when the robot has arrived to a crossroad.
 
-The chosen motor configuration consist in the use of 2 motors that move 2 parallel wheels. This allows us to change the direction of the movement of the robot setting a different motor speed in each motor.
+The chosen motor configuration consist in the use of two motors that move two parallel wheels. 
+This allows the robot to change the direction of the movement setting a different motor speed on each motor.
 
-Two light sensors are used in this configuration. In the position control, the value of the sensors is compared, and the robot is controlled having in mind that the value of the sensors should be the same when the robot is centered on the line.
-When the value of both sensors is low, the robot is facing a crossroad.
+Two light sensors are used as seen in figure \ref{fig:robotscheme}. 
+In the position control, the value of the sensors are compared and the robot is controlled having in mind that the value of the sensors should be the same when the robot is centred above the line.
+When the value of both sensors are low, the robot is facing a crossroad.
 
-In the Figure 2 we can see the built robot.
+The position of the light sensors is in the front of the robot, and the distance between them should be enough to correctly detect the line. 
+This means the light sensors should be placed close to the edges of the line such that they both detect a part of the line.
+This means that the distance between them should be around the width of the line itself as shown in figure \ref{fig:robotscheme}.
 
-\begin{figure}[h]
-\includegraphics[width=10cm]{Fig1.png}
+\begin{figure}[H]
+\includegraphics[width=10cm]{Fig2.png}
 \centering
-\caption{Images of the built robot.}
+\caption{Scheme of the proposed configuration.}
+\label{fig:robotscheme}
 \end{figure}
 
 To be able to push and guide the can across the map, the robot should have a proper tool that allows this task. 
@@ -99,13 +105,23 @@ Thinking now about the behaviours of the robot, it can be assumed that when turn
 
 The position of the light sensors is in the front of the robot, and the distance between them should be enough to detect correctly the line. This means the light sensors should be placed close to the edges of the line, and because of that the distance between them should be around the width of the line.
 
+Considering the rules of the game then the can is not permitted to be pushed left or right and because of that, no special design enabling this are required. 
+The turning back behaviour is more difficult. 
+%As the distance between the lines are short, the turn back should be done in a small place because the sensors should find the line before the crossroad.
+The distance between the line intersections are short and the turn back has to happen in free space without interacting with the nearby placed cans.
+On the same time, the robot should also finish the turn before reaching the new intersection.
+Therefore the robot should not take up too much space, such that this can happen unproblematic and in a simple way.
 
+The final build of the robot is seen in figure \ref{fig:robotImage}.
 
-\begin{figure}[T]
-\includegraphics[width=10cm]{Fig2.png}
+\begin{figure}[H]
+\includegraphics[width=10cm]{Fig1.png}
 \centering
-\caption{Scheme of the proposed configuration.}
+\caption{Images of the built robot.}
+\label{fig:robotImage}
 \end{figure}
+
+
 
 % img of robot (schematic)
 

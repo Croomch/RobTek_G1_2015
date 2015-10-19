@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <math.h>
 
 #include "graph.h"
 
@@ -78,6 +79,8 @@ private:
     bool validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in);
     // checks if this node has been encountered earlier
     bool uniqueNode(node* &origo);
+    // key generator
+    int keyGenerator(node* &element);
 
     // map of the lane (walls, empty and goals)
     // 2d vector of chars (free, goal and wall)

@@ -18,7 +18,7 @@ int main()
         std::cout << "Path found" << std::endl;
     }
 
-    solver.printMap();
+    //solver.printMap();
 
     return 0;
 }
