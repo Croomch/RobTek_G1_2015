@@ -3,14 +3,14 @@
 #include "sokoban.h"
 
 
-// todo: add check so it does not push the diamonds back and forth
+// todo: find error for why it stops early, probably it does not find possible paths to add?..
 
 int main()
 {
     std::cout << "Hello Sokoban Solver!" << std::endl;
 
-    //Sokoban solver("../../../sokoban_maps/2014competition.txt");
-    Sokoban solver("../../../sokoban_maps/simple_map.txt");
+    Sokoban solver("../../../sokoban_maps/2014competition.txt");
+    //Sokoban solver("../../../sokoban_maps/simple_map.txt");
 
     //solver.printMap();
 
@@ -18,7 +18,7 @@ int main()
         std::cout << "Path found" << std::endl;
     }
 
-    //solver.printMap();
+    solver.printMap();
 
     return 0;
 }

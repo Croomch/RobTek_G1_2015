@@ -77,10 +77,7 @@ private:
     void possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vector<pos_t> * &diamonds, std::vector< node > &moves, node* &origo);
     // checks if all the diamonds are placed on valid spots, takes the diamonds in and a map where the diamond positions are set to walls
     bool validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in);
-    // checks if this node has been encountered earlier
-    bool uniqueNode(node* &origo);
-    // key generator
-    int keyGenerator(node* &element);
+
 
     // map of the lane (walls, empty and goals)
     // 2d vector of chars (free, goal and wall)

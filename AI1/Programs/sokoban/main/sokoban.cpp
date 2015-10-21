@@ -145,19 +145,30 @@ bool Sokoban::findPath(){
     nextnode.setCost(0);
     nextnode.setRobot(pos_t(robot_.x_, robot_.y_));
     nextnode.setDiamonds(diamonds_);
-    //std::cout << "number of Diamonds: " << diamonds_.size() << std::endl;
+    std::cout << "# of Diamonds: " << diamonds_.size() << std::endl;
     // add the initial position
-    paths.addChild(nextnode);
+    paths.createChild(nextnode);
 
     std::cout << "Exploring paths..." << std::endl;
     // run this until the path is found or no paths can be taken
+    int iterations = 0; // debug thing
     while(!solution_found && paths.getNextChild(cheapest_leaf)){
+        iterations++;
         // check cheapest leaf if it is the solution
         solution_found = cheapest_leaf->compSolution(map_);
         if(!solution_found){
+            //std::cout << "Solution not yet found.\n";
             bool acceptableNode = true;
-            // check that this node has not already been found
-            acceptableNode = acceptableNode & uniqueNode(cheapest_leaf);
+            // check that this node has not already been found, if so, remove it
+            if(paths.nodeUnique(*cheapest_leaf)){
+                paths.addChild(cheapest_leaf);
+
+            }
+            else{
+                paths.deleteChild(cheapest_leaf);
+                acceptableNode = false;
+            }
+            //std::cout << "Node unique " << acceptableNode << "\n";
             // get diamonds pointer
             std::vector< pos_t > * diamonds = cheapest_leaf->getDiamonds();
             // set diamonds to walls
@@ -165,33 +176,39 @@ bool Sokoban::findPath(){
             for(int d = 0; d < diamonds->size(); d++){
                 int x = (*diamonds)[d].x_;
                 int y = (*diamonds)[d].y_;
-                wf_map[x][y] = MAP_WALL;
+                wf_map[y][x] = MAP_DIAMOND;
             }
             // check that the node is valid (all diamonds are in valid positions)
             acceptableNode = acceptableNode & validNode(diamonds, wf_map); // takes the diamonds and the map with all diamonds set to wall
+            //std::cout << "Node valid " << acceptableNode << "\n";
             if(acceptableNode){
-                // add the node to the list of existing nodes
-                // todo <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 // make wavefront from pos to see the distance to the diamonds
                 wavefront(wf_map, cheapest_leaf);
                 // find the diamonds that can be moved
                 std::vector< node > moves;
                 possibleMoves(wf_map, diamonds, moves, cheapest_leaf);
                 // add the moves to the heap (does not take care of states being the same)
+                //std::cout << "# of new moves found: " << moves.size() << "\n";
                 for(int newChild = 0; newChild < moves.size(); newChild++){
                     // here can the check for repetition be added
                     // if not, then move this to possibleMoves instead
-                    paths.addChild(moves[newChild]);
+                    paths.createChild(moves[newChild]);
                 }
-                std::cout << "Shortest path till now: " << cheapest_leaf->getCost() << std::endl;
+                //std::cout << "Shortest path till now: " << cheapest_leaf->getCost() << std::endl;
             }
+        }
+        else{
+            // return shortest path
+            cheapest_leaf->printPathToHere();
+            std::cout << "Solution Found!\n";
         }
     }
 
-    // return shortest path
-    if(solution_found){
-        cheapest_leaf->printPathToHere();
+    if(!paths.getNextChild(cheapest_leaf)){
+        std::cout << "No more possible paths left.\n";
     }
+
+    std::cout << "# of iterations gone through: " << iterations << "\n";
 
     return solution_found;
 }
@@ -201,6 +218,7 @@ void Sokoban::pathToRobot(){
 }
 
 
+// wavefront element, used in the generation of the wavefront
 struct wfElement{
     char cost_;
     pos_t point_;
@@ -293,7 +311,7 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
             char south = wfmap_in[(*diamonds)[d].y_ + 1][(*diamonds)[d].x_];
             dim[d].x_ = (*diamonds)[d].x_;
             // check north
-            if(!(MAP_IS_WALL(north)) && MAP_IS_WALKABLE(south)){
+            if(!(MAP_IS_OCCUPIED(north)) && MAP_IS_WALKABLE(south)){
                 // set values
                 tmp.setCost(currentCost + south); // pushes from south
                 dim[d].y_ = (*diamonds)[d].y_ - 1;
@@ -302,7 +320,7 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 moves.emplace_back(tmp);
             }
             // check south
-            if(!(MAP_IS_WALL(south)) && MAP_IS_WALKABLE(north)){
+            if(!(MAP_IS_OCCUPIED(south)) && MAP_IS_WALKABLE(north)){
                 // set values
                 tmp.setCost(currentCost + north); // pushes from north
                 dim[d].y_ = (*diamonds)[d].y_ + 1;
@@ -317,7 +335,7 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
             char west = wfmap_in[(*diamonds)[d].y_][(*diamonds)[d].x_ - 1];
             dim[d].y_ = (*diamonds)[d].y_;
             // check west
-            if(!(MAP_IS_WALL(west)) && MAP_IS_WALKABLE(east)){
+            if(!(MAP_IS_OCCUPIED(west)) && MAP_IS_WALKABLE(east)){
                 // set values
                 tmp.setCost(currentCost + east); // pushes from east
                 dim[d].x_ = (*diamonds)[d].x_ - 1;
@@ -326,7 +344,7 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 moves.emplace_back(tmp);
             }
             // check east
-            if(!(MAP_IS_WALL(east)) && MAP_IS_WALKABLE(west)){
+            if(!(MAP_IS_OCCUPIED(east)) && MAP_IS_WALKABLE(west)){
                 // set values
                 tmp.setCost(currentCost + west); // pushes from west
                 dim[d].x_ = (*diamonds)[d].x_ + 1;
@@ -366,26 +384,7 @@ bool Sokoban::validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector
 }
 
 
-int Sokoban::keyGenerator(node* &element){
-   // calculate the key for the robot (to be added to total key later)
-   int key_robot = element->getRobotPos()->x_ * map_size_.x_ + element->getRobotPos()->y_;
-   // calc diamonds
-   int key_diamonds = 0;
-   std::vector< pos_t > * dims = element->getDiamonds();
-   for(int i = 0; i < dims->size(); i++){
-        key_diamonds += (pow(2, i) - 1) * (map_size_.x_ * map_size_.y_) +  ((*dims)[i].x_ * map_size_.x_ + (*dims)[i].y_);
-   }
-   int key = key_diamonds + key_robot + (pow(2, dims->size()) - 1) * (map_size_.x_ * map_size_.y_);
-}
 
-// checks if this node has been encountered earlier
-bool Sokoban::uniqueNode(node* &origo){
-    int key = keyGenerator(origo);
-
-    std::cout << key << std::endl;
-
-    return true;
-}
 
 
 

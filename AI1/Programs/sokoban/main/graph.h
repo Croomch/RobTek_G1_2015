@@ -1,23 +1,27 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 #include <iostream>
+#include <unordered_map>
 
 #define MAP_FREE 0
 #define MAP_WALL 1
 #define MAP_GOAL 2
-#define MAP_WALKABLE 3
+#define MAP_DIAMOND 3
+#define MAP_WALKABLE 4
 #define MAP_IS_WALKABLE(x) (x>=MAP_WALKABLE)?true:false
 #define MAP_IS_GOAL(x) (x==MAP_GOAL)?true:false
 #define MAP_IS_WALL(x) (x==MAP_WALL)?true:false
 #define MAP_IS_EMPTY(x) (x==MAP_FREE)?true:false
+#define MAP_IS_OCCUPIED(x) (x==MAP_WALL || x==MAP_DIAMOND)?true:false
 
 struct pos_t{
     char x_, y_;
     pos_t():x_(0),y_(0){}
     pos_t(char x, char y):x_(x),y_(y){}
+
     bool operator== (const pos_t &other){
         bool ret = false;
         if(x_ == other.x_ && y_ == other.y_){
@@ -25,10 +29,30 @@ struct pos_t{
         }
         return ret;
     }
+
+    bool operator< (const pos_t &other)const{
+        bool ret = false;
+        if(x_ < other.x_){
+            ret = true;
+        }
+        else if(x_ == other.x_){
+            if(y_ < other.y_){
+                ret = true;
+            }
+        }
+        return ret;
+    }
+
+    bool operator() (const pos_t &a, const pos_t &b)const {
+        return a < b;
+    }
+
     void print(){
         std::cout << "{" << (int)x_ << ", " << (int)y_ << "}";
     }
 };
+
+
 
 
 
@@ -38,29 +62,37 @@ public:
     node():parent_(nullptr){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
+        makeKey();
     }
     node(int element):cost_(element),parent_(nullptr){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
+        makeKey();
     }
     node(int element, node * &parent):cost_(element),parent_(parent){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
+        makeKey();
     }
-    node(const node &init){*this = init;}
+    node(const node &init){*this = init;makeKey();}
 
     int getCost(){return cost_;}
+
+    std::string * getKey(){ return &key_;}
+
     void setCost(int element_in){
         cost_ = element_in;
     }
     void setRobot(pos_t pos){
         robot_pos_ = pos;
+        makeKey();
     }
     void setParent(node * &parent){
         parent_= parent;
     }
     void setDiamonds(std::vector< pos_t > &diamonds){
         diamonds_ = diamonds;
+        makeKey();
     }
     node* getParent(){return parent_;}
     std::vector< pos_t > * getDiamonds(){return &diamonds_;}
@@ -88,11 +120,59 @@ public:
         return ret;
     }
 
+    bool compSolution(node &other){
+        std::vector< pos_t >* goals = other.getDiamonds();
+        bool ret = false;
+        int matches = 0;
+        for(int d = 0; d < diamonds_.size(); d++){
+            for(int g = 0; g < goals->size(); g++){
+                if(diamonds_[d] == (*goals)[g]){
+                    matches++;
+                }
+            }
+        }
+        if(matches == diamonds_.size()){
+            ret = true;
+        }
+        ret = ret & ((*other.getRobotPos()) == (*getRobotPos()));
+
+        return ret;
+    }
+
+    bool operator==(node &other)
+    {
+        bool ret = compSolution(other);
+
+        return ret;
+    }
+
+    bool operator!=(node &other)
+    {
+        bool ret = !(*this == other);
+
+        return ret;
+    }
+
 private:
+
+    void makeKey(){
+        std::string key = "";
+
+        std::sort (diamonds_.begin(),diamonds_.end());
+        for(int i = 0; i < diamonds_.size(); i++){
+            key += (diamonds_[i]).x_;
+            key += (diamonds_[i]).y_;
+        }
+        key += robot_pos_.x_;
+        key += robot_pos_.y_;
+        key_ = key;
+    }
+
     int cost_;
     std::vector< pos_t > diamonds_;
     pos_t robot_pos_;
     node * parent_;
+    std::string key_;
 };
 
 struct Comp
@@ -103,8 +183,32 @@ struct Comp
    }
 };
 
+//namespace std {
+
+//template <>
+//struct hash<node>
+//{
+//    int operator()(const node& element)
+//    {
+//        // calculate the key for the robot (to be added to total key later)
+//        int key_robot = element.getRobotPos()->x_ * 255 + element.getRobotPos()->y_;
+//        // calc diamonds
+//        int key_diamonds = 0;
+//        std::vector< pos_t > * dims = element.getDiamonds();
+//        for(int i = 0; i < dims->size(); i++){
+//            key_diamonds += (pow(2, i) - 1) * (255 * 255) +  ((*dims)[i].x_ * 255 + (*dims)[i].y_);
+//        }
+//        int key = key_diamonds + key_robot + (pow(2, dims->size()) - 1) * (255 * 255);
+
+//        return key;
+//    }
+//};
+//}
 
 
+// complete converting the code into map instead of creating new nodes!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// make the
 class graph
 {
 public:
@@ -114,14 +218,19 @@ public:
 
     // -- add/get children function, to expand tree --
     // adds a child(ren) to the node parent in the graph and adds them to the leafs_
-    void addChild(int &child_in, node *parent_in = nullptr){
-        node _child(child_in, parent_in);
-        addChild(_child);
-    }
-    void addChild(node &obj){
+    void createChild(node &obj){
         node * _child = new node(obj);
         leafs_.push_back(_child);
         std::push_heap(leafs_.begin(), leafs_.end(), Comp());
+    }
+
+    void addChild(node* &obj){
+        std::string * key = obj->getKey();
+        data_[*key] = obj;
+    }
+
+    void deleteChild(node* &obj){
+        delete obj;
     }
     //void addChild(std::vector< T > &children_in, const node< T > *parent_in);
 
@@ -138,6 +247,24 @@ public:
         return ret;
     }
 
+    // test node existence
+    bool nodeUnique(node &other){
+        bool ret = false;
+        //int obj = std::hash<node>()(other);
+        std::unordered_map< std::string, node* >::iterator iter = data_.find((*(other.getKey())));
+
+        if(iter == data_.end()){
+            ret = true;
+            //std::cout << "not equal\n";
+        }
+        else{
+            //std::cout << *other.getKey() << " equals " << *(iter->second)->getKey() << std::endl;
+        }
+
+
+        return ret;
+    }
+
     // -- traverse tree --
 
 
@@ -148,6 +275,8 @@ public:
 private:
     std::vector< node * > leafs_;
     //node<T> * root_;
+    std::unordered_map< std::string, node* > data_;
+
 
 };
 
