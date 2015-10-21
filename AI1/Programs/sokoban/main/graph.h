@@ -59,24 +59,34 @@ struct pos_t{
 class node
 {
 public:
-    node():parent_(nullptr){
+    node():parent_(nullptr),cost_(0),heuristic_(0){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
         makeKey();
     }
-    node(int element):cost_(element),parent_(nullptr){
+    node(int cost):cost_(cost),parent_(nullptr),heuristic_(0){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
         makeKey();
     }
-    node(int element, node * &parent):cost_(element),parent_(parent){
+    node(int cost, node * &parent):cost_(cost),parent_(parent),heuristic_(0){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
         makeKey();
     }
-    node(const node &init){*this = init;makeKey();}
+    node(int element, node * &parent, std::vector< std::vector<char> > &heuristicmap):cost_(element),parent_(parent){
+        robot_pos_.x_ = 0;
+        robot_pos_.y_ = 0;
+        makeKey();
+        updateHeuristic(heuristicmap);
+    }
+    node(const node &init){
+        *this = init;
+        makeKey();
+    }
 
     int getCost(){return cost_;}
+    int getHeuristic(){return heuristic_;}
 
     std::string * getKey(){ return &key_;}
 
@@ -153,6 +163,15 @@ public:
         return ret;
     }
 
+    void updateHeuristic(std::vector< std::vector<char> > &heuristicmap){
+        int cost = 0;
+        for(int d = 0; d < diamonds_.size(); d++){
+            cost += heuristicmap[diamonds_[d].y_][diamonds_[d].x_] - MAP_WALKABLE;
+        }
+
+        heuristic_ = cost;
+    }
+
 private:
 
     void makeKey(){
@@ -168,47 +187,25 @@ private:
         key_ = key;
     }
 
-    int cost_;
+    int cost_, heuristic_;
     std::vector< pos_t > diamonds_;
     pos_t robot_pos_;
     node * parent_;
     std::string key_;
 };
 
+
+// comparator used for the graph > heap, to find the next leaf to consider
 struct Comp
 {
    bool operator()( node * a, node * b)
    {
-       return (a->getCost()) > (b->getCost());
+       return (a->getCost() + a->getHeuristic()) > (b->getCost() + b->getHeuristic());
    }
 };
 
-//namespace std {
 
-//template <>
-//struct hash<node>
-//{
-//    int operator()(const node& element)
-//    {
-//        // calculate the key for the robot (to be added to total key later)
-//        int key_robot = element.getRobotPos()->x_ * 255 + element.getRobotPos()->y_;
-//        // calc diamonds
-//        int key_diamonds = 0;
-//        std::vector< pos_t > * dims = element.getDiamonds();
-//        for(int i = 0; i < dims->size(); i++){
-//            key_diamonds += (pow(2, i) - 1) * (255 * 255) +  ((*dims)[i].x_ * 255 + (*dims)[i].y_);
-//        }
-//        int key = key_diamonds + key_robot + (pow(2, dims->size()) - 1) * (255 * 255);
-
-//        return key;
-//    }
-//};
-//}
-
-
-// complete converting the code into map instead of creating new nodes!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-// make the
+// make the graph
 class graph
 {
 public:
@@ -250,34 +247,18 @@ public:
     // test node existence
     bool nodeUnique(node &other){
         bool ret = false;
-        //int obj = std::hash<node>()(other);
         std::unordered_map< std::string, node* >::iterator iter = data_.find((*(other.getKey())));
 
         if(iter == data_.end()){
             ret = true;
-            //std::cout << "not equal\n";
         }
-        else{
-            //std::cout << *other.getKey() << " equals " << *(iter->second)->getKey() << std::endl;
-        }
-
 
         return ret;
     }
 
-    // -- traverse tree --
-
-
-    // -- modify children --
-
-
-
 private:
     std::vector< node * > leafs_;
-    //node<T> * root_;
     std::unordered_map< std::string, node* > data_;
-
-
 };
 
 

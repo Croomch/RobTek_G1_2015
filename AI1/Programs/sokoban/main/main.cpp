@@ -12,13 +12,9 @@ int main()
     Sokoban solver("../../../sokoban_maps/2014competition.txt");
     //Sokoban solver("../../../sokoban_maps/simple_map.txt");
 
-    //solver.printMap();
-
     if(solver.findPath()){
-        std::cout << "Path found" << std::endl;
+        std::cout << "Path found." << std::endl;
     }
-
-    solver.printMap();
 
     return 0;
 }

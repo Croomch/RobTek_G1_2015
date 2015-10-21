@@ -52,7 +52,8 @@ bool Sokoban::loadMap(std::string filename){
 
     std::cout << "Loading Map...";
     // init vectors
-    diamonds_.resize(D);
+    diamonds_.clear();
+    goals_.clear();
     map_.resize(map_size_.y_);
     for(int i = 0; i < map_size_.y_; i++){
         (map_[i]).resize(map_size_.x_);
@@ -62,7 +63,6 @@ bool Sokoban::loadMap(std::string filename){
     // X || ' ' = wall, J = diamond, G = goal, . = free space, M = robot, * = J + G
     int x = 0;
     int y = 0;
-    int d = 0;
     do{
         file.get(c);
 
@@ -71,18 +71,16 @@ bool Sokoban::loadMap(std::string filename){
         }
         else if(c == 'J'){
             map_[y][x] = MAP_FREE;
-            diamonds_[d].x_ = x;
-            diamonds_[d].y_ = y;
-            d++;
+            diamonds_.emplace_back(pos_t(x,y));
         }
         else if(c == 'G'){
             map_[y][x] = MAP_GOAL;
+            goals_.emplace_back(pos_t(x,y));
         }
         else if(c == '*'){
             map_[y][x] = MAP_GOAL;
-            diamonds_[d].x_ = x;
-            diamonds_[d].y_ = y;
-            d++;
+            goals_.emplace_back(pos_t(x,y));
+            diamonds_.emplace_back(pos_t(x,y));
         }
         else if(c == 'M'){
             map_[y][x] = MAP_FREE;
@@ -115,34 +113,24 @@ bool Sokoban::loadMap(std::string filename){
 // the shortest path till now is explored further (heap)
 // hash table to check if node exists
 bool Sokoban::findPath(){
+    printMap(map_);
+
     std::cout << "Init. finding paths..." << std::endl;
     // graph to store the tree of possibilities
     graph paths;
-    // make hash table for lookup if element exists
-    std::unordered_map<std::string,std::string> exists;
     // has a solution been found
     bool solution_found = false;
 
-    // make raw map
-    std::vector< std::vector<char> > wall_map;
-    wall_map = map_;
-    // set goals to free space
-    // not needed
-//    for(int i = 0; i < wall_map.size(); i++){
-//        for(int j = 0; j < (wall_map.at(i)).size(); j++){
-//            char c = wall_map[i][j];
-//            if(c == MAP_GOAL){
-//                wall_map[i][j] = MAP_FREE;
-//            }
-//        }
-//    }
+    // make needed maps
+    std::vector< std::vector<char> > heuristic_map = map_;
+    wavefront(heuristic_map, goals_);
+    printMap(heuristic_map);
 
     // the next child to consider (lowest cost)
     node * cheapest_leaf = nullptr;
 
     // node to add
-    node nextnode;
-    nextnode.setCost(0);
+    node nextnode(0, cheapest_leaf, heuristic_map);
     nextnode.setRobot(pos_t(robot_.x_, robot_.y_));
     nextnode.setDiamonds(diamonds_);
     std::cout << "# of Diamonds: " << diamonds_.size() << std::endl;
@@ -157,44 +145,43 @@ bool Sokoban::findPath(){
         // check cheapest leaf if it is the solution
         solution_found = cheapest_leaf->compSolution(map_);
         if(!solution_found){
-            //std::cout << "Solution not yet found.\n";
-            bool acceptableNode = true;
             // check that this node has not already been found, if so, remove it
-            if(paths.nodeUnique(*cheapest_leaf)){
+            bool unique_node = paths.nodeUnique(*cheapest_leaf);
+            bool valid_node = false;
+            std::vector< pos_t > * diamonds;
+            std::vector< std::vector<char> > wf_map;
+            if(unique_node){
                 paths.addChild(cheapest_leaf);
-
+                // get diamonds pointer
+                diamonds = cheapest_leaf->getDiamonds();
+                // set diamonds to walls
+                wf_map = map_;
+                for(int d = 0; d < diamonds->size(); d++){
+                    int x = (*diamonds)[d].x_;
+                    int y = (*diamonds)[d].y_;
+                    wf_map[y][x] = MAP_DIAMOND;
+                }
+                // check that the node is valid (all diamonds are in valid positions)
+                valid_node = validNode(diamonds, wf_map);
             }
             else{
                 paths.deleteChild(cheapest_leaf);
-                acceptableNode = false;
             }
-            //std::cout << "Node unique " << acceptableNode << "\n";
-            // get diamonds pointer
-            std::vector< pos_t > * diamonds = cheapest_leaf->getDiamonds();
-            // set diamonds to walls
-            std::vector< std::vector<char> > wf_map = wall_map;
-            for(int d = 0; d < diamonds->size(); d++){
-                int x = (*diamonds)[d].x_;
-                int y = (*diamonds)[d].y_;
-                wf_map[y][x] = MAP_DIAMOND;
-            }
-            // check that the node is valid (all diamonds are in valid positions)
-            acceptableNode = acceptableNode & validNode(diamonds, wf_map); // takes the diamonds and the map with all diamonds set to wall
-            //std::cout << "Node valid " << acceptableNode << "\n";
-            if(acceptableNode){
+            if(unique_node && valid_node){
                 // make wavefront from pos to see the distance to the diamonds
-                wavefront(wf_map, cheapest_leaf);
+                std::vector< pos_t > robot_position = {*(cheapest_leaf->getRobotPos())};
+                wavefront(wf_map, robot_position);
                 // find the diamonds that can be moved
                 std::vector< node > moves;
                 possibleMoves(wf_map, diamonds, moves, cheapest_leaf);
                 // add the moves to the heap (does not take care of states being the same)
-                //std::cout << "# of new moves found: " << moves.size() << "\n";
                 for(int newChild = 0; newChild < moves.size(); newChild++){
+                    // update heuristics first
+                    moves[newChild].updateHeuristic(heuristic_map);
                     // here can the check for repetition be added
                     // if not, then move this to possibleMoves instead
                     paths.createChild(moves[newChild]);
                 }
-                //std::cout << "Shortest path till now: " << cheapest_leaf->getCost() << std::endl;
             }
         }
         else{
@@ -205,7 +192,7 @@ bool Sokoban::findPath(){
     }
 
     if(!paths.getNextChild(cheapest_leaf)){
-        std::cout << "No more possible paths left.\n";
+        std::cout << "No more possible paths left to explore.\n";
     }
 
     std::cout << "# of iterations gone through: " << iterations << "\n";
@@ -229,7 +216,7 @@ struct wfElement{
 };
 // takes in a map of chars to generate a wavefront map with no-go-pos=0, and rest the cost to go there
 // map consists only of free and wall elements
-void Sokoban::wavefront(std::vector< std::vector<char> > &map_out, node * &state){
+void Sokoban::wavefront(std::vector< std::vector<char> > &map_out, std::vector< pos_t > &state){
     // make heap
     std::vector< wfElement > wfHeap;
     std::make_heap(wfHeap.begin(), wfHeap.end(), wfElement());
@@ -237,9 +224,11 @@ void Sokoban::wavefront(std::vector< std::vector<char> > &map_out, node * &state
     // push starting point
     wfElement current, next;
     current.cost_ = MAP_WALKABLE;
-    current.point_ = *(state->getRobotPos());
-    wfHeap.push_back(current);
-    std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
+    for(int i = 0; i < state.size(); i++){
+        current.point_ = state[i];
+        wfHeap.push_back(current);
+        std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
+    }
 
 
     // while something can be poped, do so
@@ -251,7 +240,7 @@ void Sokoban::wavefront(std::vector< std::vector<char> > &map_out, node * &state
 
         // set value if free
         char state = map_out[current.point_.y_][current.point_.x_];
-        if(state == MAP_FREE || state == MAP_GOAL){
+        if(MAP_IS_EMPTY(state) || MAP_IS_GOAL(state)){
             map_out[current.point_.y_][current.point_.x_] = current.cost_;
             // add neighbours
             next.cost_ = current.cost_ + 1;
