@@ -1,0 +1,131 @@
+
+// motor defines
+#define MOTOR_L OUT_A
+#define MOTOR_R OUT_B
+#define MOTOR OUT_AB
+
+// light sensor defines
+#define SENSE_LIGHT_L IN_1
+#define SENSE_LIGHT_R IN_2
+
+
+// defines
+#define SPEED 50
+#define PID_P 1
+#define BLACKLINE 550
+#define CALIB_FACTOR 0
+#define TURNVAL_L 80
+#define TURNVAL_R -80
+
+
+
+int StraightFordward(bool drive_straight)
+{	
+    float light_l, light_r;
+
+	while(drive_straight){
+        	ClearScreen();
+
+        	TextOut(0, LCD_LINE1, "Turn:");
+
+        
+        	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        	light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+                
+        	float speed_l, speed_r;
+        
+        if( light_l > BLACKLINE  && light_r > BLACKLINE ){
+            speed_l = 0;
+            speed_r = 0;
+            drive_straight = false;
+        }
+        else{
+            
+            float light_off = light_l - light_r + CALIB_FACTOR; // offset from the line
+        
+            if(light_off > 0){
+              TextOut(40, LCD_LINE1, "Left");
+            } 
+            else {
+               TextOut(40, LCD_LINE1, "Right");
+            }
+        
+            speed_l = SPEED - light_off * PID_P;
+            speed_r = SPEED + light_off * PID_P;
+        
+            if(speed_l < 0){
+               // speed_l = 0;
+            }
+            if(speed_r < 0){
+               // speed_r = 0;
+            }
+        }
+
+        OnRev(MOTOR_L, speed_l);
+        OnRev(MOTOR_R, speed_r);
+                
+    }
+
+
+	return 0;
+}
+
+
+int TurnRight(bool FindLine){
+
+    float light_l, light_r;
+
+
+	OnRev(MOTOR_L, 80);
+	OnRev(MOTOR_R, 50);
+
+	Wait(100);
+	
+	OnRev(MOTOR_L, TURNVAL_L);
+	OnRev(MOTOR_R, TURNVAL_R);
+	
+	while(FindLine){
+
+        	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        	light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+
+		if (light_r > BLACKLINE && light_l < BLACKLINE)
+		{ 
+			FindLine = false;
+		
+			OnRev(MOTOR_L, 0);
+			OnRev(MOTOR_R, 0);
+
+		}
+
+
+	}
+	return 0;
+}
+
+
+
+task main()
+{
+	// set sensors
+	SetSensor(SENSE_LIGHT_L, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_R, SENSOR_LIGHT);
+
+
+    SetSensorLight(SENSE_LIGHT_L);
+    SetSensorLight(SENSE_LIGHT_R);
+    
+    
+    
+	while(1){
+
+		StraightFordward(1);
+		TurnRight(1);
+
+	}
+
+    Off(MOTOR);
+
+}
+
+

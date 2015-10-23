@@ -10,7 +10,7 @@
 #include "graph.h"
 
 
-
+// to do: make a destructor making sure all nodes are gone
 class Sokoban
 {
 public:
@@ -48,10 +48,10 @@ public:
     // converts NSEW to BFLR
     void pathToRobot();
 
-    void printMap(){
-        for(int y = 0; y < map_size_.y_; y++){
-            for(int x = 0; x < map_size_.x_; x++){
-                char e = map_[y][x];
+    void printMap(std::vector< std::vector<char> > &map){
+        for(int y = 0; y < map.size(); y++){
+            for(int x = 0; x < map[y].size(); x++){
+                char e = map[y][x];
                 if(e == MAP_WALL){
                     std::cout << "X";
                 }
@@ -61,8 +61,11 @@ public:
                 else if(e == MAP_GOAL){
                     std::cout << "G";
                 }
+                else if(e == MAP_DIAMOND){
+                    std::cout << "J";
+                }
                 else {
-                    std::cout << (int)e;
+                    std::cout << (int)e - MAP_WALKABLE;
                 }
 
             }
@@ -72,20 +75,19 @@ public:
 
 private:
     // takes in a map of chars to generate a wavefront map with no-go-pos=0, and rest the cost to go there
-    void wavefront(std::vector< std::vector<char> > &map_out, node * &state);
+    void wavefront(std::vector< std::vector<char> > &map_out, std::vector< pos_t > &state);
     // takes in a wavefronted map and the position of diamonds to output a vector of possible moves
     void possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vector<pos_t> * &diamonds, std::vector< node > &moves, node* &origo);
     // checks if all the diamonds are placed on valid spots, takes the diamonds in and a map where the diamond positions are set to walls
     bool validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in);
-    // checks if this node has been encountered earlier
-    bool uniqueNode(node* &origo);
-    // key generator
-    int keyGenerator(node* &element);
+
 
     // map of the lane (walls, empty and goals)
     // 2d vector of chars (free, goal and wall)
     pos_t map_size_;
     std::vector< std::vector<char> > map_;
+    // goals (they are also on the map)
+    std::vector< pos_t > goals_;
     // path
     // string (N,S,E,W)
     std::string path_;
