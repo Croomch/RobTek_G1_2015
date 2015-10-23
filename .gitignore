@@ -25,7 +25,7 @@
 *.html
 *.sim
 *.b##
-*.s*
+*.s#*
 *.b#*
 *.user
 AI1/Programs/sokoban/build-main-Desktop-Default
