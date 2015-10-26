@@ -1,0 +1,76 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\graphicspath{ {./graphics/} }
+
+\usepackage{fullpage}
+
+\usepackage{float}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata, positioning,calc,shapes.geometric}
+
+\begin{document}
+
+\title{Sokoban Solver}
+%\date{19$^{th}$ October 2015}
+\author{Aitor Miguel Blanco and Lukas Chr. M. W. Schwartz}
+\maketitle
+
+\pagebreak
+
+
+\section{Introduction}
+To sort bricks in function of their color two things are needed. First, a color detector is needed to measure the color of the brick, and a servo motor is used to sort them into 2 diferent stacks.
+
+All the system is controlled with the Spartan 3 Experimentation board.
+
+This board is the one in charge of the control of all the system, comunicating with an ADC that converts the analog signal of the light sensor into a digital signal, a servo motor to sort the different bricks, all the LEDs' drivers and the PC interface.
+
+A power supply to set 12, 6 and 5V is needed in order to power each part of the system.
+
+This way, the project can be easily divided in 6 different blocks,
+
+	- Power supply
+	- LED controller.
+	- Light sensor.
+	- Servo motor.
+	- PC communication.
+	- VHDL design.
+	
+
+\section{Circuit and physical design}
+
+\subsection{Power Supply}
+The power supply has been build to deliver 3 different voltage levels (5V, 6V, 12V), ensuring a current of 1A, 1.5A and 1A respectively.
+
+This circuit has been printed in a PCB that can be plugged directly in a breadboard to deliver the required voltage and current.
+
+The power supply is conected to a 15V power supply as a input voltage. To convert this 15V into 12V, 6V and 5V 3 different elements are used.
+
+To ensure a 5V/1A supply with a +-1.5\% voltage for the FPGA, an LM2574 regulator is used. 
+
+About the 6V/1.5A and 12V/1A, the 7806 and 7812 regulators are used. As the efficiency of these regulators is not as good as the one of the LM2574 and they dissipate the excess of power by heating up, a heatsink for the 
+
+\subsection{LED controller}
+
+\subsection{Light sensor}
+
+\subsection{Servo motor}
+
+\subsection{PC communication}
+
+\section{Software}
+
+
+
+
+
+
+
+
+\end{document}
