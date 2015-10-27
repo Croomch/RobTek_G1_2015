@@ -5342,29 +5342,20 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <instance part="GREEN2" gate="G$1" x="0" y="83.82"/>
 <instance part="BLUE1" gate="G$1" x="15.24" y="83.82"/>
 <instance part="BLUE2" gate="G$1" x="25.4" y="83.82"/>
-<instance part="OPTO" gate="G$1" x="17.78" y="40.64" rot="R180"/>
+<instance part="OPTO" gate="G$1" x="17.78" y="35.56" rot="R180"/>
 <instance part="GND5" gate="1" x="17.78" y="30.48"/>
 <instance part="K2" gate="G$1" x="101.6" y="86.36" rot="R270"/>
 <instance part="IC1" gate="A" x="43.18" y="43.18"/>
 <instance part="IC1" gate="P" x="43.18" y="43.18"/>
 <instance part="IC1" gate="B" x="66.04" y="30.48"/>
 <instance part="GND1" gate="1" x="43.18" y="30.48"/>
-<instance part="R1" gate="G$1" x="40.64" y="58.42"/>
+<instance part="R1" gate="G$1" x="43.18" y="20.32"/>
 <instance part="GND2" gate="1" x="55.88" y="15.24"/>
 </instances>
 <busses>
 </busses>
 <nets>
 <net name="GND" class="0">
-<segment>
-<pinref part="OPTO" gate="G$1" pin="A"/>
-<pinref part="GND5" gate="1" pin="GND"/>
-<wire x1="17.78" y1="38.1" x2="17.78" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="A" pin="-IN"/>
-<wire x1="17.78" y1="35.56" x2="17.78" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="35.56" y1="40.64" x2="35.56" y2="35.56" width="0.1524" layer="91"/>
-<wire x1="35.56" y1="35.56" x2="17.78" y2="35.56" width="0.1524" layer="91"/>
-</segment>
 <segment>
 <pinref part="K2" gate="G$1" pin="9"/>
 <wire x1="91.44" y1="73.66" x2="88.9" y2="73.66" width="0.1524" layer="91"/>
@@ -5403,6 +5394,14 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="K2" gate="G$1" pin="6"/>
 <wire x1="111.76" y1="83.82" x2="114.3" y2="83.82" width="0.1524" layer="91"/>
 <label x="114.3" y="83.82" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="GND5" gate="1" pin="GND"/>
+<pinref part="OPTO" gate="G$1" pin="A"/>
+<pinref part="IC1" gate="A" pin="+IN"/>
+<wire x1="35.56" y1="45.72" x2="10.16" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="45.72" x2="10.16" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="33.02" x2="17.78" y2="33.02" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="12V" class="0">
@@ -5489,26 +5488,15 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <label x="88.9" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$2" class="0">
-<segment>
-<pinref part="OPTO" gate="G$1" pin="C"/>
-<wire x1="17.78" y1="45.72" x2="30.48" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="A" pin="+IN"/>
-<wire x1="30.48" y1="45.72" x2="35.56" y2="45.72" width="0.1524" layer="91"/>
-<wire x1="30.48" y1="45.72" x2="30.48" y2="58.42" width="0.1524" layer="91"/>
-<pinref part="R1" gate="G$1" pin="1"/>
-<wire x1="30.48" y1="58.42" x2="35.56" y2="58.42" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="PHD" class="0">
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="45.72" y1="58.42" x2="53.34" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="53.34" y1="58.42" x2="53.34" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="20.32" x2="53.34" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="20.32" x2="53.34" y2="43.18" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="A" pin="OUT"/>
-<wire x1="53.34" y1="43.18" x2="50.8" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="50.8" y1="43.18" x2="58.42" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="50.8" y1="43.18" x2="53.34" y2="43.18" width="0.1524" layer="91"/>
 <label x="58.42" y="43.18" size="1.778" layer="95"/>
+<wire x1="53.34" y1="43.18" x2="58.42" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="K2" gate="G$1" pin="8"/>
@@ -5526,6 +5514,17 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="K2" gate="G$1" pin="10"/>
 <wire x1="111.76" y1="73.66" x2="114.3" y2="73.66" width="0.1524" layer="91"/>
 <label x="114.3" y="73.66" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$2" class="0">
+<segment>
+<pinref part="IC1" gate="A" pin="-IN"/>
+<wire x1="35.56" y1="40.64" x2="35.56" y2="35.56" width="0.1524" layer="91"/>
+<pinref part="OPTO" gate="G$1" pin="C"/>
+<wire x1="17.78" y1="40.64" x2="35.56" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="R1" gate="G$1" pin="1"/>
+<wire x1="35.56" y1="20.32" x2="38.1" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="35.56" y1="40.64" x2="35.56" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
