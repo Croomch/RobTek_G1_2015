@@ -87,7 +87,7 @@ servo_control: MotorControl PORT MAP (
 
 
 -- adc --
-LED_DATA <= spi_data(9 downto 2);
+LED_DATA <= color & spi_data_updated & spi_data(9 downto 6);--spi_data(9 downto 5); -- WHEN spi_data_updated = '1';
 SPI_dev: SPI PORT MAP (
     CLK => CLK,
     SPI_CLK => SPI_CLK,

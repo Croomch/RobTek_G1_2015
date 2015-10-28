@@ -47,7 +47,7 @@ signal pr_state, nx_state : state;
 -- save the lighting intensities --
 signal i_red, i_blue, i_green : STD_LOGIC_VECTOR (9 downto 0) := "0000000000";
 -- intensity tresholds --
-signal t_red, t_blue, t_green : STD_LOGIC_VECTOR (9 downto 0) := "1000000000";
+CONSTANT t_red, t_blue, t_green : STD_LOGIC_VECTOR (9 downto 0) := "0000000001";
 
 begin
 -- no PWM is needed due to the constant changing  between the different colors = 25% duty cycle 
@@ -78,7 +78,12 @@ begin
                 color(0) <= '1';
             end if;
             -- what is nx-state?
-            nx_state <= red;
+            if ligtlevel_updated = '1' then -- wait for new sensor value
+                nx_state <= red;
+                led <= "100";
+            else -- stay in the state
+                nx_state <= decide;
+            end if;
         WHEN red =>
             -- output --
             color <= "000";
@@ -87,6 +92,7 @@ begin
             -- what is nx-state? 
             if ligtlevel_updated = '1' then -- wait for new sensor value
                 nx_state <= green;
+                led <= "010";
             else -- stay in the state
                 nx_state <= red;
             end if;
@@ -98,6 +104,7 @@ begin
             -- what is nx-state? 
             if ligtlevel_updated = '1' then -- wait for new sensor value
                     nx_state <= blue;
+                    led <= "001";
             else -- stay in the state
                 nx_state <= green;
             end if;

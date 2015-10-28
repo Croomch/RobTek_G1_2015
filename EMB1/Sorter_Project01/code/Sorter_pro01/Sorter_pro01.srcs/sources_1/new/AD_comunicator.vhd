@@ -47,11 +47,11 @@ architecture Behavioral of SPI is
 -- spi signals --
 SIGNAL CLK_SPI : STD_LOGIC := '0';
 SIGNAL CS : STD_LOGIC := '1';
-SIGNAL MOSI : STD_LOGIC := '0';
 -- to get val --
-SIGNAL CBS : STD_LOGIC_vector (3 downto 0) := "1000";
+CONSTANT CBS : STD_LOGIC_vector (3 downto 0) := "1000";
 -- data recieved 
 SIGNAL data : STD_LOGIC_vector (9 downto 0) := "0000000000";
+
 
 ---- Constants ----
 -- scale down with factor 14 to get = 3.571MHz < 3.6MHz max
@@ -67,9 +67,21 @@ CONSTANT MSG_PERIOD : INTEGER := MSG_DATA_END+1;
 begin
 
 -- actual data part --
-process(CLK_SPI)
+process(CLK_SPI, CLK)
 variable CLK_COUNT : integer range 0 to MSG_PERIOD+1 := MSG_PERIOD;
+-- var to make sure you only pulse once
+variable pulsed : boolean := false;
 begin
+    if rising_edge(CLK) then 
+        output_updated <= '0';
+        -- signal new message 
+        if CLK_COUNT = MSG_DATA_END AND pulsed = false then
+            pulsed := true;
+            output_updated <= '1';
+        elsif  CLK_COUNT = 0 then
+            pulsed := false;           
+        end if;
+    end if;
     if rising_edge(CLK_SPI) then
         -- increment counter --
         CLK_COUNT := CLK_COUNT + 1;
@@ -79,15 +91,9 @@ begin
         end if;
      
         -- process the msg --
-         if CLK_COUNT >= MSG_DATA_START and CLK_COUNT <= MSG_DATA_END then
+        if CLK_COUNT >= MSG_DATA_START and CLK_COUNT <= MSG_DATA_END then
             -- recieve the data
             data <= data(8 downto 0) & SPI_MISO;
-        end if;
-        -- signal new message
-        if CLK_COUNT = MSG_DATA_END then
-            output_updated <= '1';
-        elsif CLK_COUNT = MSG_DATA_END + 1 then
-            output_updated <= '0';
         end if;
     end if;
     if falling_edge(CLK_SPI) then
@@ -100,7 +106,7 @@ begin
             SPI_MOSI <= CBS((MSG_CS_END - MSG_CS_START) - (CLK_COUNT - MSG_CS_START));
         end if;
         -- put CS low to prep for next read 
-        if CLK_COUNT = MSG_PERIOD then
+        if CLK_COUNT = MSG_DATA_END then
             SPI_CS <= '1';
         end if; 
     end if;
