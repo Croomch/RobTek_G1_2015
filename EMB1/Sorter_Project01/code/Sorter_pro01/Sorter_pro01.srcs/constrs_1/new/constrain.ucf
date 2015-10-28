@@ -1,0 +1,24 @@
+NET "CLK" LOC = P60;
+
+NET "ALIVE" LOC = P47; # yellow onboard
+
+NET "SPI_CLK" LOC = P42; #3
+NET "SPI_MISO" LOC = P43; #4
+NET "SPI_MOSI" LOC = P44; #5
+NET "SPI_CS" LOC = P45; #6
+
+NET "LED[0]" LOC = P51; #9 -- blue
+NET "LED[1]" LOC = P49; #7 -- green
+NET "LED[2]" LOC = P50; #8 -- red
+
+NET "PWM" LOC = P54; # 10
+
+NET "LED_DATA[7]" LOC = P55; #11
+NET "LED_DATA[6]" LOC = P57; #12
+NET "LED_DATA[5]" LOC = P58; #13
+NET "LED_DATA[4]" LOC = P59; #14
+NET "LED_DATA[3]" LOC = P68; #15
+NET "LED_DATA[2]" LOC = P69; #16
+NET "LED_DATA[1]" LOC = P71; #17
+NET "LED_DATA[0]" LOC = P72; #18
+
