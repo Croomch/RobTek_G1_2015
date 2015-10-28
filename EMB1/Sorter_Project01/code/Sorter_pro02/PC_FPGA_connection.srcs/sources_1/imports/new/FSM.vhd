@@ -22,6 +22,7 @@ entity FSM is
            );
 end FSM;
 
+
 architecture Behavioral of FSM is
 
 ---- Signals ----
