@@ -5328,7 +5328,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <part name="K2" library="Wurth_Elektronik_Electromechanic_Wire_to_Board_Connectors_rev15c" deviceset="61201021621" device=""/>
 <part name="IC1" library="linear" deviceset="LM358" device="N"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
-<part name="R1" library="resistor" deviceset="R-EU_" device="0207/10"/>
+<part name="R1" library="resistor" deviceset="R-EU_" device="0207/10" value="1.6M"/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
