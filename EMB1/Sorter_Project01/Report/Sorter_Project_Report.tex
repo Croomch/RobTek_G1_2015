@@ -13,10 +13,11 @@
 
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata, positioning,calc,shapes.geometric}
+\usepackage{varwidth} % for the diagram of fpga design
 
 \begin{document}
 
-\title{Sorter}
+\title{Brick Sorter}
 \date{2$^{nd}$ November 2015}
 \author{Aitor Miguel Blanco and Lukas Chr. M. W. Schwartz}
 \maketitle
@@ -38,8 +39,10 @@
 
 
 \section{Software}
-\input{sections/sof_led}
-\input{sections/sof_photosensor}
+
+\input{sections/sof_intro}
+\input{sections/sof_topmodule}
+\input{sections/sof_adc}
 \input{sections/sof_servo}
 \input{sections/sof_pccommunication}
 

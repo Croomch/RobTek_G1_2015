@@ -55,7 +55,7 @@ SIGNAL data : STD_LOGIC_vector (9 downto 0) := "0000000000";
 
 ---- Constants ----
 -- scale down with factor 14 to get = 3.571MHz < 3.6MHz max
-CONSTANT CLK_SCALING : INTEGER := 16;
+CONSTANT CLK_SCALING : INTEGER := 14;
 -- data msg info
 CONSTANT MSG_CS_START : INTEGER := 1;
 CONSTANT MSG_CS_END : INTEGER := 4;
