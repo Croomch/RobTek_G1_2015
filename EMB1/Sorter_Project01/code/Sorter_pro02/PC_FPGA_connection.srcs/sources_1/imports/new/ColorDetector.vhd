@@ -36,7 +36,9 @@ entity ColorDetector is
             color : out STD_LOGIC_VECTOR (2 downto 0); -- resulting color
             led : out STD_LOGIC_VECTOR (2 downto 0); -- LED control signal
             ligtlevel_updated : in STD_LOGIC;
-            ligthlevel : in STD_LOGIC_VECTOR (9 downto 0)
+            ligthlevel : in STD_LOGIC_VECTOR (9 downto 0);
+            intensity_red, intensity_green, intensity_blue : out STD_LOGIC_VECTOR (9 downto 0);
+            treshold_red, treshold_green, treshold_blue : in STD_LOGIC_VECTOR (9 downto 0)
            );
 end ColorDetector;
 
@@ -47,9 +49,14 @@ signal pr_state, nx_state : state;
 -- save the lighting intensities --
 signal i_red, i_blue, i_green : STD_LOGIC_VECTOR (9 downto 0) := "0000000000";
 -- intensity tresholds --
-CONSTANT t_red, t_blue, t_green : STD_LOGIC_VECTOR (9 downto 0) := "0000000001";
+signal t_red, t_blue, t_green : STD_LOGIC_VECTOR (9 downto 0) := "1000000000";
 
 begin
+-- load tresholds
+t_red <= treshold_red;
+t_green <= treshold_green;
+t_blue <= treshold_blue;
+
 -- no PWM is needed due to the constant changing  between the different colors = 25% duty cycle 
 -- lower FSM - flip-flop part, optn. add reset?! --
 process(CLK)
@@ -67,6 +74,9 @@ begin
         WHEN decide =>
             -- output --
             led <= "000";
+            intensity_red <= i_red;
+            intensity_green <= i_green;
+            intensity_blue <= i_blue;
             -- find out which color it was using iintensity values (i_XYZ)
             if i_red >= t_red then
                 color(2) <= '1';
