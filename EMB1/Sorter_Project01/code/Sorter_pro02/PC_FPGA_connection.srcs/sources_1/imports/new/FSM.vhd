@@ -66,7 +66,20 @@ signal period		      : std_logic_vector(31 downto 0); -- 32 bit register for fre
 signal flash             : std_logic_vector(7 downto 0); -- 8 bit register for flash duration
 signal v_leds            : std_logic_vector(31 downto 0); -- 32 bit register to hold status for variable leds 
 --  signal xb_leds           : std_logic_vector(2 downto 0);  -- register for 3 leds
-      
+ 
+ -- intensity values for the 3 different colors from the color detector
+ signal i_red, i_green, i_blue : STD_LOGIC_VECTOR(9 downto 0) := (others => '0');
+ -- tresholds for the color detector
+ signal t_red, t_green, t_blue : STD_LOGIC_VECTOR(9 downto 0) := "1000000000";
+-- motor positions
+signal mp_left : STD_LOGIC_VECTOR(8 downto 0) := "110000000"; -- W34 000000C0
+signal mp_center : STD_LOGIC_VECTOR(8 downto 0) := "010001000"; -- W35 00000136
+signal mp_right : STD_LOGIC_VECTOR(8 downto 0) := "011000011"; -- W36 00000187
+signal mp_overwrite : STD_LOGIC_VECTOR(1 downto 0) := "11";
+
+-- signals to count number of bricks
+signal bricks_red, bricks_green, bricks_blue : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+    
 ---- Constants ----
 -- board clk frequency --
 CONSTANT CLK_FREQ : INTEGER := 50000000;
@@ -81,7 +94,9 @@ CONSTANT CLK_TIMEOUT_PERIOD : INTEGER := CLK_FREQ;
 COMPONENT MotorControl IS
     Port (  motorposition : in STD_LOGIC_VECTOR (1 downto 0);
             PWM : out STD_LOGIC;
-            CLK : in STD_LOGIC
+            CLK : in STD_LOGIC;
+            mp_left, mp_center, mp_right : in STD_LOGIC_VECTOR(8 downto 0);
+            mp_overwrite : in STD_LOGIC_VECTOR(1 downto 0)
             );
 END COMPONENT;
 
@@ -107,7 +122,9 @@ COMPONENT ColorDetector IS
             color : out STD_LOGIC_VECTOR (2 downto 0);
             led : out STD_LOGIC_VECTOR (2 downto 0);
             ligtlevel_updated : in STD_LOGIC;
-            ligthlevel : in STD_LOGIC_VECTOR (9 downto 0)
+            ligthlevel : in STD_LOGIC_VECTOR (9 downto 0);
+            intensity_red, intensity_green, intensity_blue : out STD_LOGIC_VECTOR (9 downto 0);
+            treshold_red, treshold_green, treshold_blue : in STD_LOGIC_VECTOR (9 downto 0)
            );
 END COMPONENT;
 
@@ -142,7 +159,11 @@ begin
 servo_control: MotorControl PORT MAP (
     motorposition =>  motor,
     PWM => PWM,
-    CLK => CLK
+    CLK => CLK,
+    mp_left => mp_left, 
+    mp_center => mp_center, 
+    mp_right => mp_right,
+    mp_overwrite => mp_overwrite
 );
 
 
@@ -165,7 +186,13 @@ colordetector_dev: ColorDetector PORT MAP (
     color => color,
     led => led_signal,
     ligtlevel_updated => spi_data_updated,
-    ligthlevel => spi_data
+    ligthlevel => spi_data,
+    intensity_red => i_red, 
+    intensity_green => i_green, 
+    intensity_blue => i_blue,
+    treshold_red => t_red, 
+    treshold_green => t_green, 
+    treshold_blue => t_blue
 );
 
 
@@ -190,10 +217,13 @@ begin
             -- what is nx-state? 
             if color = "010" then -- Green
                 nx_state <= left_tray;
+                bricks_green <= bricks_green + 1; 
             elsif color = "010" then -- Blue
+                bricks_blue <= bricks_blue + 1;
                 nx_state <= left_tray;
             elsif color = "100" then -- Red
                 nx_state <= right_tray;
+                bricks_red <= bricks_red + 1;
             else -- stay in the state
                 nx_state <= idle;
             end if;
@@ -269,8 +299,17 @@ end process;
 --		                  flash     <= T_data_from_mem(31 downto 24); --                      high 8 bits
 --		  when "00100" => v_leds    <= T_data_from_mem;               -- Register 1, word 0 - all 32 bits
 
-          when "00000" => LED_DATA <= T_data_from_mem(31 downto 24);  -- Register 0, word 1 - high 8 bits 
-
+          when "00000" => LED_DATA <= T_data_from_mem(31 downto 24);  -- Register 0, word 1 - high 8 bits
+          -- register 2, tresholds for the intensities 
+          when "01000" => t_red <= T_data_from_mem(9 downto 0); -- R2W0
+          when "01001" => t_green <= T_data_from_mem(9 downto 0); -- R2W1
+          when "01010" => t_blue <= T_data_from_mem(9 downto 0); -- R2W2 
+          -- register 3, potor position values 
+          when "01100" => mp_left <= T_data_from_mem(8 downto 0); -- R3W0
+          when "01101" => mp_center <= T_data_from_mem(8 downto 0); -- R3W1
+          when "01110" => mp_right <= T_data_from_mem(8 downto 0); -- R3W2
+          when "01111" => mp_overwrite <= T_data_from_mem(1 downto 0); -- R3W3
+          -- others
 		  when others =>
 		end case;
 	 end if;
@@ -293,7 +332,13 @@ end process;
 			when "00100" =>	T_data_to_mem <= sys_cnt;  -- Word 0 gives the value of the system counter
 			when "00101" =>	T_data_to_mem <= freq_gen; -- Word 1 gives the value of the frequency generator
          -- register 2
-         when "01000" =>   T_data_to_mem <= "0000000000000000000000000000" & dipsw;
+         when "01000" =>   T_data_to_mem <= "0000000000000000000000" & i_red; -- intensity of the red LED
+         when "01001" =>   T_data_to_mem <= "0000000000000000000000" & i_green; -- intensity of the green LED
+         when "01010" =>   T_data_to_mem <= "0000000000000000000000" & i_blue; -- intensity of the blue LED
+         -- register 3
+         when "01100" =>   T_data_to_mem <= bricks_red; -- brick count red
+         when "01101" =>   T_data_to_mem <= bricks_green; -- brick count green
+         when "01110" =>   T_data_to_mem <= bricks_blue; -- brick count blue
 --       Etc. etc. etc.
 			when others =>
 		end case;		
