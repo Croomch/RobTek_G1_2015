@@ -78,7 +78,7 @@ int main()
 ///////////////////////////////////////////////////////////////////////////////////////
 // 	Port Configuration
 
-	cout << "Set portname";
+	cout << "Set portname: " << endl;
 	cin >> portname;
 
 
