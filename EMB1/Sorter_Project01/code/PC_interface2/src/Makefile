@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src
+CMAKE_SOURCE_DIR = /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src
+CMAKE_BINARY_DIR = /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -73,9 +73,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src/CMakeFiles /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src/CMakeFiles /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -103,41 +103,41 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named PC_interface
+# Target rules for targets named PC_interface2
 
 # Build rule for target.
-PC_interface: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 PC_interface
-.PHONY : PC_interface
+PC_interface2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 PC_interface2
+.PHONY : PC_interface2
 
 # fast build rule for target.
-PC_interface/fast:
-	$(MAKE) -f CMakeFiles/PC_interface.dir/build.make CMakeFiles/PC_interface.dir/build
-.PHONY : PC_interface/fast
+PC_interface2/fast:
+	$(MAKE) -f CMakeFiles/PC_interface2.dir/build.make CMakeFiles/PC_interface2.dir/build
+.PHONY : PC_interface2/fast
 
-PC_interface.o: PC_interface.cpp.o
-.PHONY : PC_interface.o
+PC_interface2.o: PC_interface2.cpp.o
+.PHONY : PC_interface2.o
 
 # target to build an object file
-PC_interface.cpp.o:
-	$(MAKE) -f CMakeFiles/PC_interface.dir/build.make CMakeFiles/PC_interface.dir/PC_interface.cpp.o
-.PHONY : PC_interface.cpp.o
+PC_interface2.cpp.o:
+	$(MAKE) -f CMakeFiles/PC_interface2.dir/build.make CMakeFiles/PC_interface2.dir/PC_interface2.cpp.o
+.PHONY : PC_interface2.cpp.o
 
-PC_interface.i: PC_interface.cpp.i
-.PHONY : PC_interface.i
+PC_interface2.i: PC_interface2.cpp.i
+.PHONY : PC_interface2.i
 
 # target to preprocess a source file
-PC_interface.cpp.i:
-	$(MAKE) -f CMakeFiles/PC_interface.dir/build.make CMakeFiles/PC_interface.dir/PC_interface.cpp.i
-.PHONY : PC_interface.cpp.i
+PC_interface2.cpp.i:
+	$(MAKE) -f CMakeFiles/PC_interface2.dir/build.make CMakeFiles/PC_interface2.dir/PC_interface2.cpp.i
+.PHONY : PC_interface2.cpp.i
 
-PC_interface.s: PC_interface.cpp.s
-.PHONY : PC_interface.s
+PC_interface2.s: PC_interface2.cpp.s
+.PHONY : PC_interface2.s
 
 # target to generate assembly for a file
-PC_interface.cpp.s:
-	$(MAKE) -f CMakeFiles/PC_interface.dir/build.make CMakeFiles/PC_interface.dir/PC_interface.cpp.s
-.PHONY : PC_interface.cpp.s
+PC_interface2.cpp.s:
+	$(MAKE) -f CMakeFiles/PC_interface2.dir/build.make CMakeFiles/PC_interface2.dir/PC_interface2.cpp.s
+.PHONY : PC_interface2.cpp.s
 
 # Help Target
 help:
@@ -145,12 +145,12 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... PC_interface"
+	@echo "... PC_interface2"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... PC_interface.o"
-	@echo "... PC_interface.i"
-	@echo "... PC_interface.s"
+	@echo "... PC_interface2.o"
+	@echo "... PC_interface2.i"
+	@echo "... PC_interface2.s"
 .PHONY : help
 
 

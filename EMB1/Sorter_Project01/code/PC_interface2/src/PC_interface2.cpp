@@ -19,7 +19,16 @@ void write_FPGA(asio::serial_port &port, string &command)
   full_command = command + " " + data_;
 
   //Write the command to access to memory
-  asio::write(port, asio::buffer(full_command.c_str(), full_command.size()));
+  port.write_some(asio::buffer(full_command.c_str(), full_command.size()));
+
+
+  char data[9] = {};
+  port.read_some(asio::buffer(data,9));
+  //unsigned char* new_data = boost::asio::buffer_cast<unsigned char*>(read_buf);
+
+  //string new_data_str((char*) new_data);
+  cout << "Data recieved was: " << data << "\n";
+
 
 }
 
@@ -33,7 +42,7 @@ void read_FPGA(asio::serial_port &port, string &command)
   asio::write(port, asio::buffer(command.c_str(), command.size()));
 
   //Read the memory set and save it in char*
-  asio::read(port, asio::buffer(data,9));
+  port.read_some(asio::buffer(data,9));
   //unsigned char* new_data = boost::asio::buffer_cast<unsigned char*>(read_buf);
 
   //string new_data_str((char*) new_data);

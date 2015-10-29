@@ -1,4 +1,4 @@
-# Install script for directory: /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src
+# Install script for directory: /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ else()
   set(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 endif()
 
-file(WRITE "/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src/${CMAKE_INSTALL_MANIFEST}" "")
+file(WRITE "/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src/${CMAKE_INSTALL_MANIFEST}" "")
 foreach(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  file(APPEND "/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  file(APPEND "/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 endforeach()

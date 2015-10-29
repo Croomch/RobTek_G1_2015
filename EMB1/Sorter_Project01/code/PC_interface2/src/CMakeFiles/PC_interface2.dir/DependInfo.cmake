@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src/PC_interface.cpp" "/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src/CMakeFiles/PC_interface.dir/PC_interface.cpp.o"
+  "/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src/PC_interface2.cpp" "/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface2/src/CMakeFiles/PC_interface2.dir/PC_interface2.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
