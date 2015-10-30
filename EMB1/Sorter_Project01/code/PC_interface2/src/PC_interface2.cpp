@@ -22,14 +22,6 @@ void write_FPGA(asio::serial_port &port, string &command)
   port.write_some(asio::buffer(full_command.c_str(), full_command.size()));
 
 
-  char data[9] = {};
-  port.read_some(asio::buffer(data,9));
-  //unsigned char* new_data = boost::asio::buffer_cast<unsigned char*>(read_buf);
-
-  //string new_data_str((char*) new_data);
-  cout << "Data recieved was: " << data << "\n";
-
-
 }
 
 

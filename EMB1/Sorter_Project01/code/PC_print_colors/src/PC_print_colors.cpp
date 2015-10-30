@@ -12,10 +12,10 @@ void write_FPGA(asio::serial_port &port, string &command)
 {
 
   cout << "Enter data:\n";
-  string data_, full_command;
-  cin >> data_;
+  string data, full_command;
+  cin >> data;
 
-  full_command = command + " " + data_;
+  full_command = command + " " + data;
 
   //Write the command to access to memory
   asio::write(port, asio::buffer(full_command.c_str(), full_command.size()));
@@ -24,7 +24,7 @@ void write_FPGA(asio::serial_port &port, string &command)
 
 
 //Function to read data in FPGA
-void read_FPGA(asio::serial_port &port, string &command)
+string read_FPGA(asio::serial_port &port, string &command)
 {
 
   char data[9] = {};
@@ -33,14 +33,31 @@ void read_FPGA(asio::serial_port &port, string &command)
 
   //Read the memory set and save it in char*
   asio::read(port, asio::buffer(data,9));
-  //unsigned char* new_data = boost::asio::buffer_cast<unsigned char*>(read_buf);
 
-  //string new_data_str((char*) new_data);
-  cout << "Data recieved was: " << data << "\n";
+  //cout << "Data recieved was: " << data;// << "\n";
 
-  //return data;
+  return data;
 }
 
+int HEX_2_int(string data)
+{
+  int value = 0;
+
+  for(int i=0; i<=7; i++)
+  {
+     char c = data[i];
+     if(c >= '0' && c <= '9')
+     { value = value*16 + (c-'0');
+     }
+     else if(c >= 'a' && c <= 'f')
+     { value = value*16 + (c-'a'+10);
+     }
+
+  }
+  
+  return value;
+
+}
 
 int main()
 {
@@ -48,16 +65,6 @@ int main()
   string portname;
   string data_;
   string inputdata;
-
-
-
-  //	asio::mutable_buffer read_buf;
-
-  //asio::const_buffer command_buf = asio::buffer(command);
-  //asio::const_buffers_1 command_buf;
-
-  //	asio::io_service io;
-  //	asio::serial_port port( io );
 
 
 
@@ -82,38 +89,38 @@ int main()
   //////////////////////////////////////////////////////////////////////////////////////
   // 	While loop, ask for port to read and print it constatntly
 
-  cout << "Select port to read" << endl;
-  cin >> command;	
+//  cout << "Select port to read" << endl;
+//  cin >> command;	
   while(1){
 
-	
-      if(command[0] == 'r'){
+	  //Read data from port 
+	  command = "r20";
+          cout << "\rR2W0 (red): ";
+          data_ = read_FPGA(port, command);
+	  //Convert data to integer
+	  cout << HEX_2_int(data_) << "\t\t";
 
-          cout << "\rReading from port.\n";
-          read_FPGA(port, command);
+	  //Read data from port 
+	  command = "r21";
+          cout << "R2W1 (green): ";
+          data_ = read_FPGA(port, command);
+	  //Convert data to integer
+	  cout << HEX_2_int(data_) << "\t\t";
 
-        } else if(command[0] == 'w'){
+	  //Read data from port 
+	  command = "r22";
+          cout << "R2W2 (blue): ";
+          data_ = read_FPGA(port, command);
+	  //Convert data to integer
+	  cout << HEX_2_int(data_);
 
-          cout << "Writing to port.\n";
-          write_FPGA(port, command);
 
-        }
+
+
     }
 
 
   port.close();
-
-  ///////////////////////////////////////////////////////////////////////////////////////
-  // 	Test read on buffer
-  /*
-
-        asio::write(port, asio::buffer(command.c_str(), command.size()));
-
-        asio::read(port, asio::buffer(read_buf));
-        unsigned char* p2 = boost::asio::buffer_cast<unsigned char*>(read_buf);
-
-        cout << p2;
-*/
 
 
 
