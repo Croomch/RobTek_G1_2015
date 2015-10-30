@@ -1,0 +1,6 @@
+
+\subsection{AD-Converter Communication}
+The ADC communicates using SPI.
+This is hence implemented in the module.
+Since the ADC only allows up to 3.6MHz communication frequency, then the clock is scaled down to 3.57MHz.
+The FPGA is then requesting the data from the ADC continuously and whenever a whole message is received, it is send out into the FPGA and a signal is pulsed to notify the color detector of the new message.

@@ -1,0 +1,41 @@
+
+\subsection{Top Module}
+The top module is the part of the system which combines all the functionality the FPGA should have.
+Its core functionality is implemented as the state machine in figure \ref{fig:topmodule_fsm}.
+This state machine is sorting the bricks using the signals generated from the sub components.
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=3cm]
+\node[circle, minimum width=6cm, name=c] {};
+
+\node[initial,accepting,state,name=start,minimum width=2.2cm] at (c.180)   {Wait}; 
+
+\node[state,name=left,minimum width=2.2cm] at (c.50)   {Left Tray}; 
+\node[state,name=right,minimum width=2.2cm] at (c.-50)   {Right Tray}; 
+
+
+%\node[name=rst] at (-2.5,3) {rst};
+
+\draw[->] (start) to[out=40, in=180] node[midway,above left] {Green} (left) ;
+\draw[->] (start) to[out=10, in=230] node[midway,above left] {Timeout} (left) ;
+
+\draw[->] (start) to[out=-10, in=-230] node[midway,below left] {Red} (right) ;
+\draw[->] (start) to[out=-40, in=180] node[midway,below left] {Timeout} (right) ;  
+\end{tikzpicture}
+
+\caption{Top module Finite State Machine.}
+\label{fig:topmodule_fsm}
+\end{figure}
+
+
+The state machine in figure \ref{fig:topmodule_fsm} waits in the idle mode whenever no brick is or has passed.
+When a brick is detected, and the state machine is in the \textit{Wait} state, then it moves to the \textit{Right-} or \textit{Left Tray} state depending on the color of the brick.
+When the state is changed, a timer is started and this generated a timeout signal once the time has elapsed.
+This timeout results in the state machine returning to its initial \textit{Wait} state when the brick has passed the sorter.
+While the state machine is in \textit{Left-} or \textit{Right Tray}, it sends a signal to the \textit{Motor Control} component to move to the left or right side in order to sort the bricks.
+Otherwise, the motors are told to return to its initial position, which is when the motor is pointing the sorter towards the falling bricks.
+
+
+

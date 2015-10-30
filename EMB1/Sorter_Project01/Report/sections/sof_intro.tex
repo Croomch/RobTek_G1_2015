@@ -1,0 +1,73 @@
+This section describes the software used to control the brick sorting system.
+First the top module is described and from there the individual components are considered.
+
+The main components and their interface is shown in figure \ref{fig:program_design}.
+Apart from the shown connections in figure \ref{fig:program_design}, then a set of connections to transfer variables which can be set from the computer and the clock signal.
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1cm]
+% FPGA border
+\node[rectangle,draw,minimum width=9cm, minimum height=7cm, dashed, name=FPGA]  {};
+
+% used to align the insides of FPGA
+\node[rectangle,minimum width=5cm, minimum height=5cm, name=FPGAaligne] {};
+
+% components of FPGA
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=utos] at (FPGAaligne.-135) {uTosNet};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=ad] at (FPGAaligne.45) {\begin{varwidth}{4cm}AD-Converter\\ Communication\end{varwidth}};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=mc] at (FPGAaligne.0) {Motor Control};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=fsm] at (FPGAaligne.180) {FSM};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=color] at (FPGAaligne.135) {Color Detector};
+
+% nodes outside FPGA
+\node [left=of utos,name=pc] {PC};
+\node [right=of ad,name=adc] {SPI};
+\node [left=of color,name=rgb] {RGB(2:0)};
+\node [right=of mc,name=servo] {Servo};
+
+% arrows inside FPGA
+\draw[<->] (utos) -- node[] {} (fsm) ;
+\draw[<-] (color) -- node[above] {10 bit} (ad) ;
+\draw[->] (fsm) --  node[above] {2 bit} (mc) ;
+\draw[->] (color) -- node[left] {2 bit} (fsm) ;
+ 
+% arrows connected to the outside of FPGA
+\draw[<->] (utos) to[out=180, in=0] node[] {} (pc) ;
+\draw[->] (adc) to[out=180, in=0] node[] {} (ad) ;
+\draw[->] (color) to[out=180, in=0] node[] {} (rgb) ;
+\draw[->] (mc) to[out=0, in=180] node[] {} (servo) ;
+\end{tikzpicture}
+
+\caption{FPGA Program Design.}
+\label{fig:program_design}
+\end{figure}
+
+
+
+The components of figure \ref{fig:program_design} are responsible for the following tasks.
+
+\paragraph*{FSM}
+The \textit{FSM} component is the top module of the system.
+It connects the remaining components functionality in order to sort the bricks depending on their color and communicate with the computer.
+
+\paragraph*{Color Detector}
+The \textit{Color Detector} is responsible for controlling the LEDs and use the data from the ADC to decide the color of the bricks passing through the system.
+This way it is able to connect the light intensity values from the photo-diode and relate them to a specific color.
+From there the data is used to decide which brick, if any, is passing the sensor.
+
+\paragraph*{AD-converter Communication}
+This component implements the SPI communication to the ADC and feeds this onwards to the \textit{Color Detector}.
+
+
+\paragraph*{Motor Control}
+The \textit{Motor Control} component is controlling the servo motor using an input signal, deciding which of three positions it should be in.
+Either the left- or right-tray or the idle position.
+
+\paragraph*{uTosNet}
+UTosNet is the component supplied by SDU which implements the communication with the computer.
+This component is hence created such that it is capable of transferring data of importance to the FPGA and change specific settings or gather data from such.
+
+
+
