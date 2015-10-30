@@ -1,8 +1,3 @@
-LECROYWS3024,14476,Waveform
-Segments,1,SegmentSize,100002
-Segment,TrigTime,TimeSinceSegment1
-#1,22-Oct-2015 04:23:00,0                 
-Time,Ampl
 -0.001000008,6.21667
 -0.00099998803,6.21667
 -0.00099996803,6.21667
