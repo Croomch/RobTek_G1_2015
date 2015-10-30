@@ -43,6 +43,8 @@ signal spi_data : STD_LOGIC_VECTOR(9 downto 0) := "0000000000";
 signal spi_data_updated : STD_LOGIC := '0';
 -- led driver signals --
 signal led_signal : STD_LOGIC_VECTOR(2 downto 0) := "000";
+-- sample adc
+signal sample_adc : STD_LOGIC := '0';
 
 
 -- Signals below is used to connect to the Pseudo TosNet Controller component  
@@ -124,7 +126,8 @@ COMPONENT ColorDetector IS
             ligtlevel_updated : in STD_LOGIC;
             ligthlevel : in STD_LOGIC_VECTOR (9 downto 0);
             intensity_red, intensity_green, intensity_blue : out STD_LOGIC_VECTOR (9 downto 0);
-            treshold_red, treshold_green, treshold_blue : in STD_LOGIC_VECTOR (9 downto 0)
+            treshold_red, treshold_green, treshold_blue : in STD_LOGIC_VECTOR (9 downto 0);
+            getData : out STD_LOGIC
            );
 END COMPONENT;
 
@@ -136,7 +139,8 @@ COMPONENT SPI IS
             SPI_MISO : in STD_LOGIC;
             SPI_CS : out STD_LOGIC;
             output_updated : out STD_LOGIC; 
-            output : out STD_LOGIC_VECTOR (9 downto 0)
+            output : out STD_LOGIC_VECTOR (9 downto 0);
+            getSample : in STD_LOGIC
             );
 END COMPONENT;
 
@@ -176,7 +180,8 @@ SPI_dev: SPI PORT MAP (
     SPI_MISO => SPI_MISO,
     SPI_CS => SPI_CS,
     output_updated => spi_data_updated,
-    output => spi_data
+    output => spi_data,
+    getSample => sample_adc
 );
 
 -- color detector --
@@ -192,7 +197,8 @@ colordetector_dev: ColorDetector PORT MAP (
     intensity_blue => i_blue,
     treshold_red => t_red, 
     treshold_green => t_green, 
-    treshold_blue => t_blue
+    treshold_blue => t_blue,
+    getData => sample_adc
 );
 
 

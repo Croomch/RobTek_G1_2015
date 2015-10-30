@@ -43,12 +43,9 @@ r_12v = [11 16.5 33];
 
 
 
-
 supply_voltage = 15;
-supply_current = 0.08;
 power_input = supply_current * supply_voltage ;
 
-load_resistor = 33;
 %power_output_min = v_min^2 / load_resistor;
 %power_output_max = v_max^2 / load_resistor;
 %power_output_avg = v_avg^2 / load_resistor;
@@ -60,4 +57,8 @@ load_resistor = 33;
 %v_min;
 %v_avg;
 %v_max;
+
+figure(1);
+hFig = figure(1);
+set(hFig, 'Position', [0 0 500 320])
 

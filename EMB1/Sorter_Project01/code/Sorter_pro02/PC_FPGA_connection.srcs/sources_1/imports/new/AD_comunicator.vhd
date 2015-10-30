@@ -38,7 +38,8 @@ entity SPI is
            SPI_MISO : in STD_LOGIC;
            SPI_CS : out STD_LOGIC;
            output : out STD_LOGIC_VECTOR (9 downto 0);
-           output_updated : out STD_LOGIC
+           output_updated : out STD_LOGIC;
+           getSample : in STD_LOGIC
            );
 end SPI;
 
@@ -62,13 +63,13 @@ CONSTANT MSG_CS_END : INTEGER := 4;
 CONSTANT MSG_DATA_START : INTEGER := 8;
 CONSTANT MSG_DATA_END : INTEGER := 17;
 -- how often restart to sample --
-CONSTANT MSG_PERIOD : INTEGER := 350;--MSG_DATA_END+1;
+CONSTANT MSG_PERIOD : INTEGER := MSG_DATA_END+1;
 
 begin
 
 -- actual data part --
-process(CLK_SPI, CLK)
-variable CLK_COUNT : integer range 0 to MSG_PERIOD+1 := MSG_PERIOD;
+process(CLK_SPI, CLK, getSample)
+variable CLK_COUNT : integer range 0 to MSG_PERIOD := MSG_PERIOD;
 -- var to make sure you only pulse once
 variable pulsed : boolean := false;
 begin
@@ -84,10 +85,15 @@ begin
     end if;
     if rising_edge(CLK_SPI) then
         -- increment counter --
-        CLK_COUNT := CLK_COUNT + 1;
-        if CLK_COUNT > MSG_PERIOD then
-            CLK_COUNT := 0;
+        if CLK_COUNT < MSG_PERIOD then 
+            CLK_COUNT := CLK_COUNT + 1;
+        end if;
+        -- put data on bus
+        if CLK_COUNT = MSG_DATA_END then
             output <= data;
+        end if;
+        if CLK_COUNT >= MSG_PERIOD and getSample = '1' then
+            CLK_COUNT := 0;            
         end if;
      
         -- process the msg --

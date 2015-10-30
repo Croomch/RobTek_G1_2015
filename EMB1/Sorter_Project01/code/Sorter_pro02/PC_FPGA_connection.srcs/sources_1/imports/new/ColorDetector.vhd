@@ -38,7 +38,8 @@ entity ColorDetector is
             ligtlevel_updated : in STD_LOGIC;
             ligthlevel : in STD_LOGIC_VECTOR (9 downto 0);
             intensity_red, intensity_green, intensity_blue : out STD_LOGIC_VECTOR (9 downto 0);
-            treshold_red, treshold_green, treshold_blue : in STD_LOGIC_VECTOR (9 downto 0)
+            treshold_red, treshold_green, treshold_blue : in STD_LOGIC_VECTOR (9 downto 0);
+            getData : out STD_LOGIC
            );
 end ColorDetector;
 
@@ -50,6 +51,14 @@ signal pr_state, nx_state : state;
 signal i_red, i_blue, i_green : STD_LOGIC_VECTOR (9 downto 0) := "0000000000";
 -- intensity tresholds --
 signal t_red, t_blue, t_green : STD_LOGIC_VECTOR (9 downto 0) := "1000000000";
+-- timer signal
+signal timer_end, timer_start : STD_LOGIC := '0';
+
+---- Constants ----
+-- board clk frequency --
+CONSTANT CLK_FREQ : INTEGER := 50000000;
+-- constant for defining wait period from LED is switched on till the adc has to be sampled
+CONSTANT CLK_TIMEOUT_PERIOD : INTEGER := CLK_FREQ/ 30000;
 
 begin
 -- load tresholds
@@ -68,11 +77,12 @@ end process;
 
 -- upper FSM, could be concurrent code too - no flip-flops allowed --
 -- see state diagram for the design
-process(pr_state, ligtlevel_updated) -- pr state and all other inputs
+process(pr_state, ligtlevel_updated, timer_end) -- pr state and all other inputs
 begin
     CASE pr_state IS
         WHEN decide =>
             -- output --
+            timer_start <= '0';
             led <= "000";
             intensity_red <= i_red;
             intensity_green <= i_green;
@@ -87,22 +97,38 @@ begin
             if i_blue >= t_blue then
                 color(0) <= '1';
             end if;
+            -- also wait here for 25% duty cycle
+            --timer_start <= '1';
+            --getData <= '0';
+            --if timer_end = '1' then
+            --    timer_start <= '0';
+            --    getData <= '1';
+            --end if;
             -- what is nx-state?
-            if ligtlevel_updated = '1' then -- wait for new sensor value
+            --if ligtlevel_updated = '1' then -- wait for new sensor value
                 nx_state <= red;
-                led <= "100";
-            else -- stay in the state
-                nx_state <= decide;
-            end if;
+            --    led <= "100";
+            --    timer_start <= '0';
+            --else -- stay in the state
+            --    nx_state <= decide;
+            --end if;
         WHEN red =>
             -- output --
             color <= "000";
             i_red <= ligthlevel;
             led <= "100";
+            -- timeout to get data
+            timer_start <= '1';
+            getData <= '0';
+            if timer_end = '1' then
+                timer_start <= '0';
+                getData <= '1';
+            end if;
             -- what is nx-state? 
             if ligtlevel_updated = '1' then -- wait for new sensor value
                 nx_state <= green;
                 led <= "010";
+                timer_start <= '0';
             else -- stay in the state
                 nx_state <= red;
             end if;
@@ -111,10 +137,18 @@ begin
             color <= "000";
             i_green <= ligthlevel;
             led <= "010";
+            -- timeout to get data
+            timer_start <= '1';
+            getData <= '0';
+            if timer_end = '1' then
+                timer_start <= '0';
+                getData <= '1';
+            end if;
             -- what is nx-state? 
             if ligtlevel_updated = '1' then -- wait for new sensor value
-                    nx_state <= blue;
-                    led <= "001";
+                nx_state <= blue;
+                led <= "001";
+                timer_start <= '0';
             else -- stay in the state
                 nx_state <= green;
             end if;
@@ -123,13 +157,41 @@ begin
             color <= "000";
             i_blue <= ligthlevel;
             led <= "001";
+            -- timeout to get data
+            timer_start <= '1';
+            getData <= '0';
+            if timer_end = '1' then
+                timer_start <= '0';
+                getData <= '1';
+            end if;
             -- what is nx-state? 
             if ligtlevel_updated = '1' then -- wait for new sensor value
                 nx_state <= decide;
+                timer_start <= '0';
             else -- stay in the state
                 nx_state <= blue;
             end if;
     END CASE; 
+end process;
+
+
+-- clk timeout --
+-- generate a timer_end pulse x sec after timer_start has been stepped up 
+process(CLK,timer_start)
+variable scaler : integer range 0 to CLK_TIMEOUT_PERIOD := 0;
+begin
+    if rising_edge(CLK) then
+        if timer_start = '1' then -- count up the timer only if asked for
+            scaler := scaler + 1;
+            if scaler >= CLK_TIMEOUT_PERIOD then -- time period reached
+                scaler := 0;
+                timer_end <= '1'; -- send signal
+            end if;
+        else -- if not asked for, keep scaler rst
+            scaler := 0;
+            timer_end <= '0';
+        end if;
+    end if;
 end process;
 
 
