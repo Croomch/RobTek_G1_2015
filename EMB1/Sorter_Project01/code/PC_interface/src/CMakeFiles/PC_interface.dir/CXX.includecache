@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_interface/src/PC_interface.cpp
+boost/asio.hpp
+-
+iostream
+-
+string
+-
+
