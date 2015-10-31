@@ -1,0 +1,12 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {2}Circuit and Physical Design}{3}
+\contentsline {subsection}{\numberline {2.1}Power Supply}{3}
+\contentsline {subsection}{\numberline {2.2}LED controller}{5}
+\contentsline {subsection}{\numberline {2.3}Light sensor}{5}
+\contentsline {subsection}{\numberline {2.4}Servo motor}{6}
+\contentsline {section}{\numberline {3}Software}{6}
+\contentsline {subsection}{\numberline {3.1}Top Module}{7}
+\contentsline {subsection}{\numberline {3.2}AD-Converter Communication}{8}
+\contentsline {subsection}{\numberline {3.3}Servo Motor}{8}
+\contentsline {subsection}{\numberline {3.4}PC Communication}{8}
