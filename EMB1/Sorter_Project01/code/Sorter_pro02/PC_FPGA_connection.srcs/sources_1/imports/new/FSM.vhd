@@ -72,7 +72,10 @@ signal v_leds            : std_logic_vector(31 downto 0); -- 32 bit register to 
  -- intensity values for the 3 different colors from the color detector
  signal i_red, i_green, i_blue : STD_LOGIC_VECTOR(9 downto 0) := (others => '0');
  -- tresholds for the color detector
- signal t_red, t_green, t_blue : STD_LOGIC_VECTOR(9 downto 0) := "1000000000";
+ signal t_red_redmin, t_red_redMax, t_green_redmin, t_green_redMax, t_blue_redmin, t_blue_redMax : STD_LOGIC_VECTOR(9 downto 0) := "1000000000";
+ signal t_red_greenmin, t_red_greenMax, t_green_greenmin, t_green_greenMax, t_blue_greenmin, t_blue_greenMax : STD_LOGIC_VECTOR(9 downto 0) := "1000000000";
+ signal t_red_bluemin, t_red_blueMax, t_green_bluemin, t_green_blueMax, t_blue_bluemin, t_blue_blueMax : STD_LOGIC_VECTOR(9 downto 0) := "1000000000";
+ 
 -- motor positions
 signal mp_left : STD_LOGIC_VECTOR(8 downto 0) := "110000000"; -- W34 000000C0
 signal mp_center : STD_LOGIC_VECTOR(8 downto 0) := "010001000"; -- W35 00000136
@@ -126,8 +129,18 @@ COMPONENT ColorDetector IS
             ligtlevel_updated : in STD_LOGIC;
             ligthlevel : in STD_LOGIC_VECTOR (9 downto 0);
             intensity_red, intensity_green, intensity_blue : out STD_LOGIC_VECTOR (9 downto 0);
-            treshold_red, treshold_green, treshold_blue : in STD_LOGIC_VECTOR (9 downto 0);
-            getData : out STD_LOGIC
+            
+            tr_red_redmin, tr_red_redMax : in STD_LOGIC_VECTOR (9 downto 0);
+            tr_green_redmin, tr_green_redMax : in STD_LOGIC_VECTOR (9 downto 0);
+            tr_blue_redmin, tr_blue_redMax : in STD_LOGIC_VECTOR (9 downto 0);
+
+            tr_red_greenmin, tr_red_greenMax : in STD_LOGIC_VECTOR (9 downto 0);
+            tr_green_greenmin, tr_green_greenMax : in STD_LOGIC_VECTOR (9 downto 0);
+            tr_blue_greenmin, tr_blue_greenMax : in STD_LOGIC_VECTOR (9 downto 0);
+
+            tr_red_bluemin, tr_red_blueMax : in STD_LOGIC_VECTOR (9 downto 0);
+            tr_green_bluemin, tr_green_blueMax : in STD_LOGIC_VECTOR (9 downto 0);
+            tr_blue_bluemin, tr_blue_blueMax : in STD_LOGIC_VECTOR (9 downto 0);            getData : out STD_LOGIC
            );
 END COMPONENT;
 
@@ -195,9 +208,28 @@ colordetector_dev: ColorDetector PORT MAP (
     intensity_red => i_red, 
     intensity_green => i_green, 
     intensity_blue => i_blue,
-    treshold_red => t_red, 
-    treshold_green => t_green, 
-    treshold_blue => t_blue,
+    
+    tr_red_redmin => t_red_redmin,
+    tr_red_redMax => t_red_redMax,    
+    tr_green_redmin => t_green_redmin,
+    tr_green_redMax => t_green_redMax,
+    tr_blue_redmin => t_blue_redmin,
+    tr_blue_redMax => t_blue_redMax,
+    
+    tr_red_bluemin => t_red_bluemin,
+    tr_red_blueMax => t_red_blueMax,
+    tr_green_bluemin => t_green_bluemin,
+    tr_green_blueMax => t_green_blueMax,
+    tr_blue_bluemin => t_blue_bluemin,
+    tr_blue_blueMax => t_blue_blueMax,
+    
+    tr_red_greenmin => t_red_greenmin,
+    tr_red_greenMax => t_red_greenMax,
+    tr_green_greenmin => t_green_greenmin,
+    tr_green_greenMax => t_green_greenMax,
+    tr_blue_greenmin => t_blue_greenmin,
+    tr_blue_greenMax => t_blue_greenMax,
+    
     getData => sample_adc
 );
 
@@ -306,10 +338,31 @@ end process;
 --		  when "00100" => v_leds    <= T_data_from_mem;               -- Register 1, word 0 - all 32 bits
 
           when "00000" => LED_DATA <= T_data_from_mem(31 downto 24);  -- Register 0, word 1 - high 8 bits
+          
+          -- register 1, tresholds for the intensities
+          when "00100" => t_red_redmin <= T_data_from_mem(29 downto 20);
+                          t_green_redmin <= T_data_from_mem(19 downto 10);
+                          t_blue_redmin <= T_data_from_mem(9 downto 0);
+          when "00101" => t_red_redMax <= T_data_from_mem(29 downto 20);
+                          t_green_redMax <= T_data_from_mem(19 downto 10);
+                          t_blue_redMax <= T_data_from_mem(9 downto 0);
+                          
+          when "00110" => t_red_greenmin <= T_data_from_mem(29 downto 20);
+                          t_green_greenmin <= T_data_from_mem(19 downto 10);
+                          t_blue_greenmin <= T_data_from_mem(9 downto 0);
+          when "00111" => t_red_greenMax <= T_data_from_mem(29 downto 20);
+                          t_green_greenMax <= T_data_from_mem(19 downto 10);
+                          t_blue_greenMax <= T_data_from_mem(9 downto 0);
+                          
           -- register 2, tresholds for the intensities 
-          when "01000" => t_red <= T_data_from_mem(9 downto 0); -- R2W0
-          when "01001" => t_green <= T_data_from_mem(9 downto 0); -- R2W1
-          when "01010" => t_blue <= T_data_from_mem(9 downto 0); -- R2W2 
+          when "01000" => t_red_bluemin <= T_data_from_mem(29 downto 20);
+                          t_green_bluemin <= T_data_from_mem(19 downto 10);
+                          t_blue_bluemin <= T_data_from_mem(9 downto 0);
+          when "01001" => t_red_blueMax <= T_data_from_mem(29 downto 20);
+                          t_green_blueMax <= T_data_from_mem(19 downto 10);
+                          t_blue_blueMax <= T_data_from_mem(9 downto 0);
+                          
+          
           -- register 3, potor position values 
           when "01100" => mp_left <= T_data_from_mem(8 downto 0); -- R3W0
           when "01101" => mp_center <= T_data_from_mem(8 downto 0); -- R3W1
