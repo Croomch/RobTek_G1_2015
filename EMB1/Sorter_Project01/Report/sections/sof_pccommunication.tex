@@ -1,2 +1,31 @@
 \subsection{PC Communication}
-The communication to the PC...
+The communication to the PC was implemented using uTosNet on the FPGA and a C++ program on the PC.
+The data made available to the computer is seen in table \ref{tab:pc_fpga_communication}.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & \multicolumn{4}{|c|}{FPGA $\rightarrow$ PC} \\ \hline
+& W0 & W1 & W2 & W3 \\ \hline
+R0 & 1 & 2 & 4 & 8 \\ \hline
+R1 & sys\_cnt & freq\_gen & - & - \\ \hline
+R2 & i\_red & i\_green & i\_blue & - \\ \hline
+R3 & bricks\_red & bricks\_green & bricks\_blue & - \\ \hline
+ & \multicolumn{4}{|c|}{PC $\rightarrow$ FPGA} \\ \hline
+& W0 & W1 & W2 & W3 \\ \hline
+R0 & LED\_DATA & - & - & - \\ \hline
+R1 & low\_threshold\_red & up\_threshold\_red & low\_threshold\_green & up\_threshold\_green \\ \hline
+R2 & low\_threshold\_blue & up\_threshold\_blue & - & - \\ \hline
+R3 & mp\_left & mp\_center & mp\_right & mp\_overwrite \\ \hline
+
+\end{tabular}
+\caption{FPGA and PC data exchange. 
+Where Rx is the x'th register and Wy is the y'th word in the uTosNet protocol.
+For reading the registers with i\_ are intensity values from the ADC for the respective color, bricks\_ is the brick count of the color.
+The PC $\rightarrow$ FPGA registers with \_threshold\_ is the upper and lower thresholds for the corresponding brick for the three different colors.
+And the mp\_ registers control the position of the motor when it is in the right, left or center position and it include an overwrite which forces it to stay in one of the three states.
+}
+\label{tab:pc_fpga_communication}
+\end{table}

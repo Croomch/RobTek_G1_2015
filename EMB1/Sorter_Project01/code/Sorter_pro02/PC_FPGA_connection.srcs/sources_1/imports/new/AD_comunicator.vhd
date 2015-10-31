@@ -48,6 +48,7 @@ architecture Behavioral of SPI is
 -- spi signals --
 SIGNAL CLK_SPI : STD_LOGIC := '0';
 SIGNAL CS : STD_LOGIC := '1';
+SIGNAL MOSI : STD_LOGIC := '1';
 -- to get val --
 CONSTANT CBS : STD_LOGIC_vector (3 downto 0) := "1000";
 -- data recieved 
@@ -67,6 +68,8 @@ CONSTANT MSG_PERIOD : INTEGER := MSG_DATA_END+1;
 
 begin
 
+SPI_CS <= CS;
+SPI_MOSI <= MOSI;
 -- actual data part --
 process(CLK_SPI, CLK, getSample)
 variable CLK_COUNT : integer range 0 to MSG_PERIOD := MSG_PERIOD;
@@ -76,7 +79,7 @@ begin
     if rising_edge(CLK) then 
         output_updated <= '0';
         -- signal new message 
-        if CLK_COUNT = MSG_DATA_END AND pulsed = false then
+        if CLK_COUNT = MSG_DATA_END+1 AND pulsed = false then
             pulsed := true;
             output_updated <= '1';
         elsif  CLK_COUNT = 0 then
@@ -89,7 +92,7 @@ begin
             CLK_COUNT := CLK_COUNT + 1;
         end if;
         -- put data on bus
-        if CLK_COUNT = MSG_DATA_END then
+        if CLK_COUNT = MSG_DATA_END+1 then
             output <= data;
         end if;
         if CLK_COUNT >= MSG_PERIOD and getSample = '1' then
@@ -106,14 +109,14 @@ begin
     -- send commands on falling edge
         if CLK_COUNT = 0 then
             -- drive CS low to initiate communication  
-            SPI_CS <= '0';   
+            CS <= '0';   
         elsif CLK_COUNT >= MSG_CS_START and CLK_COUNT <= MSG_CS_END then
             -- send the Control selection
-            SPI_MOSI <= CBS((MSG_CS_END - MSG_CS_START) - (CLK_COUNT - MSG_CS_START));
+            MOSI <= CBS((MSG_CS_END - MSG_CS_START) - (CLK_COUNT - MSG_CS_START));
         end if;
         -- put CS low to prep for next read 
         if CLK_COUNT = MSG_DATA_END then
-            SPI_CS <= '1';
+            CS <= '1';
         end if; 
     end if;
 end process;
