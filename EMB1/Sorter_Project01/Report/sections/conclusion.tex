@@ -1,0 +1,18 @@
+A system was constructed using LEDs and a photodiode making it possible to detect the light intensity of the bricks when red, green and blue light is shined upon them.
+An ADC was used to digitalize the data from the photodiode and send it to the FPGA.
+Using thresholds, the color of the brick was then detected on the FPGA as either blue, red or green.
+This information was then used to sort the bricks to the left or right depending on their color using a servo motor.
+
+All the electronics are supplied by a powersupply converting a 15V supply into 5V, 6V and 12V.
+
+It was found that this setup worked desirably, but with room for improvement.
+The brick was capable of sorting ....
+\todo[inline]{write about the tests}
+
+This includes being able to amplify the signal from the photodiode to a range of 0 to 3.3V without saturating because of the amplifier going in saturation.
+
+
+
+
+
+

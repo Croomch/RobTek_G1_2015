@@ -16,7 +16,7 @@ Apart from the shown connections in figure \ref{fig:program_design}, then a set 
 
 % components of FPGA
 \node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=utos] at (FPGAaligne.-135) {uTosNet};
-\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=ad] at (FPGAaligne.45) {\begin{varwidth}{4cm}AD-Converter\\ Communication\end{varwidth}};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=ad] at (FPGAaligne.45) {\begin{varwidth}{4cm}ADC\\ Communication\end{varwidth}};
 \node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=mc] at (FPGAaligne.0) {Motor Control};
 \node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=fsm] at (FPGAaligne.180) {FSM};
 \node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=color] at (FPGAaligne.135) {Color Detector};
@@ -57,7 +57,7 @@ The \textit{Color Detector} is responsible for controlling the LEDs and use the 
 This way it is able to connect the light intensity values from the photo-diode and relate them to a specific color.
 From there the data is used to decide which brick, if any, is passing the sensor.
 
-\paragraph*{AD-converter Communication}
+\paragraph*{ADC Communication}
 This component implements the SPI communication to the ADC and feeds this onwards to the \textit{Color Detector}.
 
 

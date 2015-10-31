@@ -27,18 +27,19 @@ CONSTANT SERVO_UPDATE : INTEGER := CLK_FREQ / 50; -- updated with 50 Hz (20ms)
 signal left : STD_LOGIC_VECTOR(16 downto 0) :=   "01100001101010000"; 
 signal right : STD_LOGIC_VECTOR(16 downto 0) :=  "11000011101010000"; 
 signal center : STD_LOGIC_VECTOR(16 downto 0) := "10010011101010000"; 
+signal overwrite : STD_LOGIC_VECTOR(1 downto 0) := "11"; 
 
 signal mp : STD_LOGIC_VECTOR(1 downto 0) := "00";
 
 begin
-
+overwrite <= mp_overwrite;
 -- values for the position
 left <= mp_left & "01010000";
 center <= mp_center & "01010000";
 right <= mp_right & "01010000";
 
 -- motorposition overwrite
-mp <= motorposition WHEN mp_overwrite = "11" ELSE mp_overwrite;
+mp <= motorposition WHEN overwrite = "11" ELSE overwrite;
 
 -- set PWM high when less than the uptime, else it is low
 process(CLK)

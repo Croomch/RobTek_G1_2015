@@ -1,0 +1,36 @@
+
+\subsection{Color Detector}
+The color detector is responsible for figuring out which, if any, brick color passes by the sensor.
+It does this by using both input from the ADC Communication and by controlling the three different colors of LEDs.
+
+The color detector component is designed as the state machine in figure \ref{fig:colordetector_fsm}.
+
+
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=3cm]
+\node[circle, minimum width=6cm, name=c] {};
+
+\node[initial,accepting,state,name=start,minimum width=2.2cm] at (c.180)   {Wait}; 
+
+\node[state,name=left,minimum width=2.2cm] at (c.50)   {Left Tray}; 
+\node[state,name=right,minimum width=2.2cm] at (c.-50)   {Right Tray}; 
+
+
+%\node[name=rst] at (-2.5,3) {rst};
+
+\draw[->] (start) to[out=40, in=180] node[midway,above left] {Green} (left) ;
+\draw[->] (start) to[out=10, in=230] node[midway,above left] {Timeout} (left) ;
+
+\draw[->] (start) to[out=-10, in=-230] node[midway,below left] {Red} (right) ;
+\draw[->] (start) to[out=-40, in=180] node[midway,below left] {Timeout} (right) ;  
+\end{tikzpicture}
+
+\caption{Color detectors Finite State Machine.}
+\label{fig:colordetector_fsm}
+\end{figure}
+
+
+
