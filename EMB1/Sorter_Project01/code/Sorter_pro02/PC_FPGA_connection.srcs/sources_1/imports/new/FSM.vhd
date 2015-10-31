@@ -256,7 +256,7 @@ begin
             if color = "010" then -- Green
                 nx_state <= left_tray;
                 bricks_green <= bricks_green + 1; 
-            elsif color = "010" then -- Blue
+            elsif color = "001" then -- Blue
                 bricks_blue <= bricks_blue + 1;
                 nx_state <= left_tray;
             elsif color = "100" then -- Red
@@ -272,6 +272,7 @@ begin
             -- what is nx-state? 
             if timer_end = '1' then -- wait for timer run out signal
                 nx_state <= idle;
+                timer_start <= '0';
             else -- stay in the state
                 nx_state <= left_tray;
             end if;
@@ -282,6 +283,7 @@ begin
             -- what is nx-state? 
             if timer_end = '1' then -- wait for timer run out signal
                 nx_state <= idle;
+                timer_start <= '0';
             else -- stay in the state
                 nx_state <= right_tray;
             end if;
@@ -295,7 +297,7 @@ process(CLK,timer_start)
 variable scaler : integer range 0 to CLK_TIMEOUT_PERIOD := 0;
 begin
     if rising_edge(CLK) then
-        if timer_start = '1'then -- count up the timer only if asked for
+        if timer_start = '1' then -- count up the timer only if asked for
             scaler := scaler + 1;
             if scaler >= CLK_TIMEOUT_PERIOD then -- time period reached
                 scaler := 0;

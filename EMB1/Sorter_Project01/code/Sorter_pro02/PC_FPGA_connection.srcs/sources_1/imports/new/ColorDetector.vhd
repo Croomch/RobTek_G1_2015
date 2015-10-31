@@ -184,7 +184,6 @@ begin
         WHEN red =>
             -- output --
             color <= "000";
-            i_red <= ligthlevel;
             led <= "100";
             -- timeout to get data
             timer_start <= '1';
@@ -195,6 +194,9 @@ begin
             end if;
             -- what is nx-state? 
             if ligtlevel_updated = '1' then -- wait for new sensor value
+                -- save the current intensity
+                i_red <= ligthlevel;
+                -- jump to next state and set timer to 0
                 nx_state <= green;
                 led <= "010";
                 timer_start <= '0';
@@ -204,7 +206,6 @@ begin
         WHEN green =>
             -- output --
             color <= "000";
-            i_green <= ligthlevel;
             led <= "010";
             -- timeout to get data
             timer_start <= '1';
@@ -215,6 +216,9 @@ begin
             end if;
             -- what is nx-state? 
             if ligtlevel_updated = '1' then -- wait for new sensor value
+                -- save the current intensity
+                i_green <= ligthlevel;
+                -- jump to next state and set timer to 0
                 nx_state <= blue;
                 led <= "001";
                 timer_start <= '0';
@@ -224,7 +228,6 @@ begin
         WHEN blue =>
             -- output --
             color <= "000";
-            i_blue <= ligthlevel;
             led <= "001";
             -- timeout to get data
             timer_start <= '1';
@@ -235,8 +238,12 @@ begin
             end if;
             -- what is nx-state? 
             if ligtlevel_updated = '1' then -- wait for new sensor value
+                -- save the current intensity
+                i_blue <= ligthlevel;
+                -- jump to next state and set timer to 0
                 nx_state <= decide;
                 timer_start <= '0';
+                led <= "000";
             else -- stay in the state
                 nx_state <= blue;
             end if;
