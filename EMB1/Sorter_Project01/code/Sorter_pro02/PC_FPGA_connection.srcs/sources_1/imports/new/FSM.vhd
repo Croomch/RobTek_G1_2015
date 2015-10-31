@@ -91,7 +91,7 @@ CONSTANT CLK_FREQ : INTEGER := 50000000;
 -- the period the alive-led has to blink with --     
 CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
 -- the timeout before the state of the FSM is switched back to 'idle' from 'left-' or 'right-tray' --
-CONSTANT CLK_TIMEOUT_PERIOD : INTEGER := CLK_FREQ;
+CONSTANT CLK_TIMEOUT_PERIOD : INTEGER := CLK_FREQ / 4;
 
 
 ---- Components ----
