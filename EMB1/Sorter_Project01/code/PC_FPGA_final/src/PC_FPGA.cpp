@@ -260,13 +260,13 @@ write_FPGA(port, st6, tstr_blue_max);
 		}
 
 
-	}else if(command[0] == 'r'){
+	}else if(command[0] == 'r' && isdigit(command[1]) && command.size() == 3){
 
           cout << "Reading from port.\n";
           data_ = read_FPGA(port, command);
 	  cout << data_ << endl;
 
-        } else if(command[0] == 'w'){
+        } else if(command[0] == 'w' && isdigit(command[1]) && command.size() == 3){
 	  cout << "introduce data: ";
 	  cin >> data_;
           cout << "Writing to port.\n";
