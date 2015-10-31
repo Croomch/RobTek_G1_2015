@@ -31,4 +31,5 @@ The color detector component is designed as the state machine in figure \ref{fig
 \end{figure}
 
 As seen on figure \ref{fig:colordetector_fsm} the state machine starts in \textit{Decide} from there it cycles around from state to state recording the intensity values for the three different colors.
+Whenever it reaches state \textit{Decide}, it compares the three intensities with its thresholds to decide which brick color passed.
 

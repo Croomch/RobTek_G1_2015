@@ -62,12 +62,6 @@ signal bb_leds				: std_logic_vector(7 downto 0);  -- register for 8 leds
 signal dipsw             : std_logic_vector(3 downto 0);
 signal frq,flsh      : std_logic;
     
--- The signals below is used to hold data for our I/O application
-signal pwm_value         : std_logic_vector(15 downto 0); -- 16 bit register for pwm value
-signal period		      : std_logic_vector(31 downto 0); -- 32 bit register for freq generator
-signal flash             : std_logic_vector(7 downto 0); -- 8 bit register for flash duration
-signal v_leds            : std_logic_vector(31 downto 0); -- 32 bit register to hold status for variable leds 
---  signal xb_leds           : std_logic_vector(2 downto 0);  -- register for 3 leds
  
  -- intensity values for the 3 different colors from the color detector
  signal i_red, i_green, i_blue : STD_LOGIC_VECTOR(9 downto 0) := (others => '0');
@@ -294,38 +288,30 @@ begin
 end process;
 
 
--- clk timeout --
--- generate a timer_end pulse x sec after timer_start has been stepped up 
-process(CLK,timer_start)
-variable scaler : integer range 0 to CLK_TIMEOUT_PERIOD := 0;
-begin
-    if rising_edge(CLK) then
-        if timer_start = '1' then -- count up the timer only if asked for
-            scaler := scaler + 1;
-            if scaler >= CLK_TIMEOUT_PERIOD then -- time period reached
-                scaler := 0;
-                timer_end <= '1'; -- send signal
-            end if;
-        else -- if not asked for, keep scaler rst
-            scaler := 0;
-            timer_end <= '0';
-        end if;
-    end if;
-end process;
-
-
--- alive timer --
+-- alive timer ---- clk timeout --
 -- generate a regular blinking on the onboard led 
+-- generate a timer_end pulse x sec after timer_start has been stepped up 
 ALIVE <= ALIVE_LED;
-process(CLK)
-variable scaler : integer range 0 to ALIVE_PERIOD/2 := 0;
+process(CLK, timer_start)
+variable alive_scaler : integer range 0 to ALIVE_PERIOD/2 := 0;
+variable timeout_scaler : integer range 0 to CLK_TIMEOUT_PERIOD := 0;
 begin
     if rising_edge(CLK) then
-        scaler := scaler + 1;
-        if scaler >= ALIVE_PERIOD/2 then 
-            scaler := 0;
+        alive_scaler := alive_scaler + 1;
+        if alive_scaler >= ALIVE_PERIOD/2 then 
+            alive_scaler := 0;
             ALIVE_LED <= NOT(ALIVE_LED);
         end if;
+    end if;
+    if timer_start = '1' then -- count up the timer only if asked for
+        timeout_scaler := timeout_scaler + 1;
+    if timeout_scaler >= CLK_TIMEOUT_PERIOD then -- time period reached
+        timeout_scaler := 0;
+        timer_end <= '1'; -- send signal
+    end if;
+    else -- if not asked for, keep scaler rst
+        timeout_scaler := 0;
+        timer_end <= '0';
     end if;
 end process;
 
@@ -407,36 +393,6 @@ end process;
 			when others =>
 		end case;		
 	end process;
-
----------------------------------------------------------------------
--- Clocked process, that counts clk_50M edges
----------------------------------------------------------------------
-  SystemCounter:
-  process(CLK)
-  begin -- process
-    if (CLK'event and CLK='1') then
-	   sys_cnt<=sys_cnt+1;
-	 end if;
-  end process;
-
------------------------------------------------------------------
--- Clocked process to generate a square wave with variable period
------------------------------------------------------------------
-  FreqGen:
-  process(CLK)
-  begin -- process
-    if (CLK'event and CLK='1') then
-	   if period = 0 then
-		  freq_gen <= (others => '0');
-		  freq_out <= '0';
-		elsif freq_gen > period then
-		  freq_gen <= (others => '0');
-		  freq_out <= not freq_out;
-		else
-		  freq_gen <= freq_gen +1;
-		end if;
-	 end if;
-  end process;
 
 
 end Behavioral;
