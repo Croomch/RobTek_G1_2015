@@ -4297,6 +4297,12 @@ grid 2.54 mm</description>
 <text x="-2.54" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
 <pin name="+12V" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
 </symbol>
+<symbol name="+3V3">
+<wire x1="1.27" y1="-1.905" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="-1.27" y2="-1.905" width="0.254" layer="94"/>
+<text x="-2.54" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="+3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="GND" prefix="GND">
@@ -4338,6 +4344,19 @@ grid 2.54 mm</description>
 </device>
 </devices>
 </deviceset>
+<deviceset name="+3V3" prefix="+3V3">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
+<gates>
+<gate name="G$1" symbol="+3V3" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
 </devicesets>
 </library>
 </libraries>
@@ -4368,19 +4387,20 @@ grid 2.54 mm</description>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
-<part name="P+1" library="supply1" deviceset="+5V" device=""/>
-<part name="P+2" library="supply1" deviceset="+5V" device=""/>
 <part name="P+3" library="supply1" deviceset="+5V" device=""/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="R7" library="resistor" deviceset="R-US_" device="0204/7" value="430"/>
 <part name="R8" library="resistor" deviceset="R-US_" device="0204/7" value="1K"/>
 <part name="R9" library="resistor" deviceset="R-US_" device="0204/7" value="1K"/>
-<part name="P+4" library="supply1" deviceset="+5V" device=""/>
 <part name="P+5" library="supply1" deviceset="+12V" device=""/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
 <part name="P+7" library="supply1" deviceset="+12V" device=""/>
+<part name="+3V1" library="supply1" deviceset="+3V3" device=""/>
+<part name="+3V2" library="supply1" deviceset="+3V3" device=""/>
+<part name="+3V3" library="supply1" deviceset="+3V3" device=""/>
+<part name="+3V4" library="supply1" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -4405,19 +4425,20 @@ grid 2.54 mm</description>
 <instance part="GND4" gate="1" x="-35.56" y="66.04"/>
 <instance part="GND5" gate="1" x="7.62" y="99.06"/>
 <instance part="GND6" gate="1" x="38.1" y="66.04"/>
-<instance part="P+1" gate="1" x="-22.86" y="109.22"/>
-<instance part="P+2" gate="1" x="-7.62" y="111.76"/>
 <instance part="P+3" gate="1" x="71.12" y="71.12" rot="R270"/>
 <instance part="GND8" gate="1" x="-15.24" y="114.3" rot="R180"/>
 <instance part="R7" gate="G$1" x="-10.16" y="25.4" rot="R90"/>
 <instance part="R8" gate="G$1" x="33.02" y="25.4" rot="R90"/>
 <instance part="R9" gate="G$1" x="76.2" y="25.4" rot="R90"/>
-<instance part="P+4" gate="1" x="109.22" y="93.98"/>
 <instance part="P+5" gate="1" x="96.52" y="101.6"/>
 <instance part="GND9" gate="1" x="114.3" y="88.9" rot="R180"/>
 <instance part="GND10" gate="1" x="101.6" y="96.52" rot="R180"/>
 <instance part="GND11" gate="1" x="68.58" y="96.52" rot="R180"/>
 <instance part="P+7" gate="1" x="38.1" y="96.52"/>
+<instance part="+3V1" gate="G$1" x="-7.62" y="111.76"/>
+<instance part="+3V2" gate="G$1" x="-22.86" y="109.22"/>
+<instance part="+3V3" gate="G$1" x="76.2" y="73.66"/>
+<instance part="+3V4" gate="G$1" x="109.22" y="93.98"/>
 </instances>
 <busses>
 </busses>
@@ -4549,24 +4570,6 @@ grid 2.54 mm</description>
 </segment>
 </net>
 <net name="+5V" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="VREF"/>
-<wire x1="-15.24" y1="99.06" x2="-15.24" y2="104.14" width="0.1524" layer="91"/>
-<wire x1="-15.24" y1="104.14" x2="-22.86" y2="104.14" width="0.1524" layer="91"/>
-<pinref part="P+1" gate="1" pin="+5V"/>
-<wire x1="-22.86" y1="104.14" x2="-22.86" y2="106.68" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="U$1" gate="G$1" pin="VDD"/>
-<pinref part="P+2" gate="1" pin="+5V"/>
-<wire x1="-7.62" y1="99.06" x2="-7.62" y2="109.22" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="P+4" gate="1" pin="+5V"/>
-<pinref part="SL1" gate="G$1" pin="9"/>
-<wire x1="93.98" y1="86.36" x2="109.22" y2="86.36" width="0.1524" layer="91"/>
-<wire x1="109.22" y1="86.36" x2="109.22" y2="91.44" width="0.1524" layer="91"/>
-</segment>
 <segment>
 <pinref part="K1" gate="G$1" pin="10"/>
 <pinref part="P+3" gate="1" pin="+5V"/>
@@ -4739,6 +4742,26 @@ grid 2.54 mm</description>
 <wire x1="93.98" y1="93.98" x2="96.52" y2="93.98" width="0.1524" layer="91"/>
 <pinref part="P+5" gate="1" pin="+12V"/>
 <wire x1="96.52" y1="93.98" x2="96.52" y2="99.06" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="+3V3" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="VREF"/>
+<wire x1="-15.24" y1="99.06" x2="-15.24" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="-15.24" y1="104.14" x2="-22.86" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="-22.86" y1="104.14" x2="-22.86" y2="106.68" width="0.1524" layer="91"/>
+<pinref part="+3V2" gate="G$1" pin="+3V3"/>
+</segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="VDD"/>
+<wire x1="-7.62" y1="99.06" x2="-7.62" y2="109.22" width="0.1524" layer="91"/>
+<pinref part="+3V1" gate="G$1" pin="+3V3"/>
+</segment>
+<segment>
+<pinref part="SL1" gate="G$1" pin="9"/>
+<wire x1="93.98" y1="86.36" x2="109.22" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="86.36" x2="109.22" y2="91.44" width="0.1524" layer="91"/>
+<pinref part="+3V4" gate="G$1" pin="+3V3"/>
 </segment>
 </net>
 </nets>

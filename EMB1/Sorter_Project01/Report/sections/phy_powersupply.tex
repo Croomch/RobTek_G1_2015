@@ -7,7 +7,7 @@ The schematics of such can be seen in figure \ref{fig:powersupply_schematics}.
 
 \begin{figure}[H]
 \centering 
-\includegraphics[width = 0.4 \textwidth]{images/powersupply_schematics}
+\includegraphics[width = 0.7 \textwidth]{images/powersupply_schematics}
 \caption{Schematics of the power supply.}
 \label{fig:powersupply_schematics}
 \end{figure}
@@ -39,32 +39,16 @@ With a $3^{\circ}K/W$ heating coefficient it should be capable of keeping the tw
 
 To test the three power supplies, different load was added to the outputs of the supplies to check if they meet the specified requirements.
 The voltage supplied by the regulators was measured by an oscilloscope and the min, max and average recorded for the given load.
-The results are seen in table \ref{tab:voltagesupply}.
+The results are seen in figure \ref{fig:voltagesupply}.
 
-\begin{table}[H]	
+\begin{figure}[H]
 \centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-Voltage Supply & Load ($\Omega$) & Min (V) & Avg. (V) & Max (V) \\ \hline
-5V & 5 & 4.7167 & 4.7736 & 4.883 \\ \hline
-5V & 7.5 & 4.8833 & 5.0496 & 5.05 \\ \hline
-5V & 15 & 5.05 & 5.078 & 5.3833 \\ \hline
-5V & 33 & 5.05 & 5.1149 & 5.3833 \\ \hline
-6V & 4 & 6.05 & 6.1955 & 6.3833 \\ \hline
-6V & 7.5 & 6.05 & 6.2163 & 6.3833 \\ \hline
-6V & 15 & 6.05 & 6.2183 & 6.3833 \\ \hline
-12V & 11 & 11.8833 & 12.0501 & 12.2167 \\ \hline
-12V & 16.5 & 12.05 & 12.1835 & 12.2167 \\ \hline
-12V & 33 & 12.05 & 12.2137 & 12.3833 \\ \hline
-\end{tabular}
-\caption{Voltage output table of the voltage regulators using different loads.}
-\label{tab:voltagesupply}
-\end{table}
+\includegraphics[width = 0.9 \textwidth]{images/powersupply_output}
+\caption{Voltage output of the voltage regulators with different loads.}
+\label{fig:voltagesupply}
+\end{figure}
 
-\todo[inline]{make this to a V vs I graph with the 3 supplies}
-
-
-As seen in table \ref{tab:voltagesupply} then the power supplies supply a voltage slightly less than desired when exposed to the full load, but as this decreases the voltage reaches the desired voltage.
+As seen in figure \ref{fig:voltagesupply} then the power supplies supply a voltage slightly less than desired when exposed to the full load, but as this decreases the voltage reaches the desired voltage.
 This might not be desirable, but it is deemed good enough for the project since the power supply rarely will be used at with full load.
 
 
@@ -92,3 +76,7 @@ Load ($\Omega$) & Min Efficiency & Avg. Efficiency & Max Efficiency \\ \hline
 \caption{Efficiency of the 5V supply.}
 \label{tab:voltageefficiency}
 \end{table}
+
+It can be seen from table \ref{eq:powersupply_efficiency} that the efficiency of the regulator is capable of supplying the voltages at the project requirement of 80\%, for small loads.
+As the load increases above $7.5\Omega$ the efficiency decreases considerably.
+This is however expectable since the regulator used specifies that the efficiency is highest when driving a load with 0.5A at 5V and then only is specified to achieve the 80\%.
