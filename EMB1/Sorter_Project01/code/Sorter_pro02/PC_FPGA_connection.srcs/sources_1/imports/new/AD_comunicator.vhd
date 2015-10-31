@@ -109,7 +109,9 @@ begin
     -- send commands on falling edge
         if CLK_COUNT = 0 then
             -- drive CS low to initiate communication  
-            CS <= '0';   
+            CS <= '0';
+            -- drive mosi high as startbit
+            MOSI <= '1';  
         elsif CLK_COUNT >= MSG_CS_START and CLK_COUNT <= MSG_CS_END then
             -- send the Control selection
             MOSI <= CBS((MSG_CS_END - MSG_CS_START) - (CLK_COUNT - MSG_CS_START));
