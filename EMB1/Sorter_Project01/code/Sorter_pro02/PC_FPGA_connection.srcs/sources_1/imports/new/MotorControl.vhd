@@ -34,9 +34,10 @@ signal mp : STD_LOGIC_VECTOR(1 downto 0) := "00";
 begin
 overwrite <= mp_overwrite;
 -- values for the position
-left <= mp_left & "01010000";
-center <= mp_center & "01010000";
-right <= mp_right & "01010000";
+left <= "10010011101010000" WHEN mp_left = "000000000" ELSE (mp_left & "01010000");
+center <= "10010011101010000" WHEN mp_center = "000000000" ELSE  (mp_center & "01010000");
+right <= "10010011101010000" WHEN mp_right = "000000000" ELSE (mp_right & "01010000");
+
 
 -- motorposition overwrite
 mp <= motorposition WHEN overwrite = "11" ELSE overwrite;

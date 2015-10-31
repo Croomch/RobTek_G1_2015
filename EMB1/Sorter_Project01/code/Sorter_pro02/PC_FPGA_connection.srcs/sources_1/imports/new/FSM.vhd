@@ -83,7 +83,7 @@ signal mp_right : STD_LOGIC_VECTOR(8 downto 0) := "011000011"; -- W36 00000187
 signal mp_overwrite : STD_LOGIC_VECTOR(1 downto 0) := "11";
 
 -- signals to count number of bricks
-signal bricks_red, bricks_green, bricks_blue : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+signal bricks_red, bricks_green, bricks_blue, nx_bricks_red, nx_bricks_green, nx_bricks_blue : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
     
 ---- Constants ----
 -- board clk frequency --
@@ -240,6 +240,9 @@ process(CLK)
 begin
     if rising_edge(CLK) then -- update the state regularly
         pr_state <= nx_state;
+        bricks_blue <= nx_bricks_blue;
+        bricks_red <= nx_bricks_red;
+        bricks_green <= nx_bricks_green;
     end if;
 end process;
 
@@ -255,13 +258,13 @@ begin
             -- what is nx-state? 
             if color = "010" then -- Green
                 nx_state <= left_tray;
-                bricks_green <= bricks_green + 1; 
+                nx_bricks_green <= bricks_green + 1; 
             elsif color = "001" then -- Blue
-                bricks_blue <= bricks_blue + 1;
+                nx_bricks_blue <= bricks_blue + 1;
                 nx_state <= left_tray;
             elsif color = "100" then -- Red
                 nx_state <= right_tray;
-                bricks_red <= bricks_red + 1;
+                nx_bricks_red <= bricks_red + 1;
             else -- stay in the state
                 nx_state <= idle;
             end if;
