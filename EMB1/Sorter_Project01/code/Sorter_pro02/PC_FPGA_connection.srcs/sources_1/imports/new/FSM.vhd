@@ -302,17 +302,18 @@ begin
             alive_scaler := 0;
             ALIVE_LED <= NOT(ALIVE_LED);
         end if;
+        if timer_start = '1' then -- count up the timer only if asked for
+            timeout_scaler := timeout_scaler + 1;
+            if timeout_scaler >= CLK_TIMEOUT_PERIOD then -- time period reached
+                timeout_scaler := 0;
+                timer_end <= '1'; -- send signal
+            end if;
+        else -- if not asked for, keep scaler rst
+            timeout_scaler := 0;
+            timer_end <= '0';
+        end if;
     end if;
-    if timer_start = '1' then -- count up the timer only if asked for
-        timeout_scaler := timeout_scaler + 1;
-    if timeout_scaler >= CLK_TIMEOUT_PERIOD then -- time period reached
-        timeout_scaler := 0;
-        timer_end <= '1'; -- send signal
-    end if;
-    else -- if not asked for, keep scaler rst
-        timeout_scaler := 0;
-        timer_end <= '0';
-    end if;
+    
 end process;
 
 ---------------------------------------------------------
