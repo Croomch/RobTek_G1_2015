@@ -36,6 +36,6 @@ When the state is changed, a timer is started and this generated a timeout signa
 This timeout results in the state machine returning to its initial \textit{Wait} state when the brick has passed the sorter.
 While the state machine is in \textit{Left-} or \textit{Right Tray}, it sends a signal to the \textit{Motor Control} component to move to the left or right side in order to sort the bricks.
 Otherwise, the motors are told to return to its initial position, which is when the motor is pointing the sorter towards the falling bricks.
-
+The timeout period before switching back to the \textit{Wait} state was set such that the bricks would have enough time to pass through the sorting mechanism on the slide before the sorter would return to its initial state.
 
 

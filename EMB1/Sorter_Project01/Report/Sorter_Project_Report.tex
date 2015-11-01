@@ -35,6 +35,8 @@
 \rhead{ \fancyplain{}{EMB1 - 1. Semester MSc Robot Systems} }
 \cfoot{ \fancyplain{}{\thepage} }
 
+% make tables prettyer
+\def\arraystretch{1.3}
 
 \begin{document}
 
@@ -47,9 +49,9 @@
 	{\scshape\Large EMB1 Project \#1\par}
 	{\scshape\large 1. Semester MSc Robot Systems\par}
 	\vspace{1.5cm}
-	{\huge\bfseries Brick Sorter\par}
+	{\huge\bfseries Autonomous Brick Sorter\par}
 	\vspace{2cm}
-	{\Large\itshape Aitor Miguel Blanco and Lukas Chr. M. W. Schwartz \\ Group \#1 \par}
+	{\Large\itshape Aitor Miguel Blanco \& Lukas Chr. M. W. Schwartz \\ Group \#1 \par}
 	\vfill
 	supervised by\par
 	Jorgen Christian Larsen
@@ -66,6 +68,12 @@
 
 \pagebreak
 
+\listoffigures
+
+\listoftables
+
+\pagebreak
+
 \input{sections/intro}
 \pagebreak
 
@@ -75,6 +83,7 @@
 \input{sections/phy_powersupply}
 \input{sections/phy_led}
 \input{sections/phy_photosensor}
+\input{sections/phy_conclusion}
 
 \pagebreak
 \section{Software}
@@ -84,6 +93,7 @@
 \input{sections/sof_colordetector}
 \input{sections/sof_servo}
 \input{sections/sof_pccommunication}
+\input{sections/sof_conclusion}
 
 \pagebreak
 \section{Test of the System}

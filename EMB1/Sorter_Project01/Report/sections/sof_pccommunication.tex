@@ -21,7 +21,7 @@ R2 & low\_threshold\_blue & up\_threshold\_blue & - & - \\ \hline
 R3 & mp\_left & mp\_center & mp\_right & mp\_overwrite \\ \hline
 
 \end{tabular}
-\caption{FPGA and PC data exchange. 
+\caption[FPGA and PC data exchange.]{FPGA and PC data exchange. 
 Where Rx is the x'th register and Wy is the y'th word in the uTosNet protocol.
 For reading the registers with i\_ are intensity values from the ADC for the respective color, bricks\_ is the brick count of the color.
 The PC $\rightarrow$ FPGA registers with \_threshold\_ is the upper and lower thresholds for the corresponding brick for the three different colors.
@@ -29,3 +29,9 @@ And the mp\_ registers control the position of the motor when it is in the right
 }
 \label{tab:pc_fpga_communication}
 \end{table}
+
+
+Note that due to the extensive use of uTosNet to modify the different settings used for sorting, then the system will first work when the registers are initialized from the computer.
+This is so because the uTosNet module initializes the values to zero on power-up.
+
+

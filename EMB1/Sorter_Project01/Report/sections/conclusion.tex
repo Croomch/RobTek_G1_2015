@@ -6,10 +6,13 @@ This information was then used to sort the bricks to the left or right depending
 All the electronics are supplied by a powersupply converting a 15V supply into 5V, 6V and 12V.
 
 It was found that this setup worked desirably, but with room for improvement.
-The brick was capable of sorting ....
-\todo[inline]{write about the tests}
+The brick was capable of sorting the different colors in a normal ambient condition using the first found thresholds.
+When trying to sort bricks in lighting conditions other than this, the results where considerably worse and it was hence found that it is not possible to have it sort if in a room with changing lighting as the system is built now.
 
+A set of possible changes were also found which could improve the functionality of the system.
 This includes being able to amplify the signal from the photodiode to a range of 0 to 3.3V without saturating because of the amplifier going in saturation.
+Improving how the color is detected, possibly using values from the ADC when no LEDs are turned on or some kind of dynamic threshold.
+
 
 
 
