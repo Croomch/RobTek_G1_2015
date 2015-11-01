@@ -11,25 +11,54 @@
 \graphicspath{ {./images/} }
 \usepackage{epstopdf}
 
-\usepackage{fullpage}
+\usepackage[top=1.5in, bottom=1in, left=1in, right=1in]{geometry}
 
+
+% alignment of figures (H)
 \usepackage{float}
 
+% tikz graphs
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata, positioning,calc,shapes.geometric}
 \usepackage{varwidth} % for the diagram of fpga design
 
 \usepackage{todonotes}
 
+% for tanles
 \usepackage{multirow}
+
+% header
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{ \fancyplain{}{Lukas Schwartz \& Aitor Blanco } }
+\rhead{ \fancyplain{}{EMB1 - 1. Semester MSc Robot Systems} }
+\cfoot{ \fancyplain{}{\thepage} }
 
 
 \begin{document}
 
-\title{Brick Sorter}
-\date{2$^{nd}$ November 2015}
-\author{Aitor Miguel Blanco and Lukas Chr. M. W. Schwartz}
-\maketitle
+\begin{titlepage}
+	\centering
+%	\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
+	\vfill
+	{\scshape\LARGE University of Southern Denmark\par}
+	\vspace{1cm}
+	{\scshape\Large EMB1 Project \#1\par}
+	{\scshape\large 1. Semester MSc Robot Systems\par}
+	\vspace{1.5cm}
+	{\huge\bfseries Brick Sorter\par}
+	\vspace{2cm}
+	{\Large\itshape Aitor Miguel Blanco and Lukas Chr. M. W. Schwartz \\ Group \#1 \par}
+	\vfill
+	supervised by\par
+	Jorgen Christian Larsen
+
+	\vspace{2cm}
+
+% Bottom of the page
+	{\large 2$^{nd}$ November 2015 \par}
+\end{titlepage}
 
 \pagebreak
 
@@ -38,6 +67,7 @@
 \pagebreak
 
 \input{sections/intro}
+\pagebreak
 
 
 \section{Circuit and Physical Design}
@@ -46,7 +76,7 @@
 \input{sections/phy_led}
 \input{sections/phy_photosensor}
 
-
+\pagebreak
 \section{Software}
 \input{sections/sof_intro}
 \input{sections/sof_topmodule}
@@ -55,9 +85,11 @@
 \input{sections/sof_servo}
 \input{sections/sof_pccommunication}
 
+\pagebreak
 \section{Test of the System}
 \input{sections/systemtest}
 
+\pagebreak
 \section{Conclusion}
 \input{sections/conclusion}
 

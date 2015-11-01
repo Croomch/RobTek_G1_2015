@@ -32,4 +32,6 @@ The color detector component is designed as the state machine in figure \ref{fig
 
 As seen on figure \ref{fig:colordetector_fsm} the state machine starts in \textit{Decide} from there it cycles around from state to state recording the intensity values for the three different colors.
 Whenever it reaches state \textit{Decide}, it compares the three intensities with its thresholds to decide which brick color passed.
+It then outputs the result and starts right away with obtaining the new values.
+The timeout delay in figure \ref{fig:colordetector_fsm} was found from section \ref{sec:photodiode} figure \ref{fig:photodiode_output} where the delay is set such that the signal has settled before the value is sampled.
 

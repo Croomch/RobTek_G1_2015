@@ -1,19 +1,128 @@
 The final system was tested to see how well it performs.
-The tests where performed in normal ambient light and with the thresholds set beforehand to a suitable value.
+The tests where performed in set of different lighting and with the thresholds set beforehand to a suitable value.
 
-A set of bricks where let slide through the setup and the result shown in the confusion table in table \ref{tab:confusiontable_testresults}.
+The first set of test where conducted with thresholds tuned to work in approximate normal ambient lighting and hereafter the same set of tests where conducted with new thresholds trying to make them work in all conditions.
+
+
+\subsection{Test One: Thresholds for Normal Ambient Lighting}
+
+The three different bricks where let slide through the setup and the result shown in the confusion table in table \ref{tab:confusiontable_testresults}.
 
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
- & &  \multicolumn{3}{|c|}{Predicted} \\ \hline
- & & Red & Green & Blue \\ \cline{1-5} 
-\multirow{3}{*}{Actual} & Red & & & \\ \cline{2-5}
- & Green & & & \\ \cline{2-5}
- & Blue & & & \\ \hline
+\begin{tabular}{c c|c|c|c|c|}
+\cline{3-6}
+ & &  \multicolumn{4}{|c|}{Predicted} \\ \cline{3-6}
+ & & Red & Green & Blue & None \\ \cline{1-6} 
+\multicolumn{1}{ |c|  }{\multirow{3}{*}{Actual}} & Red & 19 & 0 & 0 & 1 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Green & 0 & 20 & 0 & 0 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 20 & 0 \\ \hline
 \end{tabular}
-\caption{Confusion table of the test results.}
+\caption{Confusion table of the test results in normal ambient lightning using thresholds tuned for normal ambient lighting.}
 \label{tab:confusiontable_testresults}
 \end{table}
+
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c c|c|c|c|c|}
+\cline{3-6}
+ & &  \multicolumn{4}{|c|}{Predicted} \\ \cline{3-6}
+ & & Red & Green & Blue & None \\ \cline{1-6} 
+\multicolumn{1}{ |c|  }{\multirow{3}{*}{Actual}} & Red & 9 & 0 & 0 & 11 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Green & 0 & 13 & 0 & 7 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 20 & 0 \\ \hline
+\end{tabular}
+\caption{Confusion table of the test results in a dark/low lit room using thresholds tuned for  normal ambient lighting.}
+\label{tab:confusiontable_testresults}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c c|c|c|c|c|}
+\cline{3-6}
+ & &  \multicolumn{4}{|c|}{Predicted} \\ \cline{3-6}
+ & & Red & Green & Blue & None \\ \cline{1-6} 
+\multicolumn{1}{ |c|  }{\multirow{3}{*}{Actual}} & Red & 0 & 0 & 0 & 20 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Green & 0 & 0 & 0 & 20 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 0 & 20 \\ \hline
+\end{tabular}
+\caption{Confusion table of the test results in high ambient lightning where there is lit directly into the photodiode using thresholds tuned for  normal ambient lighting.}
+\label{tab:confusiontable_testresults}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c c|c|c|c|c|}
+\cline{3-6}
+ & &  \multicolumn{4}{|c|}{Predicted} \\ \cline{3-6}
+ & & Red & Green & Blue & None \\ \cline{1-6} 
+\multicolumn{1}{ |c|  }{\multirow{3}{*}{Actual}} & Red & 10 & 0 & 0 & 10 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Green & 0 & 10 & 0 & 10 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 11 & 9 \\ \hline
+\end{tabular}
+\caption{Confusion table of the test results in high ambient lighting with no lighting directly into the photodiode using thresholds tuned for  normal ambient lighting.}
+\label{tab:confusiontable_testresults}
+\end{table}
+
+
+
+
+\subsection{Test Two: Thresholds for Larger Spectrum of Lighting Conditions}
+
+
+% normal ambient lighting failed...
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c c|c|c|c|c|}
+\cline{3-6}
+ & &  \multicolumn{4}{|c|}{Predicted} \\ \cline{3-6}
+ & & Red & Green & Blue & None \\ \cline{1-6} 
+\multicolumn{1}{ |c|  }{\multirow{3}{*}{Actual}} & Red & 20 & 0 & 0 & 0 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Green & 0 & 20 & 0 & 0 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Blue & 0 & 1 & 19 & 0 \\ \hline
+\end{tabular}
+\caption{Confusion table of the test results in a dark/low lit room using thresholds tuned for larger spectrum of lighting conditions.}
+\label{tab:confusiontable_testresults}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c c|c|c|c|c|}
+\cline{3-6}
+ & &  \multicolumn{4}{|c|}{Predicted} \\ \cline{3-6}
+ & & Red & Green & Blue & None \\ \cline{1-6} 
+\multicolumn{1}{ |c|  }{\multirow{3}{*}{Actual}} & Red & 19 & 0 & 0 & 1 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Green & 0 & 20 & 0 & 0 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Blue & 0 & 10 & 10 & 0 \\ \hline
+\end{tabular}
+\caption{Confusion table of the test results in high ambient lightning where there is lit directly into the photodiode using thresholds tuned for larger spectrum of lighting conditions.}
+\label{tab:confusiontable_testresults}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c c|c|c|c|c|}
+\cline{3-6}
+ & &  \multicolumn{4}{|c|}{Predicted} \\ \cline{3-6}
+ & & Red & Green & Blue & None \\ \cline{1-6} 
+\multicolumn{1}{ |c|  }{\multirow{3}{*}{Actual}} & Red & 20 & 0 & 0 & 0 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Green & 0 & 0 & 20 & 0 \\ \cline{2-6}
+\multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 20 & 0 \\ \hline
+\end{tabular}
+\caption{Confusion table of the test results in high ambient lighting with no lighting directly into the photodiode using thresholds tuned for larger spectrum of lighting conditions.}
+\label{tab:confusiontable_testresults}
+\end{table}
+
+
+
+
+
+
