@@ -209,12 +209,15 @@ Setup_Tresholds(port, t_red, t_green, t_blue);
 //	Admited commands: 
 //		- Any read / write command for uTosNet.
 //		- "read_LED" : prints the intensity levels received for each color.
+//		- "break" : finishes the program.
+//
 //	To write on FPGA: 1.- introduce write command (e.g. "w14").
 //			  2.- introduce desired data (e.g. "00001010").
-// 	
+// 			
 		
+bool flag = true;
 
-  while(1){
+  while(flag){
 	
 	//Command reading:
 	cout << "Select command:" << endl;
@@ -244,19 +247,20 @@ Setup_Tresholds(port, t_red, t_green, t_blue);
 			cout << HEX_2_int(data_) << endl;//<< "\t\t";
 		}
 
-	}else if(command[0] == 'r' && isdigit(command[1]) && command.size() == 3){
+	}else if(command[0] == 'r' && isdigit(command[1]) && isdigit(command[2]) && command.size() == 3){
 
 		  cout << "Reading from port.\n";
 		  data_ = read_FPGA(port, command);
 		  cout << data_ << endl;
 
-		} else if(command[0] == 'w' && isdigit(command[1]) && command.size() == 3){
+		} else if(command[0] == 'w' && isdigit(command[1]) && isdigit(command[2]) && command.size() == 3){
 		  cout << "introduce data: ";
 		  cin >> data_;
 		  cout << "Writing to port.\n";
 		  write_FPGA(port, command, data_);
 
-		}
+		} else if(command == "break")
+			flag = false;
 	
 
 
