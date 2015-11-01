@@ -1,0 +1,21 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
+\contentsline {section}{\numberline {2}Circuit and Physical Design}{4}{section.2}
+\contentsline {subsection}{\numberline {2.1}Power Supply}{4}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}LED controller}{6}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Photodiode}{7}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Conclusion}{9}{subsection.2.4}
+\contentsline {section}{\numberline {3}Software}{10}{section.3}
+\contentsline {subsection}{\numberline {3.1}Top Module}{11}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}ADC Communication}{11}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Color Detector}{12}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Servo Motor}{13}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}PC Communication}{13}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}Conclusion}{14}{subsection.3.6}
+\contentsline {section}{\numberline {4}Test of the System}{15}{section.4}
+\contentsline {subsection}{\numberline {4.1}Test One: Thresholds for Normal Ambient Lighting}{15}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Test Two: Thresholds for Larger Spectrum of Lighting Conditions}{16}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Test Analysis}{17}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Conclusion}{18}{subsection.4.4}
+\contentsline {section}{\numberline {5}Conclusion}{19}{section.5}
+\contentsline {section}{\numberline {A}Usage guide}{20}{appendix.A}

@@ -1,0 +1,11 @@
+\select@language {english}
+\contentsline {figure}{\numberline {1}{\ignorespaces Schematics of the power supply.}}{4}{figure.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces Voltage output of the voltage regulators with different loads.}}{5}{figure.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces LED driver schematics.}}{7}{figure.3}
+\contentsline {figure}{\numberline {4}{\ignorespaces Photodiode amplifier schematics.}}{7}{figure.4}
+\contentsline {figure}{\numberline {5}{\ignorespaces Schematics of the ADC connections.}}{8}{figure.5}
+\contentsline {figure}{\numberline {6}{\ignorespaces Output of the photodiode amplification versus the signal to the red LED.}}{9}{figure.6}
+\contentsline {figure}{\numberline {7}{\ignorespaces FPGA Program Design.}}{10}{figure.7}
+\contentsline {figure}{\numberline {8}{\ignorespaces Top module Finite State Machine.}}{11}{figure.8}
+\contentsline {figure}{\numberline {9}{\ignorespaces Simulation of the SPI communication with the ADC.}}{12}{figure.9}
+\contentsline {figure}{\numberline {10}{\ignorespaces Color detectors state machine.}}{12}{figure.10}
