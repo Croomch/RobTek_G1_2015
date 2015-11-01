@@ -129,7 +129,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=PC_FPGA
+CMAKE_PROJECT_NAME:STATIC=PC_FPGA_sorter
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -184,10 +184,10 @@ CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-PC_FPGA_BINARY_DIR:STATIC=/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_FPGA_final/src
+PC_FPGA_sorter_BINARY_DIR:STATIC=/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_FPGA_final/src
 
 //Value Computed by CMake
-PC_FPGA_SOURCE_DIR:STATIC=/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_FPGA_final/src
+PC_FPGA_sorter_SOURCE_DIR:STATIC=/home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_FPGA_final/src
 
 
 ########################

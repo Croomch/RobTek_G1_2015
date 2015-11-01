@@ -53,38 +53,38 @@ CMAKE_SOURCE_DIR = /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/
 CMAKE_BINARY_DIR = /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_FPGA_final/src
 
 #=============================================================================
-# Target rules for target CMakeFiles/PC_FPGA.dir
+# Target rules for target CMakeFiles/PC_FPGA_sorter.dir
 
 # All Build rule for target.
-CMakeFiles/PC_FPGA.dir/all:
-	$(MAKE) -f CMakeFiles/PC_FPGA.dir/build.make CMakeFiles/PC_FPGA.dir/depend
-	$(MAKE) -f CMakeFiles/PC_FPGA.dir/build.make CMakeFiles/PC_FPGA.dir/build
+CMakeFiles/PC_FPGA_sorter.dir/all:
+	$(MAKE) -f CMakeFiles/PC_FPGA_sorter.dir/build.make CMakeFiles/PC_FPGA_sorter.dir/depend
+	$(MAKE) -f CMakeFiles/PC_FPGA_sorter.dir/build.make CMakeFiles/PC_FPGA_sorter.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_FPGA_final/src/CMakeFiles  1
-	@echo "Built target PC_FPGA"
-.PHONY : CMakeFiles/PC_FPGA.dir/all
+	@echo "Built target PC_FPGA_sorter"
+.PHONY : CMakeFiles/PC_FPGA_sorter.dir/all
 
 # Include target in all.
-all: CMakeFiles/PC_FPGA.dir/all
+all: CMakeFiles/PC_FPGA_sorter.dir/all
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/PC_FPGA.dir/rule: cmake_check_build_system
+CMakeFiles/PC_FPGA_sorter.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_FPGA_final/src/CMakeFiles 1
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/PC_FPGA.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/PC_FPGA_sorter.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/aitormig/Documents/Github/GitRep/EMB1/Sorter_Project01/code/PC_FPGA_final/src/CMakeFiles 0
-.PHONY : CMakeFiles/PC_FPGA.dir/rule
+.PHONY : CMakeFiles/PC_FPGA_sorter.dir/rule
 
 # Convenience name for target.
-PC_FPGA: CMakeFiles/PC_FPGA.dir/rule
-.PHONY : PC_FPGA
+PC_FPGA_sorter: CMakeFiles/PC_FPGA_sorter.dir/rule
+.PHONY : PC_FPGA_sorter
 
 # clean rule for target.
-CMakeFiles/PC_FPGA.dir/clean:
-	$(MAKE) -f CMakeFiles/PC_FPGA.dir/build.make CMakeFiles/PC_FPGA.dir/clean
-.PHONY : CMakeFiles/PC_FPGA.dir/clean
+CMakeFiles/PC_FPGA_sorter.dir/clean:
+	$(MAKE) -f CMakeFiles/PC_FPGA_sorter.dir/build.make CMakeFiles/PC_FPGA_sorter.dir/clean
+.PHONY : CMakeFiles/PC_FPGA_sorter.dir/clean
 
 # clean rule for target.
-clean: CMakeFiles/PC_FPGA.dir/clean
+clean: CMakeFiles/PC_FPGA_sorter.dir/clean
 .PHONY : clean
 
 #=============================================================================

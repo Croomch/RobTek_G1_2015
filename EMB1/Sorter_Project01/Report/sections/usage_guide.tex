@@ -4,13 +4,15 @@ In order to use this brick sorter, the PC communication must be set. This is bec
 To turn on the sorter, the power must be turn on and the FPGA must be programmed.
 Once the FPGA is programmed, it is possible to start the communication with the computer.
 
-To start the communication, execute the program PC\_FPGA\_sorter. The program will ask for the USB port where the FPGA is plugged and then, the default treshold values and motor configuration will be set. At this point, the sorter can be used normally.
+To start the communication, execute the program PC\_FPGA\_sorter. The program will ask for the USB port where the FPGA is plugged and once the port name is introduced the default treshold values and motor configuration will be set. At this point, the sorter can be used normally.
 
 To read or write in any uTosNet register in the FPGA, a write or read command must be introduced. these commands can be "rxy" to read the y word of the x register or "wxy", that allows to write in the y word of the x register.
 
-When writing, a second command must be introduced for the data which is going to be written. As the registers have 32 bits, the data is introduced as a 8 character long hexadecimal string.
+When writing, a second command must be introduced for the data which is going to be written. As the registers have 32 bits, the data is introduced as a 8 character long hexadecimal string (e.g. "00011011").
 
 An extra command can be used to read the recieved values of the ADC converter for each color: "read\_LED".
+
+To stop the program, enter "break". This will cut the communication between the FPGA and the PC but the sorter will continue working until it is disconnected.
 
 
 

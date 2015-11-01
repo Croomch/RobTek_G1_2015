@@ -103,41 +103,41 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named PC_FPGA
+# Target rules for targets named PC_FPGA_sorter
 
 # Build rule for target.
-PC_FPGA: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 PC_FPGA
-.PHONY : PC_FPGA
+PC_FPGA_sorter: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 PC_FPGA_sorter
+.PHONY : PC_FPGA_sorter
 
 # fast build rule for target.
-PC_FPGA/fast:
-	$(MAKE) -f CMakeFiles/PC_FPGA.dir/build.make CMakeFiles/PC_FPGA.dir/build
-.PHONY : PC_FPGA/fast
+PC_FPGA_sorter/fast:
+	$(MAKE) -f CMakeFiles/PC_FPGA_sorter.dir/build.make CMakeFiles/PC_FPGA_sorter.dir/build
+.PHONY : PC_FPGA_sorter/fast
 
-PC_FPGA.o: PC_FPGA.cpp.o
-.PHONY : PC_FPGA.o
+PC_FPGA_sorter.o: PC_FPGA_sorter.cpp.o
+.PHONY : PC_FPGA_sorter.o
 
 # target to build an object file
-PC_FPGA.cpp.o:
-	$(MAKE) -f CMakeFiles/PC_FPGA.dir/build.make CMakeFiles/PC_FPGA.dir/PC_FPGA.cpp.o
-.PHONY : PC_FPGA.cpp.o
+PC_FPGA_sorter.cpp.o:
+	$(MAKE) -f CMakeFiles/PC_FPGA_sorter.dir/build.make CMakeFiles/PC_FPGA_sorter.dir/PC_FPGA_sorter.cpp.o
+.PHONY : PC_FPGA_sorter.cpp.o
 
-PC_FPGA.i: PC_FPGA.cpp.i
-.PHONY : PC_FPGA.i
+PC_FPGA_sorter.i: PC_FPGA_sorter.cpp.i
+.PHONY : PC_FPGA_sorter.i
 
 # target to preprocess a source file
-PC_FPGA.cpp.i:
-	$(MAKE) -f CMakeFiles/PC_FPGA.dir/build.make CMakeFiles/PC_FPGA.dir/PC_FPGA.cpp.i
-.PHONY : PC_FPGA.cpp.i
+PC_FPGA_sorter.cpp.i:
+	$(MAKE) -f CMakeFiles/PC_FPGA_sorter.dir/build.make CMakeFiles/PC_FPGA_sorter.dir/PC_FPGA_sorter.cpp.i
+.PHONY : PC_FPGA_sorter.cpp.i
 
-PC_FPGA.s: PC_FPGA.cpp.s
-.PHONY : PC_FPGA.s
+PC_FPGA_sorter.s: PC_FPGA_sorter.cpp.s
+.PHONY : PC_FPGA_sorter.s
 
 # target to generate assembly for a file
-PC_FPGA.cpp.s:
-	$(MAKE) -f CMakeFiles/PC_FPGA.dir/build.make CMakeFiles/PC_FPGA.dir/PC_FPGA.cpp.s
-.PHONY : PC_FPGA.cpp.s
+PC_FPGA_sorter.cpp.s:
+	$(MAKE) -f CMakeFiles/PC_FPGA_sorter.dir/build.make CMakeFiles/PC_FPGA_sorter.dir/PC_FPGA_sorter.cpp.s
+.PHONY : PC_FPGA_sorter.cpp.s
 
 # Help Target
 help:
@@ -145,12 +145,12 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... PC_FPGA"
+	@echo "... PC_FPGA_sorter"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... PC_FPGA.o"
-	@echo "... PC_FPGA.i"
-	@echo "... PC_FPGA.s"
+	@echo "... PC_FPGA_sorter.o"
+	@echo "... PC_FPGA_sorter.i"
+	@echo "... PC_FPGA_sorter.s"
 .PHONY : help
 
 

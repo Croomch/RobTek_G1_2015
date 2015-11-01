@@ -64,5 +64,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/PC_FPGA.dir/DependInfo.cmake"
+  "CMakeFiles/PC_FPGA_sorter.dir/DependInfo.cmake"
   )

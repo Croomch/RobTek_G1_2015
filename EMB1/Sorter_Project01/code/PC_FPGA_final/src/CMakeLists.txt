@@ -2,7 +2,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
 
 # The name of the project
-PROJECT(PC_FPGA)
+PROJECT(PC_FPGA_sorter)
 MESSAGE(${PROJECT_NAME} ":")
 
 # Used to resolve absolute path names
@@ -20,8 +20,8 @@ find_package(Boost 1.40.0 REQUIRED system)
 
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
-ADD_EXECUTABLE( PC_FPGA PC_FPGA.cpp )
+ADD_EXECUTABLE( PC_FPGA_sorter PC_FPGA_sorter.cpp )
 
-TARGET_LINK_LIBRARIES( PC_FPGA ${Boost_LIBRARIES} )
+TARGET_LINK_LIBRARIES( PC_FPGA_sorter ${Boost_LIBRARIES} )
 
 MESSAGE(${PROJECT_NAME} " done!")
