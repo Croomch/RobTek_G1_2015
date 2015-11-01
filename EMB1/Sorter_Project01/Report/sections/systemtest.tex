@@ -6,7 +6,10 @@ The first set of test where conducted with thresholds tuned to work in approxima
 
 \subsection{Test One: Thresholds for Normal Ambient Lighting}
 
-The three different bricks where let slide through the setup and the result shown in the confusion table in table \ref{tab:confusiontable_testresults}.
+The thresholds for the color detector were first tuned using the values read from the FPGA under normal lighting conditions.
+These thresholds for the red, green and blue brick colors were then used in the experiment.
+
+The three different bricks were let slide through the setup and the result shown in the confusion tables in table \ref{tab:confusiontable_testresults_01_normal}, \ref{tab:confusiontable_testresults_01_low}, \ref{tab:confusiontable_testresults_01_direct} and \ref{tab:confusiontable_testresults_01_high} for the light levels normal and low lighting, lighting directly into the photodiode and strong lighting from the side respectively.
 
 
 \begin{table}[H]
@@ -20,7 +23,7 @@ The three different bricks where let slide through the setup and the result show
 \multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 20 & 0 \\ \hline
 \end{tabular}
 \caption[Confusion table in normal ambient lightning, test one.]{Confusion table of the test results in normal ambient lightning using thresholds tuned for normal ambient lighting.}
-\label{tab:confusiontable_testresults}
+\label{tab:confusiontable_testresults_01_normal}
 \end{table}
 
 
@@ -36,7 +39,7 @@ The three different bricks where let slide through the setup and the result show
 \multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 20 & 0 \\ \hline
 \end{tabular}
 \caption[Confusion table in normal low lightning, test one.]{Confusion table of the test results in a dark/low lit room using thresholds tuned for  normal ambient lighting.}
-\label{tab:confusiontable_testresults}
+\label{tab:confusiontable_testresults_01_low}
 \end{table}
 
 
@@ -51,7 +54,7 @@ The three different bricks where let slide through the setup and the result show
 \multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 0 & 20 \\ \hline
 \end{tabular}
 \caption[Confusion table in high ambient lightning, test one.]{Confusion table of the test results in high ambient lightning where there is lit directly into the photodiode using thresholds tuned for  normal ambient lighting.}
-\label{tab:confusiontable_testresults}
+\label{tab:confusiontable_testresults_01_direct}
 \end{table}
 
 
@@ -66,13 +69,28 @@ The three different bricks where let slide through the setup and the result show
 \multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 11 & 9 \\ \hline
 \end{tabular}
 \caption[Confusion table in high ambient lightning, test one.]{Confusion table of the test results in high ambient lighting with no lighting directly into the photodiode using thresholds tuned for  normal ambient lighting.}
-\label{tab:confusiontable_testresults}
+\label{tab:confusiontable_testresults_01_high}
 \end{table}
 
+
+It was during these test found that the sorter correctly sorted 59 out of the 60 bricks in normal lighting.
+But when used in different lighting setups, this went down to 31/60 when in strong lighting and 42/60 when in low lighting.
+And when the sensor is directly exposed to a light source it is able to detect nothing.
+
+This is expected to happen since the thresholds are only found by looking at the values for normal lighting conditions and a naive approach is used were  it is always expected that the brick gives the same response no matter the lighting.
+
+In order to improve these results a set of new experiments were conducted with new thresholds based on the values obtained from the sensor in the other lighting conditions as well.
+This is seen in section \ref{sec:testtwo}.
 
 
 
 \subsection{Test Two: Thresholds for Larger Spectrum of Lighting Conditions}
+\label{sec:testtwo}
+
+The second test was conducted the same way as the previous, but with a new set of thresholds defined depending on the light intensity when the surroundings have different lighting levels.
+
+This resulted in the confusion tables in table \ref{tab:confusiontable_testresults_02_low}, \ref{tab:confusiontable_testresults_02_direct} and \ref{tab:confusiontable_testresults_02_high} for the light levels low lighting, lighting directly into the photodiode and strong lighting from the side respectively.
+Tests were also tried to be conducted at normal lighting, but this failed due to the system detecting colors randomly due to the reflections of the slide and other surroundings.
 
 
 % normal ambient lighting failed...
@@ -88,7 +106,7 @@ The three different bricks where let slide through the setup and the result show
 \multicolumn{1}{ |c|  }{} & Blue & 0 & 1 & 19 & 0 \\ \hline
 \end{tabular}
 \caption[Confusion table in low lightning, test two.]{Confusion table of the test results in a dark/low lit room using thresholds tuned for larger spectrum of lighting conditions.}
-\label{tab:confusiontable_testresults}
+\label{tab:confusiontable_testresults_02_low}
 \end{table}
 
 
@@ -103,7 +121,7 @@ The three different bricks where let slide through the setup and the result show
 \multicolumn{1}{ |c|  }{} & Blue & 0 & 10 & 10 & 0 \\ \hline
 \end{tabular}
 \caption[Confusion table in high ambient lightning, test two.]{Confusion table of the test results in high ambient lightning where there is lit directly into the photodiode using thresholds tuned for larger spectrum of lighting conditions.}
-\label{tab:confusiontable_testresults}
+\label{tab:confusiontable_testresults_02_direct}
 \end{table}
 
 
@@ -118,8 +136,51 @@ The three different bricks where let slide through the setup and the result show
 \multicolumn{1}{ |c|  }{} & Blue & 0 & 0 & 20 & 0 \\ \hline
 \end{tabular}
 \caption[Confusion table in high ambient lightning, test two.]{Confusion table of the test results in high ambient lighting with no lighting directly into the photodiode using thresholds tuned for larger spectrum of lighting conditions.}
-\label{tab:confusiontable_testresults}
+\label{tab:confusiontable_testresults_02_high}
 \end{table}
+
+
+It can be seen that the brick sorter performs considerably better in low lit conditions where its correct detection rate is 59/60.
+Likewise it is able to detect 49/60 correct when light it lit directly into the photodiode where 10 of the error are misclassification.
+The setup is however detecting green bricks as blue when there is higher ambient lighting whereas it always detects the red and blue correctly.
+
+It can therefore be concluded that the used thresholds are only suitable for low lit conditions and overall gives worse results when considering that it is not able to detect anything in normal conditions.
+
+
+
+\subsection{Test Analysis}
+
+% the method used to detect color algorithm is NOT invariant of ambient lighting.
+The two tests preformed were both using a set of fixed thresholds for which each color has to lie within, in order to be detected as a brick of that color.
+That is a brick needs to consist of a limited range of red, green and blue color.
+This is a method that is not invariant to the lighting conditions.
+The used method was, however chosen because of its ease of implementation.
+
+It is therefore expected that it should be possible to improve the results of the brick sorter by using a ambient light-level invariant, or at least semi-invariant, method for detection.
+These methods can be based both on the ratio of the colors, rather than the level.
+Furthermore it is possible to include the use of the ambient light-level when no LED is on.
+This should, by taken the difference between when the LEDs are on and when not, give a result capable of handling more noise in form of changes in the lighting.
+
+One problem does however also arises when the color detection method is invariant to the lighting level.
+That is the photodiods signal going in saturation because of complete over lighting because the amplification of the diode is only designed to work within a specific range.
+This would in most cases cause problems if all the three colors reach saturation as one can then not distinguish between the levels.
+A possible way of solving this problem can be made by a change in hardware.
+By introducing different amplifications on the photodiode, a set of ranges can then be used such that the amplification is lower when the setup is used in higher lighting settings and vice versa.
+The final implementation of such a circuit could be to have multiple amplifier circuits connected to different input ports on the ADC.
+The FPGA can then sample from the port that gives the best overall resolution on the three color intensities.
+
+The used implementation can also be improved by changing the physical properties of the slide.
+By building a dark cage around the color detecting circuit, it should be possible to hold the light level around the detector more or less constant.
+Thus improving the systems robustness to the light changes around it.
+
+
+
+
+\subsection{Conclusion}
+Tests were conducted to test the functionality of the system when using fixed thresholds.
+It was found that this worked sufficiently (almost 100\% accuracy) in cases were the ambient lighting is fixed, but less so in environments with changing lighting.
+
+The results were hence analysed and a set of changes to both the physical and software system was suggested to improve the performance by making the system invariant to changes in lighting.
 
 
 
