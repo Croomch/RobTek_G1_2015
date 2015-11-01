@@ -35,3 +35,7 @@ Whenever it reaches state \textit{Decide}, it compares the three intensities wit
 It then outputs the result and starts right away with obtaining the new values.
 The timeout delay in figure \ref{fig:colordetector_fsm} was found from section \ref{sec:photodiode} figure \ref{fig:photodiode_output} where the delay is set such that the signal has settled before the value is sampled.
 
+Because of the cycling through the states, the total duty cycle of each of the three LED sums up to 33\%.
+This and the low current with which the LEDs are driven makes sure that all three LEDs are within their recommended working area.
+Hence no further precautions have to be taken for the LEDs to have a longer lifetime.
+
