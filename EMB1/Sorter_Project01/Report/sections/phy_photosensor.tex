@@ -4,8 +4,8 @@
 \label{sec:photodiode}
 
 The photodiode is used to detect the intensity of the light shined upon it.
-In operation it generates a current proportional to the intensity of the surrounding light.
-This signal does, however, need to be converted into a voltage between 0 and 3.3V for the ADC to measure.
+In operation it generates a current proportional to the intensity of the measured light.
+This signal does need to be converted into a voltage between 0 and 3.3V for the ADC to measure.
 
 To do this, the signal is amplified using the amplifier circuit shown in figure \ref{fig:photodiodeschematics}.
 The amplification was found by dimensioning the resistor such that it is close to saturation when the photodiode is exposed to the highest expected lighting level.
@@ -42,7 +42,7 @@ When sampled at this time the data would hence be wrong.
 This problem can be solved by adding a low-pass filter to the amplifier circuit to reduce/remove the oscillations or one could wait with sampling the signal until it has stabilized.
 Of these two options the latter was used.
 This was chosen because the number of samples gathered a second, even when not being able to sample directly after the LED has turned on, is still so high that the sample frequency is a problem.
-The sample for each color is hence first taken $3.3 \cdot 10^-5 s$ after the LED is turned on.
+The sample for each color is hence first taken $3.3 \cdot 10^{-5} s$ after the LED is turned on.
 
 
 \begin{figure}[H]
@@ -53,7 +53,7 @@ The sample for each color is hence first taken $3.3 \cdot 10^-5 s$ after the LED
 \end{figure}
 
 It is also noticeable that the amplifier is not a rail-to-rail amplifier and the input to the ADC can hence not reach the 3.3V before it reaches saturation.
-This reduce the resolution of the light-intensity measurable by the system.
+This reduces the resolution of the light-intensity measurable by the system.
 This problem could be solved by supplying the amplifier with a higher voltage such that its saturation is at 3.3V, or higher, or one could use a rail-to-rail amplifier, which is more expensive than using a general purpose amplifier.
 This problem was, however, not deemed necessary for the project as the resolution of the light intensity still is high enough to detect the difference among the different brick colors.
 
