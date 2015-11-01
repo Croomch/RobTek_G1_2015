@@ -16,3 +16,4 @@
 \contentsline {subsection}{\numberline {4.1}Test One: Thresholds for Normal Ambient Lighting}{15}{subsection.4.1}
 \contentsline {subsection}{\numberline {4.2}Test Two: Thresholds for Larger Spectrum of Lighting Conditions}{16}{subsection.4.2}
 \contentsline {section}{\numberline {5}Conclusion}{17}{section.5}
+\contentsline {section}{\numberline {A}Usage guide}{18}{appendix.A}

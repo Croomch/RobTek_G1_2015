@@ -77,7 +77,13 @@ signal mp_right : STD_LOGIC_VECTOR(8 downto 0) := "011000011"; -- W36 00000187
 signal mp_overwrite : STD_LOGIC_VECTOR(1 downto 0) := "11";
 
 -- signals to count number of bricks
-signal bricks_red, bricks_green, bricks_blue, nx_bricks_red, nx_bricks_green, nx_bricks_blue : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+signal bricks_red : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal bricks_green : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal bricks_blue : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal nx_bricks_red : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal nx_bricks_green : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal nx_bricks_blue : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+
     
 ---- Constants ----
 -- board clk frequency --
@@ -242,7 +248,7 @@ end process;
 
 -- upper FSM, could be concurrent code too - no flip-flops allowed --
 -- see state diagram for the design
-process(pr_state, color, timer_end) -- pr state and all other inputs
+process(pr_state, color, timer_end, bricks_green, bricks_red, bricks_blue) -- pr state and all other inputs
 begin
     CASE pr_state IS
         WHEN idle =>
@@ -251,8 +257,8 @@ begin
             motor <= "00";
             -- what is nx-state? 
             if color = "010" then -- Green
-                nx_state <= left_tray;
                 nx_bricks_green <= bricks_green + 1; 
+                nx_state <= right_tray;
             elsif color = "001" then -- Blue
                 nx_bricks_blue <= bricks_blue + 1;
                 nx_state <= left_tray;
@@ -387,9 +393,9 @@ end process;
          when "01001" =>   T_data_to_mem <= "0000000000000000000000" & i_green; -- intensity of the green LED
          when "01010" =>   T_data_to_mem <= "0000000000000000000000" & i_blue; -- intensity of the blue LED
          -- register 3
-         when "01100" =>   T_data_to_mem <= bricks_red; -- brick count red
-         when "01101" =>   T_data_to_mem <= bricks_green; -- brick count green
-         when "01110" =>   T_data_to_mem <= bricks_blue; -- brick count blue
+         when "01100" =>   T_data_to_mem <= "0000000000000000" & bricks_red; -- brick count red
+         when "01101" =>   T_data_to_mem <= "0000000000000000" & bricks_green; -- brick count green
+         when "01110" =>   T_data_to_mem <= "0000000000000000" & bricks_blue; -- brick count blue
 --       Etc. etc. etc.
 			when others =>
 		end case;		
