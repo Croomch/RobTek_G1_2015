@@ -4,9 +4,9 @@ The overall design of the software on the FPGA was given after which each compon
 
 The topmodule was implemented as an FSM switching depending on the color perceived by the color detector.
 The \textit{Color Detector} was likewise implemented as a state machine recording the light intensities for the three different colors at regular intervals.
-The \textit{Color Detector} is also implemented such that it takes care of the oscillation of the operational amplifier when it is going from one color to another.
+The \textit{Color Detector} is implemented such that it takes care of the oscillation of the operational amplifier when it is going from one color to another.
 
-An SPI module was also created to communicate with the ADC, this was designed such that the \textit{Color Detector} component is capable of requesting a new ADC value on demand.
+An SPI module was created to communicate with the ADC, this was designed such that the \textit{Color Detector} component is capable of requesting a new ADC value on demand.
 
 The uTosNet module was also included in the project.
 This was setup such that a set of instructions can be given to the FPGA to adjust its thresholds, motor positions etc. 
