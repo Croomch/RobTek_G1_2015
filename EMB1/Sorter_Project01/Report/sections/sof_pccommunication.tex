@@ -2,6 +2,7 @@
 The communication to the PC was implemented using uTosNet on the FPGA and a C++ program on the PC.
 The data made available to the computer is seen in table \ref{tab:pc_fpga_communication}.
 
+The C++ program created allows writing and reading the uTosNet registers, making the user able to set the treshold light levels for the different bricks and the position of the motor. It allows to read the LED intensity levels recieved on the FPGA from the ADC and the number of bricks of each color counted by the FPGA.
 
 \begin{table}[H]
 \centering
@@ -15,7 +16,7 @@ R2 & i\_red & i\_green & i\_blue & - \\ \hline
 R3 & bricks\_red & bricks\_green & bricks\_blue & - \\ \hline
  & \multicolumn{4}{|c|}{PC $\rightarrow$ FPGA} \\ \hline
 & W0 & W1 & W2 & W3 \\ \hline
-R0 & LED\_DATA & - & - & - \\ \hline
+R0 & LED\_DEBUG & - & - & - \\ \hline
 R1 & low\_threshold\_red & up\_threshold\_red & low\_threshold\_green & up\_threshold\_green \\ \hline
 R2 & low\_threshold\_blue & up\_threshold\_blue & - & - \\ \hline
 R3 & mp\_left & mp\_center & mp\_right & mp\_overwrite \\ \hline
