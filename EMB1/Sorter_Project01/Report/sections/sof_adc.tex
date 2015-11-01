@@ -1,6 +1,6 @@
 
 \subsection{ADC Communication}
-The ADC is a MCP3008\footnote{ \url{https://www.adafruit.com/datasheets/MCP3008.pdf} } which communicates using SPI.
+The ADC is a MCP3008 \footnote{ \href{https://www.adafruit.com/datasheets/MCP3008.pdf}{MCP3008 Datasheet} } which communicates using SPI.
 This is hence implemented in the module.
 Since the ADC only allows up to 3.6MHz communication frequency, then the clock is scaled down to 3.57MHz.
 The FPGA is then requesting the data from the ADC when the \textit{sample\_adc} signal is high and when the whole message is received from the ADC, it pulses a signal (\textit{spi\_data\_updated}) to notify the color detector of the new message.
