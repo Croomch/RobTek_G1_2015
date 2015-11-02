@@ -7,19 +7,22 @@
 // light sensor defines
 #define SENSE_LIGHT_L IN_1
 #define SENSE_LIGHT_R IN_2
+#define SENSE_LIGHT_B IN_3
 
 
 // defines
 #define SPEED 50
-#define PID_P 0.5
+#define PID_P 1
 #define BLACKLINE 550
 #define CALIB_FACTOR 0
 #define TURNVAL_L 80
 #define TURNVAL_R -80
+#define TURNBACK_L 20
+#define TURNBACK_R -20
 
 
 
-int StraightFordward(bool drive_straight)
+int FollowLine(bool drive_straight)
 {	
     float light_l, light_r;
 
@@ -70,10 +73,12 @@ int StraightFordward(bool drive_straight)
 	return 0;
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////
+//
 int TurnRight(bool FindLine){
 
     float light_l, light_r;
+    bool RightSensor = false;
 
 
 	OnRev(MOTOR_L, 80);
@@ -91,11 +96,18 @@ int TurnRight(bool FindLine){
 
 		if (light_r > BLACKLINE && light_l < BLACKLINE)
 		{ 
-			FindLine = false;
+			RightSensor = true;
 		
+			OnRev(MOTOR_L, 40);
+			OnRev(MOTOR_R, 10);
+
+		}
+		if (light_r < BLACKLINE && RightSensor)
+		{
+			FindLine = false;
+
 			OnRev(MOTOR_L, 0);
 			OnRev(MOTOR_R, 0);
-
 		}
 
 
@@ -103,24 +115,217 @@ int TurnRight(bool FindLine){
 	return 0;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
+int TurnLeft(bool FindLine){
 
+    float light_l, light_r;
+    bool LeftSensor = false;
+
+	OnRev(MOTOR_L, 50);
+	OnRev(MOTOR_R, 80);
+
+	Wait(100);
+	
+	OnRev(MOTOR_L, TURNVAL_R);
+	OnRev(MOTOR_R, TURNVAL_L);
+	
+	while(FindLine){
+
+        	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        	light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+
+		if (light_l > BLACKLINE && light_r < BLACKLINE)
+		{ 
+			LeftSensor = true;
+		
+			OnRev(MOTOR_L, 10);
+			OnRev(MOTOR_R, 40);
+
+		}
+		if (light_l < BLACKLINE && LeftSensor)
+		{
+			FindLine = false;
+
+			OnRev(MOTOR_L, 0);
+			OnRev(MOTOR_R, 0);
+		}
+
+
+	}
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+int TurnBack(bool FindLine, int nxt_pos){
+
+	float light_l, light_r, light_b;
+	bool LeftSensor, RightSensor, BackSensor, flagt;
+
+	LeftSensor = false;
+	RightSensor = false;
+	BackSensor = false;
+	flagt = false;
+
+	OnRev(MOTOR_L, -70);
+	OnRev(MOTOR_R, -70);
+
+	
+	while(!BackSensor){
+
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
+
+		if (light_b > BLACKLINE)
+		{
+			BackSensor = true;
+			OnRev(MOTOR_L, 0);
+			OnRev(MOTOR_R, 0);
+			
+		}
+	}
+	
+
+	while(FindLine){
+
+		light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
+
+		switch(nxt_pos)
+		{
+		case 1:
+			
+			OnRev(MOTOR_L, TURNBACK_L);
+			OnRev(MOTOR_R, TURNBACK_R);
+			if (light_r > BLACKLINE && light_l < BLACKLINE)
+			{ 
+				RightSensor = true;
+		
+				OnRev(MOTOR_L, 50);
+				OnRev(MOTOR_R, 10);
+
+			}
+			if (light_r < BLACKLINE && RightSensor)
+			{
+				FindLine = false;
+
+				OnRev(MOTOR_L, 0);
+				OnRev(MOTOR_R, 0);
+			}
+		break;
+
+		case 2:
+	
+			OnRev(MOTOR_L, TURNBACK_L);
+			OnRev(MOTOR_R, TURNBACK_R);
+
+			if (light_r > BLACKLINE && light_l < BLACKLINE)
+			{ 
+				RightSensor = true;
+		
+				OnRev(MOTOR_L, 50);
+				OnRev(MOTOR_R, 10);
+
+			}
+			if (light_r < BLACKLINE && RightSensor)
+			{
+				if(flagt){
+					FindLine = false;
+
+					OnRev(MOTOR_L, 0);
+					OnRev(MOTOR_R, 0);
+				}
+				else{
+					flagt = true;
+					RightSensor = false;
+
+				}
+			}
+		break;
+
+		case 3:
+
+			OnRev(MOTOR_L, TURNBACK_R);
+			OnRev(MOTOR_R, TURNBACK_L);
+
+			if (light_l > BLACKLINE && light_r < BLACKLINE)
+			{ 
+				LeftSensor = true;
+		
+				OnRev(MOTOR_L, 10);
+				OnRev(MOTOR_R, 50);
+
+			}
+			if (light_l < BLACKLINE && LeftSensor)
+			{
+				FindLine = false;
+
+				OnRev(MOTOR_L, 0);
+				OnRev(MOTOR_R, 0);
+			}
+		break;
+
+	
+		
+		}
+
+	
+	}
+	return 0;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 task main()
 {
 	// set sensors
 	SetSensor(SENSE_LIGHT_L, SENSOR_LIGHT);
-	SetSensor(SENSE_LIGHT_R, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_R, SENSOR_LIGHT);	
+	SetSensor(SENSE_LIGHT_B, SENSOR_LIGHT);
 
 
-    SetSensorLight(SENSE_LIGHT_L);
-    SetSensorLight(SENSE_LIGHT_R);
+	SetSensorLight(SENSE_LIGHT_L);
+	SetSensorLight(SENSE_LIGHT_R);
+	SetSensorLight(SENSE_LIGHT_B);
     
     
     
 	while(1){
 
-		StraightFordward(1);
+		FollowLine(1);
+		TurnBack(1,1);
+		FollowLine(1);
+		TurnBack(1,2);
+		FollowLine(1);
+		TurnBack(1,3);
+/*
+
+		FollowLine(1);
+		TurnLeft(1);
+		FollowLine(1);
 		TurnRight(1);
+		FollowLine(1);
+		TurnLeft(1);
+		FollowLine(1);
+		TurnRight(1);
+
+
+		FollowLine(1);
+		TurnRight(1);
+		FollowLine(1);
+		TurnRight(1);
+		FollowLine(1);
+		TurnRight(1);
+		FollowLine(1);
+		TurnRight(1);
+
+*/
+
 
 	}
 
