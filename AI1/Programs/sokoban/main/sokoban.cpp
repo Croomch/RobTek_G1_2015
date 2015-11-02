@@ -178,16 +178,15 @@ bool Sokoban::findPath(){
                 for(int newChild = 0; newChild < moves.size(); newChild++){
                     // update heuristics first
                     moves[newChild].updateHeuristic(heuristic_map);
-                    // here can the check for repetition be added
-                    // if not, then move this to possibleMoves instead
+                    // add the child
                     paths.createChild(moves[newChild]);
                 }
             }
         }
         else{
             // return shortest path
-            cheapest_leaf->printPathToHere();
-            std::cout << "Solution Found!\n";
+            //cheapest_leaf->printPathToHere();
+            cheapest_leaf->getPathToHere(path_);
         }
     }
 
@@ -200,7 +199,9 @@ bool Sokoban::findPath(){
     return solution_found;
 }
 
-void Sokoban::pathToRobot(){
+void Sokoban::pathToRobot(std::string &path){
+    // convert the path into Fwd, Back, Left, Right and return it in path.
+
 
 }
 
@@ -276,16 +277,23 @@ void Sokoban::wavefront(std::vector< std::vector<char> > &map_out, std::vector< 
 
 // takes in a wavefronted map and the position of diamonds to output a vector of possible moves
 void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vector<pos_t> * &diamonds, std::vector< node > &moves, node* &origo){
+    // do also find the path in terms of N S E W
     // temporary node
     node tmp;
     tmp.setParent(origo);
     // get cost ready, previous cost + the cost of pushing the diamond - the cost offset in the wavefront
     int currentCost = origo->getCost() + 1 - MAP_WALKABLE;
     pos_t robot;
+    // the path
+    std::string path;
+    // pushing around
+    pos_t pushTo;
+    pos_t pushFrom = *(origo->getRobotPos());
     // reset the move vector
     moves.clear();
     // loop through the set of diamonds
     for(int d = 0; d < diamonds->size(); d++){
+
         // set robot pos
         robot.x_ = (*diamonds)[d].x_;
         robot.y_ = (*diamonds)[d].y_;
@@ -305,6 +313,13 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 tmp.setCost(currentCost + south); // pushes from south
                 dim[d].y_ = (*diamonds)[d].y_ - 1;
                 tmp.setDiamonds(dim);
+                // find path
+                pushTo = robot;
+                pushTo.y_ = robot.y_ + 1; // south
+                if(findSubPath(path, wfmap_in, pushFrom, pushTo)){
+                    path += "N";
+                    tmp.setPath(path);
+                }
                 // add it to the vector
                 moves.emplace_back(tmp);
             }
@@ -314,6 +329,13 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 tmp.setCost(currentCost + north); // pushes from north
                 dim[d].y_ = (*diamonds)[d].y_ + 1;
                 tmp.setDiamonds(dim);
+                // find path
+                pushTo = robot;
+                pushTo.y_ = robot.y_ - 1; // north
+                if(findSubPath(path, wfmap_in, pushFrom, pushTo)){
+                    path += "S";
+                    tmp.setPath(path);
+                }
                 // add it to the vector
                 moves.emplace_back(tmp);
             }
@@ -329,6 +351,13 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 tmp.setCost(currentCost + east); // pushes from east
                 dim[d].x_ = (*diamonds)[d].x_ - 1;
                 tmp.setDiamonds(dim);
+                // find path
+                pushTo = robot;
+                pushTo.x_ = robot.x_ + 1; // east
+                if(findSubPath(path, wfmap_in, pushFrom, pushTo)){
+                    path += "W";
+                    tmp.setPath(path);
+                }
                 // add it to the vector
                 moves.emplace_back(tmp);
             }
@@ -338,6 +367,13 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 tmp.setCost(currentCost + west); // pushes from west
                 dim[d].x_ = (*diamonds)[d].x_ + 1;
                 tmp.setDiamonds(dim);
+                // find path
+                pushTo = robot;
+                pushTo.x_ = robot.x_ - 1; // west
+                if(findSubPath(path, wfmap_in, pushFrom, pushTo)){
+                    path += "E";
+                    tmp.setPath(path);
+                }
                 // add it to the vector
                 moves.emplace_back(tmp);
             }
@@ -345,6 +381,51 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
     }
 }
 
+// find the path from one position to another using a wfmap
+bool Sokoban::findSubPath(std::string &path_out, std::vector< std::vector<char> > &wfmap_in, pos_t &from, pos_t &to){
+    bool ret = false;
+    path_out = "";
+    pos_t current_pos = to;
+    // start at the end (to) and follow the slope down to the start
+    // this could possibly be optimized so it prefers straight paths with less turns?
+    int check_cost = 0;
+    int max_cost = wfmap_in[to.y_][to.x_] - wfmap_in[from.y_][from.x_];
+    bool pathFound = false;
+    while(!pathFound){
+        // the next four options
+        char north = wfmap_in[current_pos.y_ - 1][current_pos.x_];
+        char south = wfmap_in[current_pos.y_ + 1][current_pos.x_];
+        char east = wfmap_in[current_pos.y_][current_pos.x_ + 1];
+        char west = wfmap_in[current_pos.y_][current_pos.x_ - 1];
+        char here = wfmap_in[current_pos.y_][current_pos.x_];
+        // find the next step
+        if(north < here && MAP_IS_WALKABLE(north)){ // comes from north
+            path_out = "s" + path_out; // back tracking the position
+            current_pos.y_ = current_pos.y_ - 1;
+        } else if(south < here && MAP_IS_WALKABLE(south)){ // comes from south
+            path_out = "n" + path_out; // back tracking the position
+            current_pos.y_ = current_pos.y_ + 1;
+        } else if(east < here && MAP_IS_WALKABLE(east)){ // comes from east
+            path_out = "w" + path_out; // back tracking the position
+            current_pos.x_ = current_pos.x_ + 1;
+        } else if(west < here && MAP_IS_WALKABLE(west)){ // comes from south
+            path_out = "e" + path_out; // back tracking the position
+            current_pos.x_ = current_pos.x_ - 1;
+        }
+        // increment check cost to see if the right path was found
+        check_cost++;
+        // returned to destination?
+        if(current_pos == from){
+            pathFound = true;
+            ret = true;
+        }
+        // gone too far?
+        if(check_cost > max_cost){
+            pathFound = true;
+        }
+    }
+    return ret;
+}
 
 // checks if all the diamonds are placed on valid spots
 bool Sokoban::validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in){
@@ -362,9 +443,9 @@ bool Sokoban::validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector
             bool verticalBlock = east | west;
             if(verticalBlock && horizontalBlock){
                 ret = false;
-//                std::cout << "Found a invalid node ";
-//                diamonds->at(d).print();
-//                std::cout << "\n";
+                //                std::cout << "Found a invalid node ";
+                //                diamonds->at(d).print();
+                //                std::cout << "\n";
             }
         }
     }

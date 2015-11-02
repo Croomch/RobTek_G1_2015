@@ -7,138 +7,77 @@
 \usepackage{graphicx}
 \graphicspath{ {./graphics/} }
 
-\usepackage{fullpage}
+\usepackage[top=1.5in, bottom=1in, left=1in, right=1in]{geometry}
+
 
 \usepackage{float}
 
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata, positioning,calc,shapes.geometric}
 
+% header
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{ \fancyplain{}{Lukas Schwartz \& Aitor Miguel } }
+\rhead{ \fancyplain{}{AI1 - 1. Semester MSc Robot Systems} }
+\cfoot{ \fancyplain{}{\thepage} }
+
+% make tables prettyer
+\def\arraystretch{1.3}
+
+\usepackage{todonotes}
+
 \begin{document}
 
-\title{Sokoban Solver}
-\date{19$^{th}$ October 2015}
-\author{Aitor Miguel Blanco and Lukas Chr. M. W. Schwartz}
-\maketitle
+\begin{titlepage}
+	\centering
+%	\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
+	\vfill
+	{\scshape\LARGE University of Southern Denmark\par}
+	\vspace{1cm}
+	{\scshape\Large AI1 Project \#1\par}
+	{\scshape\large 1. Semester MSc Robot Systems\par}
+	\vspace{1.5cm}
+	{\huge\bfseries Sokoban Solver\par}
+	\vspace{2cm}
+	{\Large\itshape Aitor Miguel Blanco \& Lukas Chr. M. W. Schwartz \\ Group \#1 \par}
+	\vfill
+	supervised by\par
+	xyz
+
+	\vspace{2cm}
+
+% Bottom of the page
+	{\large 3$^{rd}$ December 2015 \par}
+\end{titlepage}
 
 \pagebreak
 
+\tableofcontents
 
+\pagebreak
+
+\listoffigures
+
+\listoftables
+
+\pagebreak
+
+\input{sections/intro}
+
+\pagebreak
 \section{Physical Design}
-To solve the sokoban problem a robot capable of performing simple tasks concerned with moving the can and itself around the game map are needed.
-The behaviours the robot should be able to perform define how the robot should be formed in order to accomplish its task of solving the sokoban problem.
-Therefore first the capabilities of the robot are considered and how this is reflected in the robot design.
+\input{sections/phy_intro}
+\input{sections/phy_sys_behaviour}
+\input{sections/phy_physical_setup}
+\input{sections/phy_test}
 
-
-\subsection{System Behaviours}
-The robot was decided to be build upon being able to execute simple behaviours.
-The execution of the behaviours would then be controlled from the \textit{Brain},
-this is illustrated in figure \ref{fig:behaviourSystem}.
-
-% brain/behaviour diagram
-\begin{figure}[H]
-\center
-\begin{tikzpicture}[node distance=1cm]
-%  behaviour box
-\node[rectangle,draw,minimum width=10cm, minimum height=4cm, dashed, name=behaviour_box]  at (0,0) {};
-\node[name=behaviour] at (-3.7,1.5) {Behaviours};
-
-% Brain node 
-\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=brain, above=of behaviour_box] {Brain};
-
-% behaviours
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=fwd] at (-3.6,0.3) {Fwd};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=left] at (-1.8,-0.5) {Left};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=right] at (0,-1.) {Right};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=turn] at (1.8,-0.5) {Turn};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=follow] at (3.6,0.3) {Follow};
-
-% arrows inside 
-\draw[->] (brain) -- (fwd) ;
-\draw[->] (brain) -- (left) ;
-\draw[->] (brain) -- (right) ;
-\draw[->] (brain) -- (follow) ;
-\draw[->] (brain) -- (turn) ;
-\end{tikzpicture}
-\caption{Overview of the systems behaviours.}
-\label{fig:behaviourSystem}
-\end{figure}
-
-Here the central unit, the \textit{Brain} is responsible for finding the solution to the sokoban problem by invoking the five behaviours.
-The \textit{Brain} is hence a combination of both the computer processing the map offline and the Lego-robot online when using the offline generated data to solve the puzzle.
-
-The behaviours are defined in table \ref{tab:behaviourExplained} and based on dividing the behaviours into simple tasks which are easy to program.
-
-\begin{table}[H]
-\center
-\begin{tabular}{c|l}
-Behaviour & Description \\ \hline
-Fwd & Makes the robot go straight ahead in the next intersection. \\
-Left / Right & The robot turns left/right in the next intersection. \\
-Turn & Turns the robot 180 degrees around in the next intersection. \\
-Follow & Makes the robot follow the line till next intersection.
-\end{tabular}
-\caption{Behaviour table.}
-\label{tab:behaviourExplained}
-\end{table}
-
-With these five behaviours the robot should then be able to navigate around the map and when a tomato can is encountered, push it to its destination.
-
-\subsection{Physical Structure}
-The structure of the robot should allow the movement of the robot across the map. 
-That means, the robot should have at least two motors to move in the plane of the circuit and a minimum of two light sensors to check its position referred to the black lines of the map and check when the robot has arrived to a crossroad.
-
-The chosen motor configuration consist in the use of two motors that move two parallel wheels. 
-This allows the robot to change the direction of the movement setting a different motor speed on each motor.
-
-Two light sensors are used as seen in figure \ref{fig:robotscheme}. 
-In the position control, the value of the sensors are compared and the robot is controlled having in mind that the value of the sensors should be the same when the robot is centred above the line.
-When the value of both sensors are low, the robot is facing a crossroad.
-
-The position of the light sensors is in the front of the robot, and the distance between them should be enough to correctly detect the line. 
-This means the light sensors should be placed close to the edges of the line such that they both detect a part of the line.
-Because of that the distance between them should be around the width of the line itself as shown in figure \ref{fig:robotscheme}.
-
-\begin{figure}[H]
-\includegraphics[width=10cm]{Fig2.png}
-\centering
-\caption{Scheme of the proposed configuration.}
-\label{fig:robotscheme}
-\end{figure}
-
-
-To be able to push and guide the can across the map, the robot should have a proper tool that allows this task. 
-The proposed design consist of two bars placed making an angle that allows the guide of the bottle when driving straight forward, as is shown in figure \ref{fig:robotscheme}.
-This configuration allows catching the can even when its position is displaced, making the robot's job more easy.
-
-Considering the rules of the game then the can is not permitted to be pushed left or right and because of that, no special design enabling this are required. 
-The turning back behaviour is more difficult. 
-%As the distance between the lines are short, the turn back should be done in a small place because the sensors should find the line before the crossroad.
-The distance between the line intersections are short and the turn back has to happen in free space without interacting with the nearby placed cans.
-At the same time, the robot should also finish the turn before reaching the new intersection, so the full length of the robot should be short enough to allow these movements.
-
-
-The final build of the robot is seen in figure \ref{fig:robotImage}.
-
-\begin{figure}[H]
-\includegraphics[width=10cm]{Fig1.png}
-\centering
-\caption{Images of the built robot.}
-\label{fig:robotImage}
-\end{figure}
-
-
-\subsection{Tests of the Robot Behaviours}
-In order to test the functionality of the behaviours implemented each can be tested individually.
-The position controller used in the line following algorithm can be tested by letting the robot drive along a line and record the error of the line sensors.
-The smaller it is able to hold the error, the better it is.
-Furthermore the line following can be tested with and without the tomato can to check the response when the robot has a load.
-
-To test the turning behaviours the robot can be told to drive in a square and if it is able to maintain the same square, the turning function works.
+\pagebreak
+\section{Software}
+\input{sections/sof_intro}
 
 
 
-
-% img of robot (schematic)
 
 \end{document}

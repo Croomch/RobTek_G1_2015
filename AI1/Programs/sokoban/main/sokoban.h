@@ -46,7 +46,13 @@ public:
     bool findPath();
 
     // converts NSEW to BFLR
-    void pathToRobot();
+    void pathToRobot(std::string &path);
+
+    // return the solution path
+    void getPath(std::string &path){
+        path = path_;
+    }
+
 
     void printMap(std::vector< std::vector<char> > &map){
         for(int y = 0; y < map.size(); y++){
@@ -80,6 +86,8 @@ private:
     void possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vector<pos_t> * &diamonds, std::vector< node > &moves, node* &origo);
     // checks if all the diamonds are placed on valid spots, takes the diamonds in and a map where the diamond positions are set to walls
     bool validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in);
+    // find the subpath from one node to another
+    bool findSubPath(std::string &path_out, std::vector< std::vector<char> > &wfmap_in, pos_t &from, pos_t &to);
 
 
     // map of the lane (walls, empty and goals)
@@ -88,8 +96,7 @@ private:
     std::vector< std::vector<char> > map_;
     // goals (they are also on the map)
     std::vector< pos_t > goals_;
-    // path
-    // string (N,S,E,W)
+    // path, string is (N,S,E,W), case for pushes and small case for normal walks
     std::string path_;
     // dimonds init pos
     std::vector<pos_t> diamonds_;

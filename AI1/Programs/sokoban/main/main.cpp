@@ -3,8 +3,6 @@
 #include "sokoban.h"
 
 
-// todo: find error for why it stops early, probably it does not find possible paths to add?..
-
 int main()
 {
     std::cout << "Hello Sokoban Solver!" << std::endl;
@@ -13,7 +11,10 @@ int main()
     //Sokoban solver("../../../sokoban_maps/simple_map.txt");
 
     if(solver.findPath()){
-        std::cout << "Path found." << std::endl;
+        std::cout << "Path found!" << std::endl;
+        std::string path;
+        solver.getPath(path);
+        std::cout << "The path to the solution is: " << path << std::endl;
     }
 
     return 0;

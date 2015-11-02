@@ -59,22 +59,22 @@ struct pos_t{
 class node
 {
 public:
-    node():parent_(nullptr),cost_(0),heuristic_(0){
+    node():parent_(nullptr),cost_(0),heuristic_(0),path_(""){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
         makeKey();
     }
-    node(int cost):cost_(cost),parent_(nullptr),heuristic_(0){
+    node(int cost):cost_(cost),parent_(nullptr),heuristic_(0),path_(""){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
         makeKey();
     }
-    node(int cost, node * &parent):cost_(cost),parent_(parent),heuristic_(0){
+    node(int cost, node * &parent):cost_(cost),parent_(parent),heuristic_(0),path_(""){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
         makeKey();
     }
-    node(int element, node * &parent, std::vector< std::vector<char> > &heuristicmap):cost_(element),parent_(parent){
+    node(int element, node * &parent, std::vector< std::vector<char> > &heuristicmap):cost_(element),parent_(parent),path_(""){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
         makeKey();
@@ -85,113 +85,72 @@ public:
         makeKey();
     }
 
+    std::string getPath(){return path_;}
     int getCost(){return cost_;}
+
     int getHeuristic(){return heuristic_;}
 
     std::string * getKey(){ return &key_;}
 
-    void setCost(int element_in){
-        cost_ = element_in;
+    void setCost(int cost){
+      cost_ = cost;
     }
+
+    void setPath(std::string &path){
+      path_ = path;
+    }
+
     void setRobot(pos_t pos){
         robot_pos_ = pos;
         makeKey();
     }
+
     void setParent(node * &parent){
-        parent_= parent;
+      parent_ = parent;
     }
+
     void setDiamonds(std::vector< pos_t > &diamonds){
         diamonds_ = diamonds;
         makeKey();
     }
+
     node* getParent(){return parent_;}
+
     std::vector< pos_t > * getDiamonds(){return &diamonds_;}
+
     pos_t * getRobotPos(){return &robot_pos_;}
 
-    void printPathToHere(){
-        if(parent_ != nullptr){
-            parent_->printPathToHere();
-        }
-        robot_pos_.print();
-        std::cout << " " << cost_ << std::endl;
-    }
+    void getPathToHere(std::string &path);
 
-    bool compSolution(std::vector< std::vector<char> > &goalmap){
-        bool ret = false;
-        int matches = 0;
-        for(int d = 0; d < diamonds_.size(); d++){
-            if(MAP_IS_GOAL(goalmap[diamonds_[d].y_][diamonds_[d].x_])){
-                matches++;
-            }
-        }
-        if(matches == diamonds_.size()){
-            ret = true;
-        }
-        return ret;
-    }
+    void printPathToHere();
 
-    bool compSolution(node &other){
-        std::vector< pos_t >* goals = other.getDiamonds();
-        bool ret = false;
-        int matches = 0;
-        for(int d = 0; d < diamonds_.size(); d++){
-            for(int g = 0; g < goals->size(); g++){
-                if(diamonds_[d] == (*goals)[g]){
-                    matches++;
-                }
-            }
-        }
-        if(matches == diamonds_.size()){
-            ret = true;
-        }
-        ret = ret & ((*other.getRobotPos()) == (*getRobotPos()));
+    bool compSolution(std::vector< std::vector<char> > &goalmap);
 
-        return ret;
-    }
+    bool compSolution(node &other);
 
-    bool operator==(node &other)
-    {
-        bool ret = compSolution(other);
+    bool operator==(node &other);
 
-        return ret;
-    }
+    bool operator!=(node &other);
 
-    bool operator!=(node &other)
-    {
-        bool ret = !(*this == other);
-
-        return ret;
-    }
-
-    void updateHeuristic(std::vector< std::vector<char> > &heuristicmap){
-        int cost = 0;
-        for(int d = 0; d < diamonds_.size(); d++){
-            cost += heuristicmap[diamonds_[d].y_][diamonds_[d].x_] - MAP_WALKABLE;
-        }
-
-        heuristic_ = cost;
-    }
+    void updateHeuristic(std::vector< std::vector<char> > &heuristicmap);
 
 private:
 
-    void makeKey(){
-        std::string key = "";
+    void makeKey();
 
-        std::sort (diamonds_.begin(),diamonds_.end());
-        for(int i = 0; i < diamonds_.size(); i++){
-            key += (diamonds_[i]).x_;
-            key += (diamonds_[i]).y_;
-        }
-        key += robot_pos_.x_;
-        key += robot_pos_.y_;
-        key_ = key;
-    }
-
+    // variables to store
+    // cost and heuristic cost
     int cost_, heuristic_;
+    // the position of the diamonds
     std::vector< pos_t > diamonds_;
+    // the robots position on the map
     pos_t robot_pos_;
+    // the node the robot came from
     node * parent_;
+    // the unique key for this node
     std::string key_;
+    // the path taken to get her from the parent node
+    std::string path_;
 };
 
 
@@ -215,46 +174,21 @@ public:
 
     // -- add/get children function, to expand tree --
     // adds a child(ren) to the node parent in the graph and adds them to the leafs_
-    void createChild(node &obj){
-        node * _child = new node(obj);
-        leafs_.push_back(_child);
-        std::push_heap(leafs_.begin(), leafs_.end(), Comp());
-    }
 
-    void addChild(node* &obj){
-        std::string * key = obj->getKey();
-        data_[*key] = obj;
-    }
+    // creats the child and add it to the heap, used in A* to get next shortest option
+    void createChild(node &obj);
 
-    void deleteChild(node* &obj){
-        delete obj;
-    }
-    //void addChild(std::vector< T > &children_in, const node< T > *parent_in);
+    // add the child to final graph (adds the entry in the hash table)
+    void addChild(node* &obj);
 
-    // get next child
-    bool getNextChild(node * &nextChild){
-        bool ret = false;
-        if (leafs_.size() > 0){
-            node * front = leafs_.front();
-            std::pop_heap (leafs_.begin(),leafs_.end(), Comp());
-            leafs_.pop_back();
-            nextChild = front;
-            ret = true;
-        }
-        return ret;
-    }
+    // deletes the child (used when an identical node was already found to remove this option from memory)
+    void deleteChild(node* &obj);
+
+    // get next child from the hash
+    bool getNextChild(node * &nextChild);
 
     // test node existence
-    bool nodeUnique(node &other){
-        bool ret = false;
-        std::unordered_map< std::string, node* >::iterator iter = data_.find((*(other.getKey())));
-
-        if(iter == data_.end()){
-            ret = true;
-        }
-
-        return ret;
-    }
+    bool nodeUnique(node &other);
 
 private:
     std::vector< node * > leafs_;
