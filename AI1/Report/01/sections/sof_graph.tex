@@ -1,0 +1,13 @@
+
+\subsection{Graph Structure}
+The graph is used to store the possible route to the solution of the sokoban problem.
+It consist of a set of nodes representing states in the solution.
+The nodes link to each other depending on the possible ways in which one state can be reached from another.
+
+A state in the sokoban problem can be represented in many ways.
+In this implementation it was chosen to have a new state for each diamond push.
+The extra cost of going from one state to another, is then the number of steps the robot has to take, in order to reach the new state.
+In this way, only the points of interest is stored in the graph, that is the points where the diamonds move and where on the map the robot is standing after the move.
+On of the necessary data elements in each node, apart from the cost, is then the shortest path of executing the change of state in terms of moves in the directions north, south, east and west.
+
+

@@ -9,6 +9,7 @@
 
 \usepackage[top=1.5in, bottom=1in, left=1in, right=1in]{geometry}
 
+\usepackage{hyperref}
 
 \usepackage{float}
 
@@ -44,7 +45,7 @@
 	{\Large\itshape Aitor Miguel Blanco \& Lukas Chr. M. W. Schwartz \\ Group \#1 \par}
 	\vfill
 	supervised by\par
-	xyz
+	John Hallam
 
 	\vspace{2cm}
 
@@ -67,16 +68,34 @@
 \input{sections/intro}
 
 \pagebreak
-\section{Physical Design}
+\section{Robot Design}
 \input{sections/phy_intro}
 \input{sections/phy_sys_behaviour}
 \input{sections/phy_physical_setup}
 \input{sections/phy_test}
+\input{sections/phy_conclusion}
 
 \pagebreak
-\section{Software}
+\section{Software Design}
 \input{sections/sof_intro}
+\input{sections/sof_graph}
+\input{sections/sof_heuristic}
+\input{sections/sof_nodevalidation}
+\input{sections/sof_pathconverter}
+\input{sections/sof_conclusion}
 
+
+\pagebreak
+\section{Software Tests}
+\input{sections/softwaretest}
+
+\pagebreak
+\section{Hardware Tests}
+\input{sections/hardwaretest}
+
+\pagebreak
+\section{Conclusion}
+\input{sections/conclusion}
 
 
 
