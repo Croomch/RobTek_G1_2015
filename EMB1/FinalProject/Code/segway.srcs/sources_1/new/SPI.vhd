@@ -40,11 +40,11 @@ entity SPI is
            SPI_MISO : in STD_LOGIC;
            SPI_CS : out STD_LOGIC;
            
-           output : out STD_LOGIC_VECTOR (9 downto 0);
+           output : out STD_LOGIC_VECTOR (7 downto 0);
            output_updated : out STD_LOGIC;
            
            getSample : in STD_LOGIC;
-           SPI_MSG : in STD_LOGIC_VECTOR (3 downto 0)
+           SPI_MSG : in STD_LOGIC_VECTOR (7 downto 0)
            );
 end SPI;
 
@@ -55,26 +55,43 @@ SIGNAL CLK_SPI : STD_LOGIC := '0';
 SIGNAL CS : STD_LOGIC := '1';
 SIGNAL MOSI : STD_LOGIC := '1';
 -- to get val --
-SIGNAL CBS : STD_LOGIC_vector (3 downto 0) := "1000";
+SIGNAL CBS : STD_LOGIC_vector (7 downto 0) := "10100010";
 -- data recieved 
-SIGNAL data : STD_LOGIC_vector (9 downto 0) := "0000000000";
+SIGNAL data : STD_LOGIC_vector (7 downto 0) := "00000000";
 
 
 ---- Constants ----
--- scale down with factor 14 to get = 3.571MHz < 3.6MHz max
-CONSTANT CLK_SCALING : INTEGER := 14;
+-- spi supports max of 10MHz
+-- scale down with factor 6 to get = 8.33MHz < 10MHz max
+CONSTANT CLK_SCALING : INTEGER := 6;
 -- data msg info
 CONSTANT MSG_CS_START : INTEGER := 1;
-CONSTANT MSG_CS_END : INTEGER := 4;
-CONSTANT MSG_DATA_START : INTEGER := 8;
-CONSTANT MSG_DATA_END : INTEGER := 17;
+CONSTANT MSG_CS_END : INTEGER := 8;
+CONSTANT MSG_DATA_START : INTEGER := 9;
+CONSTANT MSG_DATA_END : INTEGER := 16;
 -- how often restart to sample --
 CONSTANT MSG_PERIOD : INTEGER := MSG_DATA_END+1;
 
 begin
+
+-- first bit is R/W and remaining 7 (AD) is data, R/W = 1 for read, 0 for write, AD = address or index register 
 CBS <= SPI_MSG;
 SPI_CS <= CS;
 SPI_MOSI <= MOSI;
+
+---- data info ----
+-- can be accessed using the cont. read if all 16 bits are required, ref. datasheet --
+-- GYRO --
+-- X_L X22, X_H X23
+-- Y_L X24, Y_H X25
+-- Z_L X26, Z_H X27
+
+-- ACCELEROMETER --
+-- X_L X28, X_H X29
+-- Y_L X2A, Y_H X2B
+-- Z_L X2C, Z_H X2D
+
+
 -- actual data part --
 process(CLK_SPI, CLK, getSample)
 variable CLK_COUNT : integer range 0 to MSG_PERIOD := MSG_PERIOD;
@@ -107,7 +124,7 @@ begin
         -- process the msg --
         if CLK_COUNT >= MSG_DATA_START and CLK_COUNT <= MSG_DATA_END then
             -- recieve the data
-            data <= data(8 downto 0) & SPI_MISO;
+            data <= data(6 downto 0) & SPI_MISO;
         end if;
     end if;
     if falling_edge(CLK_SPI) then

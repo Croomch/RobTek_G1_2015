@@ -51,9 +51,9 @@ architecture Behavioral of topmodule is
 -- signals for PWM
 signal L_FWD, L_BACK, R_FWD, R_BACK : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 signal L_FWD_PWM, L_BACK_PWM, R_FWD_PWM, R_BACK_PWM : STD_LOGIC := '0';
-
+signal CLK_SLOW : STD_LOGIC := '0';
 ---- CONSTANTS ----
-
+CONSTANT CLK_SCALING : INTEGER := 10;
 
 ---- COMPONENTS ----
 COMPONENT SPI IS
@@ -90,29 +90,42 @@ MOTOR_CONTROL(2) <= L_BACK_PWM;
 MOTOR_CONTROL(3) <= R_FWD_PWM;
 MOTOR_CONTROL(4) <= R_BACK_PWM;
 L_F : motorcontrol Port map (
-CLK => CLK,
+CLK => CLK_SLOW,
 PWM => L_FWD_PWM,
 duty => L_FWD
 );
 
 L_B : motorcontrol Port map (
-CLK => CLK,
+CLK => CLK_SLOW,
 PWM => L_BACK_PWM,
 duty => L_BACK
 );
 
 R_F : motorcontrol Port map (
-CLK => CLK,
+CLK => CLK_SLOW,
 PWM => R_FWD_PWM,
 duty => R_FWD
 );
 
 R_B : motorcontrol Port map (
-CLK => CLK,
+CLK => CLK_SLOW,
 PWM => R_BACK_PWM,
 duty => R_BACK
 );
 
+
+---- clk scaler for the pwm generators ----
+process(CLK)
+variable scaler : integer range 0 to CLK_SCALING/2 := 0;
+begin
+    if rising_edge(CLK) then
+        scaler := scaler + 1;
+        if scaler >= CLK_SCALING/2 then
+            CLK_SLOW <= not(CLK_SLOW);
+            scaler := 0;
+        end if;
+    end if;
+end process;
 
 ---- main part ----
 
