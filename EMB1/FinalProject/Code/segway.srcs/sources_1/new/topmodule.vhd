@@ -33,16 +33,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity topmodule is
     Port ( 
-    CLK : STD_LOGIC;
+    CLK : in STD_LOGIC;
     
-    MOTOR_CONTROL : STD_LOGIC_VECTOR(7 downto 0);
+    MOTOR_CONTROL : out STD_LOGIC_VECTOR(7 downto 0);
     
-    SPI_MISO : STD_LOGIC;
-    SPI_MOSI : STD_LOGIC;
-    SPI_CLK : STD_LOGIC;
-    SPI_CS : STD_LOGIC;
+    SPI_MISO : in STD_LOGIC;
+    SPI_MOSI : out STD_LOGIC;
+    SPI_CLK : out STD_LOGIC;
+    SPI_CS : out STD_LOGIC;
     
-    ALIVE : STD_LOGIC
+    ALIVE : out STD_LOGIC
     );
 end topmodule;
 
