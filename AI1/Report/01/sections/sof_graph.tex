@@ -4,10 +4,15 @@ The graph is used to store the possible route to the solution of the sokoban pro
 It consist of a set of nodes representing states in the solution.
 The nodes link to each other depending on the possible ways in which one state can be reached from another.
 
-A state in the sokoban problem can be represented in many ways.
+A state in the Sokoban problem can be represented in many ways.
 In this implementation it was chosen to have a new state for each diamond push.
 The extra cost of going from one state to another, is then the number of steps the robot has to take, in order to reach the new state.
-In this way, only the points of interest is stored in the graph, that is the points where the diamonds move and where on the map the robot is standing after the move.
-On of the necessary data elements in each node, apart from the cost, is then the shortest path of executing the change of state in terms of moves in the directions north, south, east and west.
+This implementation hence only stores the points of interest in the graph, that is the points where the diamonds move and where on the map the robot is standing after the move.
+The diamond position and the position of the robot was stored as a set of Cartesian coordinates on the map.
+
+One of the necessary data elements in each node, apart from the cost, is the shortest path of executing the change of state in terms of moves in the directions north, south, east and west.
+This was implemented using a string with the characters N, S, E and W.
+Upper case was used to indicate that the move required a diamond push and lower case for movement without.
+
 
 
