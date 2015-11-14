@@ -1,0 +1,26 @@
+
+\subsection{Sensors}
+In order to control and stabilize the Segway, then a set of sensors are required.
+For this project it was decided to both use a set of sensors to control the systems stability and also to implement a set of sensors into the system enabling the tracking of the Segways position.
+
+
+The tracking of the Segways position is done using an encoder kit\footnote{ \href{https://www.sparkfun.com/products/13339}{Wheel encoder}} mounted on the motors used in this project.
+The encoders chosen for this project is an incremental rotary encoder capable to track the movement of the wheels, but not the direction of rotation.
+It is hence not directly possible to tell which direction the Segway is moving without combining it with data from other sensors.
+The sensors were however deemed good enough for the scope of this project.
+
+
+The most important sensor of the system is the one used to control the stability of the system in order to hold it upright.
+For this an accelerometer or/and a gyroscope can be used.
+The advantage of using a gyroscope is that it is reliable in the measure of angular displacement over short periods of time.
+When integrating over this it does, however, get troublesome due to drifts when performing the numerical integration.
+The accelerometer on the other hand is exposed to a lot of noise from all the surrounding forces working on the system and it is hence only becomes a reliable measure of the systems angle when used with a low-pass filter.
+It was therefore decided to use both in the project and combining them using a complimentary filter.
+This provides the system with both the short term accuracy of the gyroscope and the long term reliability of the accelerometer.
+For this project it was decided to by an integrated circuit
+\footnote{ \href{https://www.sparkfun.com/products/13339}{IMU component}}
+ including both gyroscope and accelerometer in the same component.
+This ensures that the axis of the accelerometer and gyroscope are aligned within the component.
+
+
+
