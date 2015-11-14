@@ -1,2 +1,19 @@
 \subsection{Node Validation}
+When the graph is constructed a massive amount of nodes in the possible direction towards the goal are added to the graph.
+This does however also require care in order to validate the nodes before they are added to the closed list in order to prevent excessive memory and time consumption.
 
+Each node must hence be tested in the search for the solution in order to prevent duplicates using all the system memory and processing time.
+In order to reduce the check uptime when validating a specific state, it was chosen to use a hash-table to validate if a node is present in the closed-set.
+For this to work a hashing value for each node is generated.
+This is done using the coordinates of the diamonds and the robot at each state.
+The position of such was hence combined into a string where the sorted diamonds position is added to the string first and then followed up with the position of the robot.
+This is then used as the unique key in the hashing table preventing the table from being filled with duplicates.
+
+When solving the Sokoban problem furthermore a check for validity of the state is performed.
+This is done by considering if any of the diamonds has gone into a deadlock.
+Since there are many different deadlock situations, it was chosen only to implement the most simple deadlock arising when pushing a diamond into a corner that is not a goal.
+This prevents some of the paths explored being invalid because once gone into a deadlock is entered, the goal is not obtainable from the specific path.
+Furthermore a deadlock detection is able to reduce the graph and hence improve the time taken to find the solution on maps where many deadlocks can be entered.
+
+
+\todo[inline]{implement deadlock as a map for lookup? and then include more deadlock situations?}
