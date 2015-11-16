@@ -121,10 +121,18 @@ bool Sokoban::findPath(){
     // has a solution been found
     bool solution_found = false;
 
-    // make needed maps
+    // - make needed maps
+    // heuristic map
     std::vector< std::vector<char> > heuristic_map = map_;
     wavefront(heuristic_map, goals_);
-    printMap(heuristic_map);
+//    printMap(heuristic_map);
+
+//    std::cout << std::endl;
+    // deadlock map
+    std::vector< std::vector<char> > deadlock_map = map_;
+    deadlocks(deadlock_map);
+//    printMap(deadlock_map);
+
 
     // the next child to consider (lowest cost)
     node * cheapest_leaf = nullptr;
@@ -162,7 +170,14 @@ bool Sokoban::findPath(){
                     wf_map[y][x] = MAP_DIAMOND;
                 }
                 // check that the node is valid (all diamonds are in valid positions)
-                valid_node = validNode(diamonds, wf_map);
+//                valid_node = true;
+//                for(int i = 0; i < diamonds->size(); i++){
+//                    if(!isNotCorner(diamonds->at(i), map_)){
+//                        valid_node = false;
+//                    }
+//                }
+                valid_node = validNode(diamonds, deadlock_map);
+
             }
             else{
                 paths.deleteChild(cheapest_leaf);
@@ -201,8 +216,101 @@ bool Sokoban::findPath(){
 
 void Sokoban::pathToRobot(std::string &path){
     // convert the path into Fwd, Back, Left, Right and return it in path.
+    // start towards north
+    char compas = 'N';
+    std::string robotpath = "";
+    for(int i = 0; i < path_.size(); i++){
+        bool last_push = false;
+        char nextMove = path_[i];
+        // check if it is pushing the can
+        bool pushingCan = false;
+        if(!(nextMove & 0x20)){
+            pushingCan = true;
+        }
+        // check if it is supposed to push the can further
+        if(i + 1 < path_.size()){
+            if(!(nextMove & 0x20) && (path_[i+1] & 0x20)){ // if current is upper and next is lowercase
+                last_push = true;
+            }
+        } else {
+            last_push = true;
+        }
 
+        // make the next move uppercase
+        nextMove = nextMove & ~0x20; // always upper case
+        char nextDirection;
+        // check which direction to fo
+        if(nextMove == compas){ // go forward if it si in the same direction
+            nextDirection = 'F';
+//            std::cout << compas << " and " << (char)(compas & ~0x20) << "\n";
+        } else if(compas == 'N'){
+            if(nextMove == 'E'){
+                nextDirection = 'R';
+            } else if(nextMove == 'W'){
+                nextDirection = 'L';
+            } else if(nextMove == 'S'){
+                nextDirection = 'B';
+            }
 
+        } else if(compas == 'S'){
+            if(nextMove == 'E'){
+                nextDirection = 'L';
+            } else if(nextMove == 'W'){
+                nextDirection = 'R';
+            } else if(nextMove == 'N'){
+                nextDirection = 'B';
+            }
+
+        } else if(compas == 'E'){
+            if(nextMove == 'N'){
+                nextDirection = 'L';
+            } else if(nextMove == 'S'){
+                nextDirection = 'R';
+            } else if(nextMove == 'W'){
+                nextDirection = 'B';
+            }
+
+        } else if(compas == 'W'){
+            if(nextMove == 'N'){
+                nextDirection = 'R';
+            } else if(nextMove == 'S'){
+                nextDirection = 'L';
+            } else if(nextMove == 'E'){
+                nextDirection = 'B';
+            }
+
+        }
+        compas = nextMove;
+
+        // if not pushing the can, make it lower case
+        if(!pushingCan){
+            nextDirection = nextDirection | 0x20;
+        }
+        // add it to the path
+        robotpath += nextDirection;
+        // if last push, add a final fwd and back and turn the compas 180 degrees
+        if(last_push){
+            robotpath += "Fb";
+            switch (compas) {
+            case 'N':
+                compas = 'S';
+                break;
+            case 'S':
+                compas = 'N';
+                break;
+            case 'E':
+                compas = 'W';
+                break;
+            case 'W':
+                compas = 'E';
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    path = robotpath;
 }
 
 
@@ -273,6 +381,103 @@ void Sokoban::wavefront(std::vector< std::vector<char> > &map_out, std::vector< 
     }
 }
 
+
+void Sokoban::deadlocks(std::vector< std::vector<char> > &map_out){
+    // go through map to mark deadlocks
+    // find all corners
+    std::vector< std::vector<char> > deadlocks = map_out;
+    for(int i = 0; i < map_out.size(); i++){
+        for(int j = 0; j < (map_out.at(i)).size(); j++){
+            pos_t pos(j,i);
+            if(!isNotCorner(pos,map_out)){
+                deadlocks[i][j] = MAP_WALL;
+            }
+        }
+    }
+    // find the deadlocks which are next to a wall with no goal
+    // that is the block can not leave the wall again
+    // find wall parts that have no indnent to push the diamond out
+    //
+    // first look at vertical walls
+    for(int j = 0; j < (map_out.at(0)).size(); j++){ // go through x (row by row)
+        bool unblocked_l = false, unblocked_r = false; // assume each row is blocked
+        for(int i = 0; i < map_out.size(); i++){ // go vertical down and see it there is a wall next to it that is blocking
+            char element = map_out[i][j];
+            // check if the wall part ends
+            if(MAP_IS_WALL(element)){
+                if(!(unblocked_l && unblocked_r)){ // if any of the sides were blocked, go back and mark the deadlocks
+//                    std::cout << "A piece of deadlockwall was found at ";
+//                    std::cout << "(" << j << ", " << i << ")\n";
+                    int b = i-1;
+                    while( b >= 0  && !MAP_IS_WALL(map_out[b][j])){
+                        deadlocks[b][j] = MAP_WALL;
+                        b--;
+                    }
+                }
+                unblocked_l = false;
+                unblocked_r = false;
+
+
+            } else if(MAP_IS_GOAL(element)){ // checkif the wall path is valid - that is there is a goal at the wall
+                unblocked_l = true;
+                unblocked_r = true;
+            }
+            // check if there is a continous wall on one of the sides (set false if there is a hole in the wall)
+            if(j > 0){
+                if(!MAP_IS_WALL(map_out[i][j-1])){
+                    unblocked_l = true;
+                }
+            }
+            if(j < (map_out.at(i)).size() - 1 ){
+                if(!MAP_IS_WALL(map_out[i][j+1])){
+                    unblocked_r = true;
+                }
+            }
+        }
+    }
+
+
+    // now look at horizontal walls
+    for(int i = 0; i < map_out.size(); i++){ // go vertical down and see it there is a wall next to it that is blocking
+        bool unblocked_l = false, unblocked_r = false; // assume each row is blocked
+        for(int j = 0; j < (map_out.at(i)).size(); j++){ // go through x (row by row)
+            char element = map_out[i][j];
+            // check if the wall part ends
+            if(MAP_IS_WALL(element)){
+                if(!(unblocked_l && unblocked_r)){ // if any of the sides were blocked, go back and mark the deadlocks
+//                    std::cout << "A piece of deadlockwall was found at ";
+//                    std::cout << "(" << j << ", " << i << ")\n";
+                    int b = j-1;
+                    while( b >= 0  && !MAP_IS_WALL(map_out[i][b])){
+                        deadlocks[i][b] = MAP_WALL;
+                        b--;
+                    }
+                }
+                unblocked_l = false;
+                unblocked_r = false;
+
+
+            } else if(MAP_IS_GOAL(element)){ // checkif the wall path is valid - that is there is a goal at the wall
+                unblocked_l = true;
+                unblocked_r = true;
+            }
+            // check if there is a continous wall on one of the sides (set false if there is a hole in the wall)
+            if(i > 0){
+                if(!MAP_IS_WALL(map_out[i-1][j])){
+                    unblocked_l = true;
+                }
+            }
+            if(i < map_out.size() - 1 ){
+                if(!MAP_IS_WALL(map_out[i+1][j])){
+                    unblocked_r = true;
+                }
+            }
+        }
+    }
+
+    // return the image
+    map_out = deadlocks;
+}
 
 
 // takes in a wavefronted map and the position of diamonds to output a vector of possible moves
@@ -428,25 +633,35 @@ bool Sokoban::findSubPath(std::string &path_out, std::vector< std::vector<char> 
 }
 
 // checks if all the diamonds are placed on valid spots
-bool Sokoban::validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in){
+bool Sokoban::isNotCorner(pos_t &diamond, std::vector< std::vector<char> > &wallmap_in){
     bool ret = true;
-    // check all diamonds
-    for(int d = 0; d < diamonds->size() && ret; d++){
-        // check if the diamond is on a goal, if so, it is always valid - checks the original map for this
-        if(!MAP_IS_GOAL(map_[((*diamonds)[d]).y_][((*diamonds)[d]).x_])){
-            // check if the diamond is in a corner, use wallmap as diamonds also block
-            bool north = MAP_IS_WALL(wallmap_in[(*diamonds)[d].y_ - 1][(*diamonds)[d].x_]);
-            bool south = MAP_IS_WALL(wallmap_in[(*diamonds)[d].y_ + 1][(*diamonds)[d].x_]);
-            bool east = MAP_IS_WALL(wallmap_in[(*diamonds)[d].y_][(*diamonds)[d].x_ + 1]);
-            bool west = MAP_IS_WALL(wallmap_in[(*diamonds)[d].y_][(*diamonds)[d].x_ - 1]);
-            bool horizontalBlock = north | south;
-            bool verticalBlock = east | west;
-            if(verticalBlock && horizontalBlock){
-                ret = false;
-                //                std::cout << "Found a invalid node ";
-                //                diamonds->at(d).print();
-                //                std::cout << "\n";
-            }
+
+    // check if the diamond is on a goal, if so, it is always valid - checks the original map for this
+    if(!MAP_IS_GOAL(wallmap_in[diamond.y_][diamond.x_])){
+        // check if the diamond is in a corner, use wallmap as diamonds also block
+        bool north = true;
+        if(diamond.y_ - 1 >= 0){
+            north = MAP_IS_WALL(wallmap_in[diamond.y_ - 1][diamond.x_]);
+        }
+        bool south = true;
+        if(diamond.y_ + 1 < wallmap_in.size()){
+            south = MAP_IS_WALL(wallmap_in[diamond.y_ + 1][diamond.x_]);
+        }
+        bool east = true;
+        if(diamond.x_ + 1 < wallmap_in[diamond.y_].size()){
+            east = MAP_IS_WALL(wallmap_in[diamond.y_][diamond.x_ + 1]);
+        }
+        bool west = true;
+        if(diamond.x_ - 1 >= 0){
+            west = MAP_IS_WALL(wallmap_in[diamond.y_][diamond.x_ - 1]);
+        }
+        bool horizontalBlock = north | south;
+        bool verticalBlock = east | west;
+        if(verticalBlock && horizontalBlock){
+            ret = false;
+            //                std::cout << "Found a invalid node ";
+            //                diamonds->at(d).print();
+            //                std::cout << "\n";
         }
     }
 
@@ -454,7 +669,15 @@ bool Sokoban::validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector
 }
 
 
-
+bool Sokoban::validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in){
+    bool ret = true;
+    for(int d = 0; d < diamonds->size() && ret; d++){
+        if(MAP_IS_WALL(wallmap_in[(*diamonds)[d].y_][(*diamonds)[d].x_])){
+            ret = false;
+        }
+    }
+    return ret;
+}
 
 
 

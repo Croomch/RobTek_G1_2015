@@ -82,9 +82,13 @@ public:
 private:
     // takes in a map of chars to generate a wavefront map with no-go-pos=0, and rest the cost to go there
     void wavefront(std::vector< std::vector<char> > &map_out, std::vector< pos_t > &state);
+    // takes in a map of chars to generate a deadlock map with the deadlocks marked 0
+    void deadlocks(std::vector< std::vector<char> > &map_out);
+    // checks if all the diamonds are placed on valid spots, takes the diamonds in and a map where the diamond positions are set to walls
+    bool isNotCorner(pos_t &diamonds, std::vector< std::vector<char> > &wallmap_in);
     // takes in a wavefronted map and the position of diamonds to output a vector of possible moves
     void possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vector<pos_t> * &diamonds, std::vector< node > &moves, node* &origo);
-    // checks if all the diamonds are placed on valid spots, takes the diamonds in and a map where the diamond positions are set to walls
+    // checks if all the diamonds are placed on valid spots, takes the diamonds in and a map where the deadlocks are set to walls
     bool validNode(std::vector<pos_t> * &diamonds, std::vector< std::vector<char> > &wallmap_in);
     // find the subpath from one node to another
     bool findSubPath(std::string &path_out, std::vector< std::vector<char> > &wfmap_in, pos_t &from, pos_t &to);

@@ -11,9 +11,53 @@ This is then used as the unique key in the hashing table preventing the table fr
 
 When solving the Sokoban problem furthermore a check for validity of the state is performed.
 This is done by considering if any of the diamonds has gone into a deadlock.
-Since there are many different deadlock situations, it was chosen only to implement the most simple deadlock arising when pushing a diamond into a corner that is not a goal.
-This prevents some of the paths explored being invalid because once gone into a deadlock is entered, the goal is not obtainable from the specific path.
+Since there are many different deadlock situations, it was chosen only to implement the most simple deadlock arising when pushing a diamond into dead square deadlocks.
+This prevents some of the paths explored being invalid because once gone into a deadlock the goal is not obtainable from the specific path.
 Furthermore a deadlock detection is able to reduce the graph and hence improve the time taken to find the solution on maps where many deadlocks can be entered.
 
+Since only dead square deadlock situations are considered, then these can be computed pre running the path finding.
+This is then stored as on a separate map for lookup during runtime.
+The dead squares removed are the squares that are corners and pieces along a wall from which the diamond not can be pushed away from neither brought to a goal.
+The result of the algorithm is seen on figure \ref{fig:deadlocks}, where figure \ref{fig:orig_deadlock} is the actual map and figure \ref{fig:orig_deadlock} is the map where all deadlock situations are set to walls to indicate the dead square.
 
-\todo[inline]{implement deadlock as a map for lookup? and then include more deadlock situations?}
+
+\begin{table}[H]
+\begin{subtable}{.5\linewidth}
+\centering
+\begin{tabular}{| *{8}{c} |}
+\hline
+X & X & X & X & X & X & X & X \\
+X & X &   & X & X &   &   & X \\
+X &   &   &   &   &   &   & X \\
+X & G & X &   &   &   &   & X \\
+X & G & X &   & X & X &   & X \\
+X &   &   &   &   & G &   & X \\
+X &   &   & G &   &   & G & X \\
+X & X & X & X & X & X & X & X \\
+\hline
+\end{tabular}
+\caption{Original test map.}
+\label{fig:orig_testmap_deadlock}
+\end{subtable}
+%
+\begin{subtable}{.5\linewidth}
+\centering
+\begin{tabular}{| *{8}{c} |}
+\hline
+X & X & X & X & X & X & X & X \\
+X & X & X & X & X & X & X & X \\
+X & X &   &   &   &   &   & X \\
+X & G & X &   &   &   &   & X \\
+X & G & X &   & X & X &   & X \\
+X &   &   &   &   & G &   & X \\
+X & X &   & G &   &   & G & X \\
+X & X & X & X & X & X & X & X \\
+\hline
+\end{tabular}
+\caption{Deadlock test map.}
+\label{fig:orig_deadlock}
+\end{subtable}
+\caption{Result of using the proposed heuristic calculations on a given map.}
+\label{fig:deadlocks}
+\end{table}
+
