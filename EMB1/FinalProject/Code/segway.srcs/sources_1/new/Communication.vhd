@@ -36,12 +36,29 @@ end Communication;
 
 architecture Behavioral of Communication is
 
+signal counter: integer := 0;
 
 signal BAUD_CLK: STD_LOGIC := "0";
-signal inputSignal: STD_LOGIC_VECTOR := "111111111"
-
+signal inputSignal: STD_LOGIC_VECTOR := "111111111";
+signal com : STD_LOGIC := "0";
 
 begin
+
+-- BAUD GENERATION
+-- clk scaler to get 115200 bps == 115200 Hz
+BAUD_CLK <= BAUD_SPI;
+process(CLK)
+variable scaler : integer range 0 to CLK_SCALING/2 := 0;
+begin
+    if rising_edge(CLK) then
+        scaler := scaler + 1;
+        if scaler >= CLK_SCALING/2 then 
+            scaler := 0;
+            CLK_SPI <= NOT(CLK_SPI);
+        end if;
+    end if;
+end process;
+
 
 --Syncronize?
 
@@ -51,9 +68,11 @@ begin
 
 process(CLK, com)
 begin
-    if (rising_edge(CLK) and com = 0)
-        inputSignal = inputSignal(8 downto 1) & RX;
-        if inputSignal < "111111100";      
+    if (rising_edge(CLK) and comin = 0) then
+        inputSignal <= inputSignal(8 downto 1) & RX;
+        if (inputSignal < "111111100") then
+            com <= 1;
+        end if;        
     end if;
 
 end process;
@@ -62,8 +81,18 @@ end process;
 -- if reading and communication starts -> add bytes to signal with each BAUD_CLK
 -- when reading finish -> communication off
 
+process(BAUD_CLK,com)
+    if (rising_edge(BAUD_CLK) and com = 1) then 
+        instructions <= instructions(7 downto 0) & RX;
+        bitcounter <= bitcounter + "1";
+    end if;
+end process;
+
+
 -- WRITING
 -- if writing and communication starts -> put bytes from signal into TX.
+
+    
 
 
 
