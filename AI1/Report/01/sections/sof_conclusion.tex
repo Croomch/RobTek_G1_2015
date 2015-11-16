@@ -1,2 +1,13 @@
 \subsection{Conclusion}
+An A* algorithm was devised to solve the Sokoban problem.
+The algorithm uses a graph structure where the nodes represent diamond pushes with the cost being the number of steps the robot must move in order to achieve the state.
+
+The heuristic for the A* algorithm was found calculating the cost for the robot to move each diamond from their current position to the nearest goal.
+This technique takes into account the walls on the map, but disregard the diamonds left on the map disrupting the path.
+Furthermore the cost of moving in between the diamonds and the fact that one goal may be considered the destination of multiple diamonds is not taken into account using this method.
+
+The nodes in the graph where also validated using their state, in form of the diamonds and robots position, as the key in a hashing table.
+Furthermore the states are checked for simple deadlock situations.
+
+
 

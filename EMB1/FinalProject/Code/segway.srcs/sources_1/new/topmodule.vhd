@@ -33,26 +33,27 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity topmodule is
     Port ( 
-    CLK : STD_LOGIC;
+    CLK : in STD_LOGIC;
     
-    MOTOR_DIR : STD_LOGIC_VECTOR(3 downto 0);
-    MOTOR_SPEED : STD_LOGIC_VECTOR(1 downto 0);
+    MOTOR_CONTROL : out STD_LOGIC_VECTOR(7 downto 0);
     
-    SPI_MISO : STD_LOGIC;
-    SPI_MOSI : STD_LOGIC;
-    SPI_CLK : STD_LOGIC;
-    SPI_CS : STD_LOGIC;
+    SPI_MISO : in STD_LOGIC;
+    SPI_MOSI : out STD_LOGIC;
+    SPI_CLK : out STD_LOGIC;
+    SPI_CS : out STD_LOGIC;
     
-    ALIVE : STD_LOGIC
+    ALIVE : out STD_LOGIC
     );
 end topmodule;
 
 architecture Behavioral of topmodule is
 ---- SIGNALS ----
-
-
+-- signals for PWM
+signal L_FWD, L_BACK, R_FWD, R_BACK : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+signal L_FWD_PWM, L_BACK_PWM, R_FWD_PWM, R_BACK_PWM : STD_LOGIC := '0';
+signal CLK_SLOW : STD_LOGIC := '0';
 ---- CONSTANTS ----
-
+CONSTANT CLK_SCALING : INTEGER := 10;
 
 ---- COMPONENTS ----
 COMPONENT SPI IS
@@ -72,9 +73,69 @@ Port (
            );
 END COMPONENT;
 
+COMPONENT motorcontrol IS
+Port ( 
+           CLK : in STD_LOGIC;
+           
+           PWM : out STD_LOGIC;
+           duty : in STD_LOGIC_VECTOR (7 downto 0)
+           );
+END COMPONENT;
 
 begin
 
+-- init the components needed
+MOTOR_CONTROL(1) <= L_FWD_PWM;
+MOTOR_CONTROL(2) <= L_BACK_PWM;
+MOTOR_CONTROL(3) <= R_FWD_PWM;
+MOTOR_CONTROL(4) <= R_BACK_PWM;
+L_F : motorcontrol Port map (
+CLK => CLK_SLOW,
+PWM => L_FWD_PWM,
+duty => L_FWD
+);
+
+L_B : motorcontrol Port map (
+CLK => CLK_SLOW,
+PWM => L_BACK_PWM,
+duty => L_BACK
+);
+
+R_F : motorcontrol Port map (
+CLK => CLK_SLOW,
+PWM => R_FWD_PWM,
+duty => R_FWD
+);
+
+R_B : motorcontrol Port map (
+CLK => CLK_SLOW,
+PWM => R_BACK_PWM,
+duty => R_BACK
+);
+
+
+---- clk scaler for the pwm generators ----
+process(CLK)
+variable scaler : integer range 0 to CLK_SCALING/2 := 0;
+begin
+    if rising_edge(CLK) then
+        scaler := scaler + 1;
+        if scaler >= CLK_SCALING/2 then
+            CLK_SLOW <= not(CLK_SLOW);
+            scaler := 0;
+        end if;
+    end if;
+end process;
+
+---- main part ----
+-- http://www.pieter-jan.com/node/11 for complimentary filter
+-- atan approx 
+--% from 0 to 0.32
+--y_a = x_a;
+--% from 0.32 to 0.91
+--y_b = x_b * 0.75 + 0.08
+--% from 0.91 to pi/2
+--y_c = x_c * 0.375 + 0.42
 
 
 
