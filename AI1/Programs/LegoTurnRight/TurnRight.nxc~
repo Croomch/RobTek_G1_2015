@@ -11,20 +11,22 @@
 
 
 // defines
-#define SPEED 50
-#define PID_P 1
+#define SPEED 80
+#define PID_P 0.5
+#define PID_I 0.5
 #define BLACKLINE 550
 #define CALIB_FACTOR 0
 #define TURNVAL_L 80
 #define TURNVAL_R -80
-#define TURNBACK_L 20
-#define TURNBACK_R -20
+#define TURNBACK_L 80
+#define TURNBACK_R -80
 
 
 
 int FollowLine(bool drive_straight)
 {	
     float light_l, light_r;
+    float err_prev = 0, err_act = 0;
 
 	while(drive_straight){
         	ClearScreen();
@@ -43,25 +45,33 @@ int FollowLine(bool drive_straight)
             drive_straight = false;
         }
         else{
-            
-            float light_off = light_l - light_r + CALIB_FACTOR; // offset from the line
-        
-            if(light_off > 0){
+
+            err_act = (light_l - light_r + CALIB_FACTOR)*PID_P + err_prev*PID_I; // offset from the line
+            err_prev = err_act;
+
+            if(err_act > 0){
               TextOut(40, LCD_LINE1, "Left");
             } 
             else {
                TextOut(40, LCD_LINE1, "Right");
             }
         
-            speed_l = SPEED - light_off * PID_P;
-            speed_r = SPEED + light_off * PID_P;
+            speed_l = SPEED - (err_act);
+            speed_r = SPEED + (err_act);
         
             if(speed_l < 0){
-               // speed_l = 0;
+                speed_l = 0;
             }
             if(speed_r < 0){
-               // speed_r = 0;
+                speed_r = 0;
             }
+	    if(speed_l > 100){
+                speed_l = 100;
+            }
+            if(speed_r > 100){
+                speed_r = 100;
+            }
+	
         }
 
         OnRev(MOTOR_L, speed_l);
@@ -72,6 +82,68 @@ int FollowLine(bool drive_straight)
 
 	return 0;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////
+//
+int KeepGoing(bool drive_straight)
+{	
+    float light_l, light_r, light_b;
+    float err_prev = 0, err_act = 0;
+
+	while(drive_straight){
+        	ClearScreen();
+
+        	TextOut(0, LCD_LINE1, "Turn:");
+
+        
+        	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        	light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
+                
+        	float speed_l, speed_r;
+        
+        if( light_b > BLACKLINE ){
+            drive_straight = false;
+        }
+        else{
+
+            err_act = (light_l - light_r + CALIB_FACTOR)*PID_P + err_prev*PID_I; // offset from the line
+            err_prev = err_act;
+
+            if(err_act > 0){
+              TextOut(40, LCD_LINE1, "Left");
+            } 
+            else {
+               TextOut(40, LCD_LINE1, "Right");
+            }
+        
+            speed_l = SPEED - (err_act);
+            speed_r = SPEED + (err_act);
+        
+            if(speed_l < 0){
+                speed_l = 0;
+            }
+            if(speed_r < 0){
+                speed_r = 0;
+            }
+	    if(speed_l > 100){
+                speed_l = 100;
+            }
+            if(speed_r > 100){
+                speed_r = 100;
+            }
+	
+        }
+
+        OnRev(MOTOR_L, speed_l);
+        OnRev(MOTOR_R, speed_r);
+                
+    }
+
+
+	return 0;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -194,7 +266,7 @@ int TurnBack(bool FindLine, int nxt_pos){
 
 		switch(nxt_pos)
 		{
-		case 1:
+		case 1:	//Turn Right
 			
 			OnRev(MOTOR_L, TURNBACK_L);
 			OnRev(MOTOR_R, TURNBACK_R);
@@ -215,7 +287,7 @@ int TurnBack(bool FindLine, int nxt_pos){
 			}
 		break;
 
-		case 2:
+		case 2: //Turn all
 	
 			OnRev(MOTOR_L, TURNBACK_L);
 			OnRev(MOTOR_R, TURNBACK_R);
@@ -244,7 +316,7 @@ int TurnBack(bool FindLine, int nxt_pos){
 			}
 		break;
 
-		case 3:
+		case 3: //Turn Left
 
 			OnRev(MOTOR_L, TURNBACK_R);
 			OnRev(MOTOR_R, TURNBACK_L);
@@ -293,17 +365,125 @@ task main()
 	SetSensorLight(SENSE_LIGHT_R);
 	SetSensorLight(SENSE_LIGHT_B);
     
+// Load circuit
+
+	int circuit[] = {1, 2, 2, 1, 3, 3, 1, 1, 3, 1, 6, 3, 5, 2, 3, 1, 3, 1, 1, 4, 5, 1, 3, 3};
+	int lenght = ArrayLen(circuit);
+
     
     
 	while(1){
 
+// Different test circuits
+
+		for(int i = 0; i < length; i++){
+
+		int actualcase = circuit[i];
+
+			switch(actualcase)
+			{
+			case 1:	//Go straight
+				FollowLine(1);
+				KeepGoing(1);
+			break;
+
+			case 2: //Turn Right
+				FollowLine(1);
+				TurnRight(1);
+			break;
+
+			case 3: //Turn Left
+				FollowLine(1);
+				TurnLeft(1);
+			break;
+
+			case 4: //Back and Right
+				FollowLine(1);
+				TurnBack(1,1);
+			break;
+
+			case 5: //Back and Left
+				FollowLine(1);
+				TurnBack(1,3);
+			break;
+
+			case 6: //Back and straight
+				FollowLine(1);
+				TurnBack(1,2);
+			break;
+		
+			default: //Go straight
+				FollowLine(1);
+				KeepGoing(1);
+			break;
+			
+			}
+
+		} 
+
+
+
+/*		//Complete circuit		
+		FollowLine(1);
+		KeepGoing(1);
+
+		FollowLine(1);
+		TurnLeft(1);
+
+		FollowLine(1);
+		TurnBack(1,1);
+
+		FollowLine(1);
+		TurnRight(1);
+
+		FollowLine(1);
+		TurnRight(1);
+
+		FollowLine(1);
+		TurnBack(1,3);
+
+		FollowLine(1);
+		KeepGoing(1);
+	
+		FollowLine(1);
+		TurnBack(1,2);
+		
+		FollowLine(1);
+		TurnRight(1);
+		
+		FollowLine(1);
+		TurnLeft(1);
+		
+		FollowLine(1);
+		KeepGoing(1);
+
+		FollowLine(1);
+		TurnLeft(1);
+
+		FollowLine(1);
+		KeepGoing(1);
+
+		FollowLine(1);
+		KeepGoing(1);
+
+		FollowLine(1);
+		KeepGoing(1);
+
+		FollowLine(1);
+		TurnLeft(1);
+		
+		FollowLine(1);
+		TurnLeft(1);
+
+
+/*
 		FollowLine(1);
 		TurnBack(1,1);
 		FollowLine(1);
 		TurnBack(1,2);
 		FollowLine(1);
 		TurnBack(1,3);
-/*
+
 
 		FollowLine(1);
 		TurnLeft(1);
