@@ -1,0 +1,10 @@
+10 09 06
+  XXXXXXXX
+  X..X.G.X
+  X...G*GX
+  X..X.*.X
+XXXXJXXGXX
+X......J.X
+X.J.XX.J.X
+X...MX...X
+XXXXXXXXXX

@@ -1,0 +1,13 @@
+11 12 03
+     XXXX
+ X XXX..X
+ X X....X
+ X X..X.X
+ X XJ.XGX
+ X X..X.X X
+ X XJ.XGX X
+   X..X.X X
+XXXXJ.XGX X
+X.M.....X X
+X...X..XX X
+XXXXXXXX

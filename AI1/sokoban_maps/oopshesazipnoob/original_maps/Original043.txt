@@ -1,0 +1,12 @@
+19 11 09
+        XXXXXXX
+    XXXXX..X..XXXX
+    X...X...J....X
+ XXXX.XJJ.XX.XX..X
+XX......X.X..XX.XXX
+X..XXX.JXJ..J..J..X
+XGGG....X.XX..X...X
+XGGGX....M.X.XXX.XX
+XGGGX..XXX..J..J..X
+XXXXXXXX XX...X...X
+          XXXXXXXXX

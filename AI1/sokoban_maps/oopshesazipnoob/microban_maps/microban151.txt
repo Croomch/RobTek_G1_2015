@@ -1,0 +1,11 @@
+12 10 04
+   XXXX
+   X..X
+ XXX..X
+XX..J.X
+X...X.X
+X.XJJ.XXXXXX
+X.X...X...GX
+X..J..M...GX
+XXX..XXXXGGX
+  XXXX  XXXX

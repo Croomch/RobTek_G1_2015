@@ -1,0 +1,16 @@
+15 15 13
+XXXXXXXXX
+X.......X
+X.......XXXX
+XX.XXXX.X..X
+XX.XMXX....X
+X.JJJ.J..JJX
+X..X.XX.J..X
+X..X.XX..J.XXXX
+XXXX..JJJ.JX..X
+ X...XX...GGGGX
+ X.X...X.XGG.GX
+ X...X.X.XXGGGX
+ XXXXX.J..XGGGX
+     XX...XXXXX
+      XXXXX

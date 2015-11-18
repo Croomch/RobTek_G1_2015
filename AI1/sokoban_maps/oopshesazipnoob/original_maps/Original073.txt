@@ -1,0 +1,13 @@
+20 12 14
+XXXXXXXXXXXXXXXXXXXX
+X........X...XM.X..X
+X.JJ..XJJX.X.X..XX.X
+X..X.J.J.XJJ.X.....X
+XX.X..X..X.X.X..X..X
+X...XX.......X.....X
+X...X.J.X...X...X..X
+X.J.XJ.X...X..J.XGGX
+XXJ.X..XXXX....XGGGX
+X..J..........XGGGGX
+X...X..X.....XGGGGGX
+XXXXXXXXXXXXXXXXXXXX

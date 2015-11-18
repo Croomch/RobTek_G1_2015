@@ -1,0 +1,9 @@
+11 08 03
+XXXX  XXXX
+X..XXXX..X
+X..X..X..X
+X..X....JXX
+X..G.GXJ..X
+XM.XX.X.J.X
+X...G.X...X
+XXXXXXXXXXX

@@ -1,0 +1,11 @@
+09 10 03
+  XXXXXX
+  X....XX
+ XX.XX..X
+ X.JJ.X.X
+ X.MJ.X.X
+ X....X.X
+XXXX.X..X
+X..GGG.XX
+X.....XX
+XXXXXXX

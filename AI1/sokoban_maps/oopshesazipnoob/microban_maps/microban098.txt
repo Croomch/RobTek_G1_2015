@@ -1,0 +1,11 @@
+16 10 05
+XXXXX
+X...XX XXXX
+X..J.XXX.GX
+X.J...J..GX
+XX.JXXXXXGX XXXX
+X.J..X X.GXXX..X
+X....X X.GX..M.X
+XXX..X X.......X
+  XXXX XX.....XX
+        XXXXXXX

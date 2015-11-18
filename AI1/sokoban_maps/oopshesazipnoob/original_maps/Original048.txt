@@ -1,0 +1,17 @@
+13 16 34
+  XXXXXXXXX
+  X*G*X*G*X
+  XG*G*G*GX
+  X*G*G*G*X
+  XG*G*G*GX
+  X*G*G*G*X
+  XXX...XXX
+    X...X
+XXXXXX.XXXXXX
+X...........X
+X.J.J.J.J.J.X
+XX.J.J.J.J.XX
+ XJ.J.J.J.JX
+ X...JMJ...X
+ X..XXXXX..X
+ XXXX   XXXX

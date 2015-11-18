@@ -190,6 +190,11 @@ public:
     // test node existence
     bool nodeUnique(node &other);
 
+    // get some stats
+    int getClosedListSize(){
+        return data_.size();
+    }
+
 private:
     std::vector< node * > leafs_;
     std::unordered_map< std::string, node* > data_;

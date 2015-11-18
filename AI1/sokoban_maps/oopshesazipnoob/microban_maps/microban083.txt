@@ -1,0 +1,11 @@
+08 10 04
+XXXXXX
+X....XX
+X.J.J.XX
+XX.JJ..X
+ X.X...X
+ X.XX.XX
+ X..G.GX
+ X.MG.GX
+ X..XXXX
+ XXXX

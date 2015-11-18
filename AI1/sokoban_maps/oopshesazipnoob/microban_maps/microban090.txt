@@ -1,0 +1,8 @@
+10 07 04
+ XXXXXXXX
+ X..M...X
+ X.J..J.X
+XXX.XX.XXX
+X..JGGJ..X
+X...GG...X
+XXXXXXXXXX

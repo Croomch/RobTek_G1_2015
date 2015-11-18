@@ -1,0 +1,9 @@
+12 08 04
+      XXXXXX
+      X....X
+  XXXXX.G..X
+XXX..XXXG..X
+X.J..J..G.XX
+X.MJJ.X.G.X
+XX....XXXXX
+ XXXXXX

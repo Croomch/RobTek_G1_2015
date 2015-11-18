@@ -1,0 +1,11 @@
+22 10 04
+               XXXXX
+               X...X
+XXXXXXX  XXXXXXX.X.X
+X.....X  X..X......X
+X..M..XXXX..X.....XXXX
+X..X....GGGGXX.XXXX..X
+X....XXXXX.XX.JJ.J.J.X
+XXXXXX   X...........X
+         X..XXXXXXXXXX
+         XXXX

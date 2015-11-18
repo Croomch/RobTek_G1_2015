@@ -211,6 +211,9 @@ bool Sokoban::findPath(){
 
     std::cout << "# of iterations gone through: " << iterations << "\n";
 
+    std::cout << "# of elements in closed list: " << paths.getClosedListSize() << "\n";
+
+
     return solution_found;
 }
 

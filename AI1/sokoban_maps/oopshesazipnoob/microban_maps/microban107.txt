@@ -1,0 +1,9 @@
+08 08 11
+XXXXXXXX
+X......X
+X.J***.X
+X.*..*.X
+X.*..*.X
+X.***G.X
+X.....MX
+XXXXXXXX

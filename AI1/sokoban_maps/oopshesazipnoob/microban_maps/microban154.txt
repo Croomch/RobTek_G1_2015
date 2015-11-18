@@ -1,0 +1,18 @@
+29 17 01
+ XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+ X..........................X
+ X.XXXXXXXXXXXXXXXXXXXXXXXX.X
+ X.X......................X.X
+ X.X.XXXXXXXXXXXXXXXXXXXX.X.X
+ X.X.X..................X.X.X
+ X.X.X.XXXXXXXXXXXXXXXX.X.X.X
+ X.X.X.X..............X.X.X.X
+ X.X.X.X.XXXXXXXXXXXX.X.X.X.X
+ X.X.X.X.X............X.X.X.X
+ X.X.X.X.X.XXXXXXXXXXXX.X.X.X
+ X.X.X.X.X..............X.X.X
+ X.X.X.X.XXXXXXXXXXXXXXXX.X.X
+ X.X.X.X..................X.X
+XXJX.X.XXXXXXXXXXXXXXXXXXXX.X
+XG.M.X......................X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXX

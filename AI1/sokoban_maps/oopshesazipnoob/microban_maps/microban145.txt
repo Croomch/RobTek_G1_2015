@@ -1,0 +1,12 @@
+11 11 12
+   XXXXX
+   X.M.X
+  XX...XX
+XXXGJJJGXXX
+X..JGGGJ..X
+X..JGXGJ..X
+X..JGGGJ..X
+XXXGJJJGXXX
+  XX...XX
+   X...X
+   XXXXX

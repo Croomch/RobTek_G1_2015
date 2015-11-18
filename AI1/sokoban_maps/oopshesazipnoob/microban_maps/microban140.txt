@@ -1,0 +1,10 @@
+14 09 04
+XXXXXXXX XXXXX
+X..X...XXX...X
+X......XX.J..X
+XGX.M.XX.J..XX
+XGX...X.J..XX
+XGX....J..XX
+XG.XX.XXXXX
+XX....X
+ XXXXXX

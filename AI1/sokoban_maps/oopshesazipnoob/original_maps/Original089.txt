@@ -1,0 +1,18 @@
+20 17 21
+ XXXXXXXXXXXXXXXXXX
+ X...J.......GGGXGXX
+ X.......XXXXGGGGG.X
+ X.XXXXXXX..XGGGGG.X
+ X.X....J.J.XXGGGGXX
+ X.X..J.X.X.XXXGGGX
+ X.X.JMJ.J..XXXXX.X
+XX.X..J..J.JJ...J.X
+X..XJX.JX...X.JXX.X
+X.XX....XX.XX.J.X.X
+X.X.JX.J.J..X.....X
+X.X.........XXXXXXX
+X.XXXXXXXXJXX...X
+X........X..J...X
+XXXXXXXX....XXXXX
+       XXX..X
+         XXXX

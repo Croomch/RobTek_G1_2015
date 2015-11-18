@@ -1,0 +1,13 @@
+09 12 06
+XXXXXX
+X....XXXX
+X....GGGX
+X....GGGX
+XXXXXX..X
+  X..X..X
+  X.JJ.XX
+  X.MJ..X
+  X.JJ..X
+  XX.JX.X
+   X....X
+   XXXXXX

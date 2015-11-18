@@ -1,0 +1,14 @@
+19 13 11
+     XXXXXXXXXXX
+     X..G..X...X
+     X.XG....M.X
+ XXXXX.XXGGX.XXXX
+XX..X.GGXXX.....XXX
+X.J.XGGG...J.X..J.X
+X....GG.XX..XX.XX.X
+XXXXJXXJX.J.X...X.X
+  XX.X....XJ.JJ.X.X
+  X..J.X.X..X.JXX.X
+  X...............X
+  X..XXXXXXXXXXX..X
+  XXXX         XXXX

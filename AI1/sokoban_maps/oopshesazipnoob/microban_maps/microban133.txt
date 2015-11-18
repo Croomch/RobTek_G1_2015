@@ -1,0 +1,9 @@
+10 08 05
+ XXXXXXX
+ X..G.GXXX
+ X.G.G.G.X
+XXX.XXXX.X
+X..MJ..J.X
+X..JJ..J.X
+XXXX...XXX
+   XXXXX

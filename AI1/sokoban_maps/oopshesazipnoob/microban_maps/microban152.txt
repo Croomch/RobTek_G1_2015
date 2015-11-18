@@ -1,0 +1,10 @@
+15 09 04
+XXXXXX XXXX
+X.....X....X
+XGXX..XJXX..X
+X...X.....X..X
+XJ..X.XXX..X..X
+X.X......X..X.X
+X.X.XXXX..X.X.X
+XG.M....J.*.G.X
+XXXXXXXXXXXXXXX

@@ -1,0 +1,11 @@
+15 10 03
+  XXXX
+  X..X    XXXXX
+  X..X    X...X
+  X..XXXXXXGX.X
+XXXX..J....G..X
+X...JJX.XXXGX.X
+X...X...X X...X
+XXXXXXXXX XM.XX
+          X..X
+          XXXX
