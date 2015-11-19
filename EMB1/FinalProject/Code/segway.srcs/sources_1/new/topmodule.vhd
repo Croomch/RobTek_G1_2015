@@ -208,13 +208,13 @@ end process;
 
 -- upper FSM, could be concurrent code too - no flip-flops allowed --
 -- see state diagram for the design
-process(pr_state,) -- pr state and all other inputs
+process(pr_state,spi_rx_sig) -- pr state and all other inputs
 begin
     CASE pr_state IS
         WHEN send_data =>
             -- output --
             -- what is nx-state? 
-            nx_state <= send_data;
+            nx_state <= get_au;
         WHEN get_au =>
             -- output --
             -- what is nx-state? 
