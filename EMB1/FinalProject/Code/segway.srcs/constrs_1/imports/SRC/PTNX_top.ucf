@@ -1,0 +1,20 @@
+NET "CLK_50M_I" LOC = P60; # On board oscillator
+NET "LEDS_O<0>" LOC = P47;  # On board LED
+NET "LEDS_O<1>" LOC = P48;  # On board LED
+#
+NET "XB_SERIAL_I" LOC = P88; #  USB <-> UART (J2_13)
+NET "XB_SERIAL_O" LOC = P90; #  USB <-> UART (J2_15)
+#
+NET "BB_LEDS_O<0>"	LOC = P42;  # Bottom connector pin 3
+NET "BB_LEDS_O<1>"	LOC = P43;  # Bottom connector pin 4
+NET "BB_LEDS_O<2>"	LOC = P44;  # Bottom connector pin 5
+NET "BB_LEDS_O<3>"	LOC = P45;  # Bottom connector pin 6
+NET "BB_LEDS_O<4>"	LOC = P49;  # Bottom connector pin 7
+NET "BB_LEDS_O<5>"	LOC = P50;  # Bottom connector pin 8
+NET "BB_LEDS_O<6>"	LOC = P51;  # Bottom connector pin 9
+NET "BB_LEDS_O<7>"	LOC = P54;  # Bottom connector pin 10
+#
+#
+NET "BB_OUT_O[0]" LOC = P55; # FRQ  Bottom connector pin 11
+NET "BB_OUT_O[1]" LOC = P57; # PWM  Bottom connector pin 12
+NET "BB_OUT_O[2]" LOC = P58; # FLSH Bottom connector pin 13
