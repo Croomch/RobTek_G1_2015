@@ -1,7 +1,6 @@
 *.data
 *.cache
 *.out
-*.ppr
 *.jou
 *.log
 *.runs
