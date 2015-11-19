@@ -1,4 +1,7 @@
 *.out
+*.log
+*.runs
+*.jou
 *.Xil
 *.aux
 *.gz
@@ -26,5 +29,6 @@
 *.lof
 *.lot
 *.toc
+*.wpc
 *~
 AI1/Programs/sokoban/build-main-Desktop-Default

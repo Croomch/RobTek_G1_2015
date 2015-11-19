@@ -1,11 +1,13 @@
-Release 14.7 - xst P.20131013 (nt64)
+Release 14.7 - xst P.20131013 (lin64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 --> 
 
+
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.10 secs
+Total CPU time to Xst completion: 0.08 secs
  
---> Reading design: topmodule.prj
+--> 
+Reading design: topmodule.prj
 
 TABLE OF CONTENTS
   1) Synthesis Options Summary
@@ -43,7 +45,7 @@ Optimization Effort                : 1
 Netlist Hierarchy                  : rebuilt
 
 ---- Other Options
-Cores Search Directories           : {c:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister}
+Cores Search Directories           : {../../segway.srcs/sources_1/ip/dataRegister}
 
 =========================================================================
 
@@ -51,40 +53,40 @@ Cores Search Directories           : {c:/Users/lukas/Documents/GitHub/RobTek_G1_
 =========================================================================
 *                          HDL Compilation                              *
 =========================================================================
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" in Library work.
 Entity <kcuart_tx> compiled.
 Entity <kcuart_tx> (Architecture <low_level_definition>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" in Library work.
 Entity <bbfifo_16x8> compiled.
 Entity <bbfifo_16x8> (Architecture <low_level_definition>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" in Library work.
 Entity <kcuart_rx> compiled.
 Entity <kcuart_rx> (Architecture <low_level_definition>) compiled.
-Compiling vhdl file "c:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister/dataRegister.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister/dataRegister.vhd" in Library work.
 Entity <dataRegister> compiled.
 Entity <dataRegister> (Architecture <dataRegister_a>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_rx.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_rx.vhd" in Library work.
 Entity <uart_rx> compiled.
 Entity <uart_rx> (Architecture <macro_level_definition>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_tx.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_tx.vhd" in Library work.
 Entity <uart_tx> compiled.
 Entity <uart_tx> (Architecture <macro_level_definition>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_uart.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_uart.vhd" in Library work.
 Entity <PseudoTosNet_uart> compiled.
 Entity <PseudoTosNet_uart> (Architecture <Behavioral>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_ctrl.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_ctrl.vhd" in Library work.
 Entity <PseudoTosNet_ctrl> compiled.
 Entity <PseudoTosNet_ctrl> (Architecture <Behavioral>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/motorcontrol.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/new/motorcontrol.vhd" in Library work.
 Entity <motorcontrol> compiled.
 Entity <motorcontrol> (Architecture <Behavioral>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/SPI.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/new/SPI.vhd" in Library work.
 Entity <SPI> compiled.
 Entity <SPI> (Architecture <Behavioral>) compiled.
-Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/topmodule.vhd" in Library work.
+Compiling vhdl file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/new/topmodule.vhd" in Library work.
 Entity <topmodule> compiled.
 Entity <topmodule> (Architecture <Behavioral>) compiled.
-Compiling verilog file "c:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister/dataRegister.v" in library work
+Compiling verilog file "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister/dataRegister.v" in library work
 Module <dataRegister> compiled
 No errors in compilation
 Analysis of file <"topmodule.prj"> succeeded.
@@ -113,21 +115,21 @@ Analyzing hierarchy for entity <bbfifo_16x8> in library <work> (architecture <lo
 
 Analyzing hierarchy for entity <kcuart_tx> in library <work> (architecture <low_level_definition>).
 
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 331: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 254: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 257: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 270: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 318: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 236: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 158: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 215: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 226: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 239: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 133: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 281: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 300: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 354: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
-WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 141: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 331: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 254: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 257: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 270: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 318: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 236: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 158: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 215: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 226: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 239: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 133: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 281: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 300: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 354: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 141: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
 
 =========================================================================
 *                            HDL Analysis                               *
@@ -261,7 +263,7 @@ Entity <SPI> analyzed. Unit <SPI> generated.
 Performing bidirectional port resolution...
 
 Synthesizing Unit <motorcontrol>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/motorcontrol.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/new/motorcontrol.vhd".
     Found 8-bit adder for signal <$add0000> created at line 63.
     Found 1-bit register for signal <pwm_out>.
     Found 9-bit comparator greater for signal <pwm_out$cmp_gt0000> created at line 67.
@@ -275,7 +277,7 @@ Unit <motorcontrol> synthesized.
 
 
 Synthesizing Unit <SPI>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/SPI.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/new/SPI.vhd".
     Found 1-bit register for signal <output_updated>.
     Found 8-bit register for signal <output>.
     Found 5-bit register for signal <CLK_COUNT>.
@@ -303,32 +305,32 @@ Unit <SPI> synthesized.
 
 
 Synthesizing Unit <kcuart_rx>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd".
 Unit <kcuart_rx> synthesized.
 
 
 Synthesizing Unit <bbfifo_16x8>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd".
 Unit <bbfifo_16x8> synthesized.
 
 
 Synthesizing Unit <kcuart_tx>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd".
 Unit <kcuart_tx> synthesized.
 
 
 Synthesizing Unit <uart_rx>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_rx.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_rx.vhd".
 Unit <uart_rx> synthesized.
 
 
 Synthesizing Unit <uart_tx>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_tx.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_tx.vhd".
 Unit <uart_tx> synthesized.
 
 
 Synthesizing Unit <PseudoTosNet_uart>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_uart.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_uart.vhd".
 WARNING:Xst:646 - Signal <txHalfFull> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <txFull> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <rxHalfFull> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
@@ -374,7 +376,7 @@ Unit <PseudoTosNet_uart> synthesized.
 
 
 Synthesizing Unit <PseudoTosNet_ctrl>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_ctrl.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_ctrl.vhd".
     Found finite state machine <FSM_1> for signal <state>.
     -----------------------------------------------------------------------
     | States             | 4                                              |
@@ -399,7 +401,7 @@ Unit <PseudoTosNet_ctrl> synthesized.
 
 
 Synthesizing Unit <topmodule>.
-    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/topmodule.vhd".
+    Related source file is "/home/aitormig/Documents/Github/GitRep/EMB1/FinalProject/Code/segway.srcs/sources_1/new/topmodule.vhd".
 WARNING:Xst:647 - Input <XB_PSW_I> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:1306 - Output <XB_LEDS_O> is never assigned.
 WARNING:Xst:1780 - Signal <sys_cnt> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -509,7 +511,7 @@ Optimizing FSM <PseudoTosNet_ctrlInst/pseudoTosNet_uartInst/state/FSM> on signal
  perform_write_clk   | 010000000000000000
  perform_write_done  | 100000000000000000
 -------------------------------------------
-Reading core <c:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister/dataRegister.ngc>.
+Reading core <../../segway.srcs/sources_1/ip/dataRegister/dataRegister.ngc>.
 Loading core <dataRegister> for timing and area information for instance <dataRegisterInst>.
 WARNING:Xst:2404 -  FFs/Latches <txData<7:7>> (without init value) have a constant value of 0 in block <PseudoTosNet_uart>.
 WARNING:Xst:2677 - Node <currentCommand_2> of sequential type is unconnected in block <PseudoTosNet_uart>.
@@ -870,12 +872,13 @@ Offset:              5.698ns (Levels of Logic = 2)
 =========================================================================
 
 
-Total REAL time to Xst completion: 9.00 secs
-Total CPU time to Xst completion: 9.15 secs
+Total REAL time to Xst completion: 14.00 secs
+Total CPU time to Xst completion: 13.55 secs
  
 --> 
 
-Total memory usage is 335612 kilobytes
+
+Total memory usage is 555656 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   97 (   0 filtered)

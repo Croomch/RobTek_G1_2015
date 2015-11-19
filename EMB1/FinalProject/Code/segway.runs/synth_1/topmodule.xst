@@ -4,7 +4,7 @@ run
 -top topmodule
 -p xc3s50antqg144-4
 -ofn topmodule.ngc
--sd {c:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister}
+-sd {../../segway.srcs/sources_1/ip/dataRegister}
 -opt_mode speed
 -opt_level 1
 -netlist_hierarchy rebuilt

@@ -200,15 +200,6 @@ begin
     end if;
 end process;
 
----- main part ----
--- http://www.pieter-jan.com/node/11 for complimentary filter
--- atan approx 
---% from 0 to 0.32
---y_a = x_a;
---% from 0.32 to 0.91
---y_b = x_b * 0.75 + 0.08
---% from 0.91 to pi/2
---y_c = x_c * 0.375 + 0.42
 
 
 -- alive timer --
