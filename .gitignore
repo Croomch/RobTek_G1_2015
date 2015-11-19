@@ -33,4 +33,7 @@
 *.lot
 *.toc
 *~
+*.wdf
+*.wpc
+*.xml
 AI1/Programs/sokoban/build-main-Desktop-Default
