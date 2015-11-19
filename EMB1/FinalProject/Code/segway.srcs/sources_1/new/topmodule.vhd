@@ -55,6 +55,12 @@ end topmodule;
 
 architecture Behavioral of topmodule is
 ---- SIGNALS ----
+-- FSM states --
+TYPE state IS (send_data, get_au, get_al);
+signal pr_state, nx_state : state;
+-- data signals
+signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+
 -- signals for PWM
 signal L_FWD, L_BACK, R_FWD, R_BACK : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 signal L_FWD_PWM, L_BACK_PWM, R_FWD_PWM, R_BACK_PWM : STD_LOGIC := '0';
@@ -131,7 +137,9 @@ COMPONENT SPI IS
 END COMPONENT;
 
 begin
-
+--------------------
+---- Components ----
+--------------------
 -- Here we instantiate the Pseudo TosNet Controller component, and connect it's ports to signals	
 PseudoTosNet_ctrlInst : PseudoTosNet_ctrl
 Port map (
@@ -187,6 +195,49 @@ spi_c : SPI Port map (
     SPI_MSG => spi_tx
 );
 
+-------------------
+---- MAIN PART ----
+-------------------
+-- lower FSM - flip-flop part, optn. add reset?! --
+process(CLK)
+begin
+    if rising_edge(CLK) then -- update the state regularly
+        pr_state <= nx_state;
+    end if;
+end process;
+
+-- upper FSM, could be concurrent code too - no flip-flops allowed --
+-- see state diagram for the design
+process(pr_state,) -- pr state and all other inputs
+begin
+    CASE pr_state IS
+        WHEN send_data =>
+            -- output --
+            -- what is nx-state? 
+            nx_state <= send_data;
+        WHEN get_au =>
+            -- output --
+            -- what is nx-state? 
+            if spi_rx_sig = '1' then -- wait for timer run out signal
+                nx_state <= get_al;
+            else -- stay in the state
+                nx_state <= get_au;
+            end if;
+        WHEN get_al =>
+            -- output --
+            -- what is nx-state? 
+            if spi_rx_sig = '1' then -- wait for timer run out signal
+                nx_state <= send_data, get_au, get_al;
+            else -- stay in the state
+                nx_state <= send_data, get_au, get_al;
+            end if;
+    END CASE; 
+end process;
+
+---------------------
+---- Extra stuff ----
+---------------------
+
 ---- clk scaler for the pwm generators ----
 process(CLK)
 variable scaler : integer range 0 to CLK_SCALING/2 := 0;
@@ -219,6 +270,9 @@ begin
 end process;
 
 
+-----------------
+---- uTosNEt ----
+-----------------
 ---------------------------------------------------------
 -- Clocked process, to take data off the controller bus	
 ----------------------------------------------------------

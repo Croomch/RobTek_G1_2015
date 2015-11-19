@@ -35,10 +35,10 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 entity anglePredictor is
     Port (
         CLK : in STD_LOGIC;
-        ACC_X : in STD_LOGIC_VECTOR(7 downto 0);
-        ACC_Y : in STD_LOGIC_VECTOR(7 downto 0);
-        GYR_X : in STD_LOGIC_VECTOR(7 downto 0);
-        GYR_Y : in STD_LOGIC_VECTOR(7 downto 0);
+        ACC_X : in STD_LOGIC_VECTOR(15 downto 0);
+        ACC_Y : in STD_LOGIC_VECTOR(15 downto 0);
+        GYR_X : in STD_LOGIC_VECTOR(15 downto 0);
+        GYR_Y : in STD_LOGIC_VECTOR(15 downto 0);
         
         ANGLE : out STD_LOGIC_VECTOR(7 downto 0)
         
@@ -47,9 +47,14 @@ end anglePredictor;
 
 architecture Behavioral of anglePredictor is
 ---- signals ----
-signal acc_angle : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
-signal acc_ratio : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
+--signal acc_angle : STD_LOGIC_VECTOR(15 downto 0) := "0x8000";
+--signal acc_ratio : STD_LOGIC_VECTOR(15 downto 0) := "0x8000";
 
+--signal acc_X_adj : STD_LOGIC_VECTOR(15 downto 0) := "0x8000";
+--signal acc_Y_adj : STD_LOGIC_VECTOR(15 downto 0) := "0x8000";
+
+---- cosnts ----
+--CONSTANT CENTER_VAL : STD_LOGIC_VECTOR(15 downto 0) := "0x8000"
 
 begin
 
@@ -66,8 +71,9 @@ begin
 -- x is fwd, y is down
 -- atan(acc_x / acc_y)
 
-acc_ratio <= (ACC_X < 4) / ACC_Y;
-acc_angle <= acc_ratio;
+--acc_X_adj <= ACC_X - CENTER_VAL WHEN ACC_X > CENTER_VAL ELSE CENTER_VAL - ACC_X;
+--acc_ratio <= ACC_X / ACC_Y;
+--acc_angle <= acc_ratio;
 
 
 end Behavioral;
