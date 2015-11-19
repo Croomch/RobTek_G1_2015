@@ -1,0 +1,32 @@
+#-----------------------------------------------------------
+# PlanAhead v14.7 (64-bit)
+# Build 321239 by xbuild on Fri Sep 27 19:29:51 MDT 2013
+# Start of session at: Thu Nov 12 14:17:08 2015
+# Process ID: 4740
+# Log file: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/planAhead.log
+# Journal file: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code\planAhead.jou
+#-----------------------------------------------------------
+INFO: [Common 17-78] Attempting to get a license: PlanAhead
+INFO: [Common 17-290] Got license for PlanAhead
+INFO: [Device 21-36] Loading parts and site information from C:/Xilinx/14.7/ISE_DS/PlanAhead/data/parts/arch.xml
+Parsing RTL primitives file [C:/Xilinx/14.7/ISE_DS/PlanAhead/data/parts/xilinx/rtl/prims/rtl_prims.xml]
+Finished parsing RTL primitives file [C:/Xilinx/14.7/ISE_DS/PlanAhead/data/parts/xilinx/rtl/prims/rtl_prims.xml]
+start_gui
+open_project {C:\Users\lukas\Documents\GitHub\RobTek_G1_2015\EMB1\FinalProject\Code\segway.ppr}
+CRITICAL WARNING: [Common 17-48] File not found: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.data/sources_1/fileset.xml
+CRITICAL WARNING: [Common 17-48] File not found: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.data/constrs_1/fileset.xml
+CRITICAL WARNING: [Common 17-48] File not found: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.data/sim_1/fileset.xml
+CRITICAL WARNING: [Project 1-39] Failed to load run data. Making project read-only to protect unopened run data.
+INFO: [Project 1-114] Use 'File | Save Project As...' to create a new, writeable copy of this project.
+ERROR: [Common 17-70] Application Exception: Missing default src set in loadProjectHDMgr.
+Qt: Untested Windows version 6.2 detected!
+open_project C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.ppr
+CRITICAL WARNING: [Common 17-48] File not found: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.data/sources_1/fileset.xml
+CRITICAL WARNING: [Common 17-48] File not found: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.data/constrs_1/fileset.xml
+CRITICAL WARNING: [Common 17-48] File not found: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.data/sim_1/fileset.xml
+CRITICAL WARNING: [Project 1-39] Failed to load run data. Making project read-only to protect unopened run data.
+INFO: [Project 1-114] Use 'File | Save Project As...' to create a new, writeable copy of this project.
+ERROR: [Common 17-70] Application Exception: Missing default src set in loadProjectHDMgr.
+exit
+INFO: [Common 17-206] Exiting PlanAhead at Thu Nov 12 14:17:22 2015...
+INFO: [Common 17-83] Releasing license: PlanAhead

@@ -1,9 +1,4 @@
-*.data
-*.cache
 *.out
-*.jou
-*.log
-*.runs
 *.Xil
 *.aux
 *.gz

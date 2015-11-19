@@ -1,0 +1,8 @@
+INTSTYLE=pa
+INFILE=C:\Users\lukas\Documents\GitHub\RobTek_G1_2015\EMB1\FinalProject\Code\segway.runs\impl_1\topmodule_routed.ncd
+OUTFILE=C:\Users\lukas\Documents\GitHub\RobTek_G1_2015\EMB1\FinalProject\Code\segway.runs\impl_1\topmodule.bit
+FAMILY=Spartan3A and Spartan3AN
+PART=xc3s50an-4tqg144
+WORKINGDIR=C:\Users\lukas\Documents\GitHub\RobTek_G1_2015\EMB1\FinalProject\Code\segway.runs\impl_1
+LICENSE=ISE
+USER_INFO=210779069_174157381_210595800_862

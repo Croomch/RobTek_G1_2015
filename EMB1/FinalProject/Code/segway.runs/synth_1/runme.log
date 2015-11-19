@@ -1,0 +1,633 @@
+
+*** Running xst
+    with args -ifn "topmodule.xst" -ofn "topmodule.srp" -intstyle ise
+
+Reading design: topmodule.prj
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" in Library work.
+Entity <kcuart_tx> compiled.
+Entity <kcuart_tx> (Architecture <low_level_definition>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" in Library work.
+Entity <bbfifo_16x8> compiled.
+Entity <bbfifo_16x8> (Architecture <low_level_definition>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" in Library work.
+Entity <kcuart_rx> compiled.
+Entity <kcuart_rx> (Architecture <low_level_definition>) compiled.
+Compiling vhdl file "c:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister/dataRegister.vhd" in Library work.
+Entity <dataRegister> compiled.
+Entity <dataRegister> (Architecture <dataRegister_a>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_rx.vhd" in Library work.
+Entity <uart_rx> compiled.
+Entity <uart_rx> (Architecture <macro_level_definition>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_tx.vhd" in Library work.
+Entity <uart_tx> compiled.
+Entity <uart_tx> (Architecture <macro_level_definition>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_uart.vhd" in Library work.
+Entity <PseudoTosNet_uart> compiled.
+Entity <PseudoTosNet_uart> (Architecture <Behavioral>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_ctrl.vhd" in Library work.
+Entity <PseudoTosNet_ctrl> compiled.
+Entity <PseudoTosNet_ctrl> (Architecture <Behavioral>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/motorcontrol.vhd" in Library work.
+Entity <motorcontrol> compiled.
+Entity <motorcontrol> (Architecture <Behavioral>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/SPI.vhd" in Library work.
+Entity <SPI> compiled.
+Entity <SPI> (Architecture <Behavioral>) compiled.
+Compiling vhdl file "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/topmodule.vhd" in Library work.
+Entity <topmodule> compiled.
+Entity <topmodule> (Architecture <Behavioral>) compiled.
+Compiling verilog file "c:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister/dataRegister.v" in library work
+Module <dataRegister> compiled
+No errors in compilation
+Analysis of file <"topmodule.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <topmodule> in library <work> (architecture <Behavioral>).
+
+Analyzing hierarchy for entity <PseudoTosNet_ctrl> in library <work> (architecture <Behavioral>).
+
+Analyzing hierarchy for entity <motorcontrol> in library <work> (architecture <Behavioral>).
+
+Analyzing hierarchy for entity <SPI> in library <work> (architecture <Behavioral>).
+
+Analyzing hierarchy for entity <PseudoTosNet_uart> in library <work> (architecture <Behavioral>).
+
+Analyzing hierarchy for entity <uart_rx> in library <work> (architecture <macro_level_definition>).
+
+Analyzing hierarchy for entity <uart_tx> in library <work> (architecture <macro_level_definition>).
+
+Analyzing hierarchy for entity <kcuart_rx> in library <work> (architecture <low_level_definition>).
+
+Analyzing hierarchy for entity <bbfifo_16x8> in library <work> (architecture <low_level_definition>).
+
+Analyzing hierarchy for entity <kcuart_tx> in library <work> (architecture <low_level_definition>).
+
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 331: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 254: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 257: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 270: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 318: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 236: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 158: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 215: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 226: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd" line 239: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 133: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 281: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 300: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd" line 354: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+WARNING:Xst:2591 - "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd" line 141: attribute on instance <INIT> overrides generic/parameter on component. It is possible that simulator will not take this attribute into account.
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing Entity <topmodule> in library <work> (Architecture <Behavioral>).
+Entity <topmodule> analyzed. Unit <topmodule> generated.
+
+Analyzing Entity <PseudoTosNet_ctrl> in library <work> (Architecture <Behavioral>).
+Entity <PseudoTosNet_ctrl> analyzed. Unit <PseudoTosNet_ctrl> generated.
+
+Analyzing Entity <PseudoTosNet_uart> in library <work> (Architecture <Behavioral>).
+Entity <PseudoTosNet_uart> analyzed. Unit <PseudoTosNet_uart> generated.
+
+Analyzing Entity <uart_rx> in library <work> (Architecture <macro_level_definition>).
+Entity <uart_rx> analyzed. Unit <uart_rx> generated.
+
+Analyzing Entity <kcuart_rx> in library <work> (Architecture <low_level_definition>).
+    Set user-defined property "INIT =  0" for instance <sync_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <stop_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <data_loop[0].lsbs.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <data_loop[0].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <data_loop[1].lsbs.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <data_loop[1].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <data_loop[2].lsbs.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <data_loop[2].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <data_loop[3].lsbs.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <data_loop[3].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <data_loop[4].lsbs.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <data_loop[4].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <data_loop[5].lsbs.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <data_loop[5].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <data_loop[6].lsbs.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <data_loop[6].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <data_loop[7].msb.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <data_loop[7].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <start_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <start_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <edge_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <edge_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0040" for instance <valid_lut> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  54" for instance <purge_lut> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <purge_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[0].lsb.delay15_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[0].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[1].msbs.delay16_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[1].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[2].msbs.delay16_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[2].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[3].msbs.delay16_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[3].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[4].msbs.delay16_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[4].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[5].msbs.delay16_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[5].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[6].msbs.delay16_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[6].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[7].msbs.delay16_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[7].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0000" for instance <valid_loop[8].msbs.delay16_srl> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <valid_loop[8].data_reg> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  8" for instance <strobe_lut> in unit <kcuart_rx>.
+    Set user-defined property "INIT =  0" for instance <strobe_reg> in unit <kcuart_rx>.
+Entity <kcuart_rx> analyzed. Unit <kcuart_rx> generated.
+
+Analyzing Entity <bbfifo_16x8> in library <work> (Architecture <low_level_definition>).
+    Set user-defined property "INIT =  0000" for instance <data_width_loop[0].data_srl> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0000" for instance <data_width_loop[1].data_srl> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0000" for instance <data_width_loop[2].data_srl> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0000" for instance <data_width_loop[3].data_srl> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0000" for instance <data_width_loop[4].data_srl> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0000" for instance <data_width_loop[5].data_srl> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0000" for instance <data_width_loop[6].data_srl> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0000" for instance <data_width_loop[7].data_srl> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0" for instance <count_width_loop[0].register_bit> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  6606" for instance <count_width_loop[0].count_lut> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0" for instance <count_width_loop[1].register_bit> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  6606" for instance <count_width_loop[1].count_lut> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0" for instance <count_width_loop[2].register_bit> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  6606" for instance <count_width_loop[2].count_lut> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0" for instance <count_width_loop[3].register_bit> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  6606" for instance <count_width_loop[3].count_lut> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0001" for instance <zero_lut> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  8000" for instance <full_lut> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  BFA0" for instance <dp_lut> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  0" for instance <dp_flop> in unit <bbfifo_16x8>.
+    Set user-defined property "INIT =  C4" for instance <valid_lut> in unit <bbfifo_16x8>.
+Entity <bbfifo_16x8> analyzed. Unit <bbfifo_16x8> generated.
+
+Analyzing Entity <uart_tx> in library <work> (Architecture <macro_level_definition>).
+Entity <uart_tx> analyzed. Unit <uart_tx> generated.
+
+Analyzing Entity <kcuart_tx> in library <work> (Architecture <low_level_definition>).
+    Set user-defined property "INIT =  E4FF" for instance <mux1_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  E4FF" for instance <mux2_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  E4FF" for instance <mux3_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  E4FF" for instance <mux4_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <pipeline_serial> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <count_width_loop[0].register_bit> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  8" for instance <count_width_loop[0].count_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <count_width_loop[1].register_bit> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  8" for instance <count_width_loop[1].count_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <count_width_loop[2].register_bit> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  8" for instance <count_width_loop[2].count_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  10" for instance <ready_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0190" for instance <start_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <Tx_start_reg> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  1540" for instance <run_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <Tx_run_reg> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  94" for instance <hot_state_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <hot_state_reg> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0000" for instance <delay14_srl> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <Tx_bit_reg> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0180" for instance <stop_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <Tx_stop_reg> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  8" for instance <complete_lut> in unit <kcuart_tx>.
+    Set user-defined property "INIT =  0" for instance <Tx_complete_reg> in unit <kcuart_tx>.
+Entity <kcuart_tx> analyzed. Unit <kcuart_tx> generated.
+
+Analyzing Entity <motorcontrol> in library <work> (Architecture <Behavioral>).
+Entity <motorcontrol> analyzed. Unit <motorcontrol> generated.
+
+Analyzing Entity <SPI> in library <work> (Architecture <Behavioral>).
+Entity <SPI> analyzed. Unit <SPI> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <motorcontrol>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/motorcontrol.vhd".
+    Found 8-bit adder for signal <$add0000> created at line 63.
+    Found 1-bit register for signal <pwm_out>.
+    Found 9-bit comparator greater for signal <pwm_out$cmp_gt0000> created at line 67.
+    Found 8-bit up counter for signal <scaler>.
+    Summary:
+	inferred   1 Counter(s).
+	inferred   1 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   1 Comparator(s).
+Unit <motorcontrol> synthesized.
+
+
+Synthesizing Unit <SPI>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/SPI.vhd".
+    Found 1-bit register for signal <output_updated>.
+    Found 8-bit register for signal <output>.
+    Found 5-bit register for signal <CLK_COUNT>.
+    Found 5-bit adder for signal <CLK_COUNT$addsub0000> created at line 114.
+    Found 5-bit comparator greatequal for signal <CLK_COUNT$cmp_ge0000> created at line 120.
+    Found 5-bit comparator less for signal <CLK_COUNT$cmp_lt0000> created at line 113.
+    Found 1-bit register for signal <CLK_SPI>.
+    Found 2-bit adder for signal <CLK_SPI$addsub0000> created at line 155.
+    Found 2-bit comparator greatequal for signal <CLK_SPI$cmp_ge0000> created at line 156.
+    Found 1-bit register for signal <CS>.
+    Found 8-bit register for signal <data>.
+    Found 5-bit comparator greatequal for signal <data$cmp_ge0000> created at line 125.
+    Found 5-bit comparator lessequal for signal <data$cmp_le0000> created at line 125.
+    Found 1-bit register for signal <MOSI>.
+    Found 5-bit comparator greatequal for signal <MOSI$cmp_ge0000> created at line 136.
+    Found 5-bit comparator lessequal for signal <MOSI$cmp_le0000> created at line 136.
+    Found 1-bit register for signal <pulsed<0>>.
+    Found 2-bit up counter for signal <scaler>.
+    Summary:
+	inferred   1 Counter(s).
+	inferred  26 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred   7 Comparator(s).
+Unit <SPI> synthesized.
+
+
+Synthesizing Unit <kcuart_rx>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_rx.vhd".
+Unit <kcuart_rx> synthesized.
+
+
+Synthesizing Unit <bbfifo_16x8>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/bbfifo_16x8.vhd".
+Unit <bbfifo_16x8> synthesized.
+
+
+Synthesizing Unit <kcuart_tx>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/kcuart_tx.vhd".
+Unit <kcuart_tx> synthesized.
+
+
+Synthesizing Unit <uart_rx>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_rx.vhd".
+Unit <uart_rx> synthesized.
+
+
+Synthesizing Unit <uart_tx>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/uart_tx.vhd".
+Unit <uart_tx> synthesized.
+
+
+Synthesizing Unit <PseudoTosNet_uart>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_uart.vhd".
+WARNING:Xst:646 - Signal <txHalfFull> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <txFull> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <rxHalfFull> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <rxFull> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <commitWrite> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <commitRead> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found finite state machine <FSM_0> for signal <state>.
+    -----------------------------------------------------------------------
+    | States             | 18                                             |
+    | Transitions        | 108                                            |
+    | Inputs             | 5                                              |
+    | Outputs            | 21                                             |
+    | Clock              | clk_50M                   (rising_edge)        |
+    | Power Up State     | idle                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | automatic                                      |
+    -----------------------------------------------------------------------
+    Using one-hot encoding for signal <currentCommand>.
+    Found 6-bit up counter for signal <baudCount>.
+    Found 3-bit register for signal <currentCommand>.
+    Found 3-bit register for signal <currentIndex>.
+    Found 3-bit register for signal <currentReg>.
+    Found 1-bit register for signal <en_16_x_baud>.
+    Found 32-bit register for signal <inputBuffer>.
+    Found 6-bit register for signal <int_dataReg_addr>.
+    Found 1-bit register for signal <int_dataReg_clk>.
+    Found 32-bit register for signal <int_dataReg_dataIn>.
+    Found 1-bit register for signal <int_dataReg_we<0>>.
+    Found 32-bit register for signal <outputBuffer>.
+    Found 4-bit register for signal <readCounter>.
+    Found 4-bit adder for signal <readCounter$addsub0000> created at line 309.
+    Found 1-bit register for signal <readFromUart>.
+    Found 8-bit register for signal <txData>.
+    Found 4-bit register for signal <writeCounter>.
+    Found 4-bit adder for signal <writeCounter$addsub0000> created at line 354.
+    Found 1-bit register for signal <writeToUart>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 Counter(s).
+	inferred 132 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+Unit <PseudoTosNet_uart> synthesized.
+
+
+Synthesizing Unit <PseudoTosNet_ctrl>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/imports/SRC/PTN_CTRL/PseudoTosNet_ctrl.vhd".
+    Found finite state machine <FSM_1> for signal <state>.
+    -----------------------------------------------------------------------
+    | States             | 4                                              |
+    | Transitions        | 4                                              |
+    | Inputs             | 0                                              |
+    | Outputs            | 4                                              |
+    | Clock              | T_clk_50M                 (rising_edge)        |
+    | Power Up State     | idle                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | automatic                                      |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <T_data_from_mem_latch>.
+    Found 6-bit register for signal <dataReg_addr>.
+    Found 1-bit register for signal <dataReg_clk>.
+    Found 1-bit register for signal <dataReg_we>.
+    Found 6-bit up counter for signal <word_cnt>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 Counter(s).
+	inferred   9 D-type flip-flop(s).
+Unit <PseudoTosNet_ctrl> synthesized.
+
+
+Synthesizing Unit <topmodule>.
+    Related source file is "C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/new/topmodule.vhd".
+WARNING:Xst:647 - Input <XB_PSW_I> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:1306 - Output <XB_LEDS_O> is never assigned.
+WARNING:Xst:1780 - Signal <sys_cnt> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:653 - Signal <spi_tx_sig> is used but never assigned. This sourceless signal will be automatically connected to value 0.
+WARNING:Xst:653 - Signal <spi_tx> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
+WARNING:Xst:646 - Signal <spi_rx_sig> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <spi_rx> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <frq> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <freq_out> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <freq_gen> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <flsh> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <dipsw> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <bb_leds> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <T_data_from_mem_latch> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <T_data_from_mem> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:653 - Signal <R_FWD> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
+WARNING:Xst:653 - Signal <R_BACK> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
+WARNING:Xst:653 - Signal <L_FWD> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
+WARNING:Xst:653 - Signal <L_BACK> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
+    Found 1-bit register for signal <ALIVE_LED>.
+    Found 25-bit up counter for signal <alive_scaler>.
+    Found 25-bit adder for signal <alive_scaler$addsub0000> created at line 221.
+    Found 25-bit comparator greatequal for signal <alive_scaler$cmp_ge0000> created at line 222.
+    Found 1-bit register for signal <CLK_SLOW>.
+    Found 3-bit adder for signal <CLK_SLOW$addsub0000> created at line 195.
+    Found 3-bit comparator greatequal for signal <CLK_SLOW$cmp_ge0000> created at line 196.
+    Found 3-bit up counter for signal <scaler>.
+    Summary:
+	inferred   2 Counter(s).
+	inferred   2 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+Unit <topmodule> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 10
+ 2-bit adder                                           : 1
+ 25-bit adder                                          : 1
+ 3-bit adder                                           : 1
+ 4-bit adder                                           : 2
+ 5-bit adder                                           : 1
+ 8-bit adder                                           : 4
+# Counters                                             : 9
+ 2-bit up counter                                      : 1
+ 25-bit up counter                                     : 1
+ 3-bit up counter                                      : 1
+ 6-bit up counter                                      : 2
+ 8-bit up counter                                      : 4
+# Registers                                            : 33
+ 1-bit register                                        : 19
+ 3-bit register                                        : 3
+ 32-bit register                                       : 3
+ 4-bit register                                        : 2
+ 5-bit register                                        : 1
+ 6-bit register                                        : 2
+ 8-bit register                                        : 3
+# Comparators                                          : 13
+ 2-bit comparator greatequal                           : 1
+ 25-bit comparator greatequal                          : 1
+ 3-bit comparator greatequal                           : 1
+ 5-bit comparator greatequal                           : 3
+ 5-bit comparator less                                 : 1
+ 5-bit comparator lessequal                            : 2
+ 9-bit comparator greater                              : 4
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_1> for best encoding.
+Optimizing FSM <PseudoTosNet_ctrlInst/state/FSM> on signal <state[1:4]> with one-hot encoding.
+---------------------
+ State   | Encoding
+---------------------
+ idle    | 0001
+ setup_1 | 0010
+ clk_1   | 0100
+ done_1  | 1000
+---------------------
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <PseudoTosNet_ctrlInst/pseudoTosNet_uartInst/state/FSM> on signal <state[1:18]> with one-hot encoding.
+-------------------------------------------
+ State               | Encoding
+-------------------------------------------
+ idle                | 000000000000000001
+ command_in          | 000000000000000010
+ wait1               | 000000000000000100
+ reg_in              | 000000000000001000
+ wait2               | 000000000000010000
+ index_in            | 000000000000100000
+ wait3               | 000000000001000000
+ space_in            | 000000000100000000
+ wait4               | 000000001000000000
+ data_in             | 000000010000000000
+ wait_data_in        | 000000100000000000
+ data_out            | 000010000000000000
+ perform_read_setup  | 000000000010000000
+ perform_read_clk    | 000100000000000000
+ perform_read_done   | 001000000000000000
+ perform_write_setup | 000001000000000000
+ perform_write_clk   | 010000000000000000
+ perform_write_done  | 100000000000000000
+-------------------------------------------
+Reading core <c:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/segway.srcs/sources_1/ip/dataRegister/dataRegister.ngc>.
+Loading core <dataRegister> for timing and area information for instance <dataRegisterInst>.
+WARNING:Xst:2404 -  FFs/Latches <txData<7:7>> (without init value) have a constant value of 0 in block <PseudoTosNet_uart>.
+WARNING:Xst:2677 - Node <currentCommand_2> of sequential type is unconnected in block <PseudoTosNet_uart>.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 2
+# Adders/Subtractors                                   : 10
+ 2-bit adder                                           : 1
+ 25-bit adder                                          : 1
+ 3-bit adder                                           : 1
+ 4-bit adder                                           : 2
+ 5-bit adder                                           : 1
+ 8-bit adder                                           : 4
+# Counters                                             : 9
+ 2-bit up counter                                      : 1
+ 25-bit up counter                                     : 1
+ 3-bit up counter                                      : 1
+ 6-bit up counter                                      : 2
+ 8-bit up counter                                      : 4
+# Registers                                            : 215
+ Flip-Flops                                            : 215
+# Comparators                                          : 13
+ 2-bit comparator greatequal                           : 1
+ 25-bit comparator greatequal                          : 1
+ 3-bit comparator greatequal                           : 1
+ 5-bit comparator greatequal                           : 3
+ 5-bit comparator less                                 : 1
+ 5-bit comparator lessequal                            : 2
+ 9-bit comparator greater                              : 4
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1989 - Unit <topmodule>: instances <L_F>, <L_B> of unit <motorcontrol> are equivalent, second instance is removed
+WARNING:Xst:1989 - Unit <topmodule>: instances <L_F>, <R_F> of unit <motorcontrol> are equivalent, second instance is removed
+WARNING:Xst:1989 - Unit <topmodule>: instances <L_F>, <R_B> of unit <motorcontrol> are equivalent, second instance is removed
+
+Optimizing unit <topmodule> ...
+
+Optimizing unit <SPI> ...
+WARNING:Xst:1426 - The value init of the FF/Latch MOSI hinder the constant cleaning in the block SPI.
+   You should achieve better results by setting this init to 0.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_3> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_4> has a constant value of 1 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <MOSI> has a constant value of 1 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_0> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_1> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_0> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_2> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_1> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_3> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_2> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_4> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_3> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_5> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_4> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_5> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_6> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_7> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_6> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_7> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_0> has a constant value of 1 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_1> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_2> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CS> has a constant value of 1 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1426 - The value init of the FF/Latch MOSI hinder the constant cleaning in the block SPI.
+   You should achieve better results by setting this init to 0.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_1> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_4> has a constant value of 1 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <MOSI> has a constant value of 1 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_0> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_1> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_0> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_2> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_1> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_3> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_2> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_4> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_3> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_5> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_4> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_5> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_6> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_7> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_6> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <output_7> (without init value) has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CS> has a constant value of 1 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_0> has a constant value of 1 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_2> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <CLK_COUNT_3> has a constant value of 0 in block <SPI>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <kcuart_rx> ...
+
+Optimizing unit <bbfifo_16x8> ...
+
+Optimizing unit <kcuart_tx> ...
+
+Optimizing unit <PseudoTosNet_uart> ...
+WARNING:Xst:1710 - FF/Latch <txData_5> (without init value) has a constant value of 1 in block <PseudoTosNet_uart>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <PseudoTosNet_ctrl> ...
+WARNING:Xst:2677 - Node <spi_c/output_updated> of sequential type is unconnected in block <topmodule>.
+WARNING:Xst:2677 - Node <spi_c/pulsed_0> of sequential type is unconnected in block <topmodule>.
+WARNING:Xst:2677 - Node <PseudoTosNet_ctrlInst/T_data_from_mem_latch> of sequential type is unconnected in block <topmodule>.
+
+Mapping all equations...
+Building and optimizing final netlist ...
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 257
+ Flip-Flops                                            : 257
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+
+Clock Information:
+------------------
+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+-------+
+Clock Signal                                               | Clock buffer(FF name)                                                                                                                         | Load  |
+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+-------+
+CLK                                                        | BUFGP                                                                                                                                         | 284   |
+CLK_SLOW                                                   | NONE(L_F/pwm_out)                                                                                                                             | 9     |
+PseudoTosNet_ctrlInst/dataReg_clk                          | NONE(PseudoTosNet_ctrlInst/pseudoTosNet_uartInst/dataRegisterInst/BU2/U0/blk_mem_generator/valid.cstr/ramloop[0].ram.r/s3a_init.ram/dpram.ram)| 1     |
+PseudoTosNet_ctrlInst/pseudoTosNet_uartInst/int_dataReg_clk| NONE(PseudoTosNet_ctrlInst/pseudoTosNet_uartInst/dataRegisterInst/BU2/U0/blk_mem_generator/valid.cstr/ramloop[0].ram.r/s3a_init.ram/dpram.ram)| 1     |
+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------+-------+
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -4
+
+   Minimum period: 9.028ns (Maximum Frequency: 110.772MHz)
+   Minimum input arrival time before clock: 1.521ns
+   Maximum output required time after clock: 5.698ns
+   Maximum combinational path delay: No path found
+
+=========================================================================

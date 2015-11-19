@@ -1,0 +1,17 @@
+#-----------------------------------------------------------
+# PlanAhead v14.7 (64-bit)
+# Build 321239 by xbuild on Fri Sep 27 19:29:51 MDT 2013
+# Start of session at: Thu Nov 12 14:20:50 2015
+# Process ID: 3060
+# Log file: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code/planAhead.log
+# Journal file: C:/Users/lukas/Documents/GitHub/RobTek_G1_2015/EMB1/FinalProject/Code\planAhead.jou
+#-----------------------------------------------------------
+start_gui
+open_project {C:\Users\lukas\Documents\GitHub\RobTek_G1_2015\EMB1\FinalProject\Code\segway.ppr}
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs synth_1
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1
+wait_on_run synth_1
