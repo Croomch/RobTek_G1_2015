@@ -367,7 +367,7 @@ task main()
     
 // Load circuit
 
-	int circuit[] = {1, 2, 2, 1, 3, 3, 1, 1, 3, 1, 6, 3, 5, 2, 3, 1, 3, 1, 1, 4, 5, 1, 3, 3};
+	char circuit[] = {F, R, R, F, L, L, F, F, L, F, B, F, L, B, L, R, L, F, L, F, F, B, R, B, L, F, L, L};
 	int length = ArrayLen(circuit);
 
     
@@ -382,34 +382,35 @@ task main()
 
 			switch(actualcase)
 			{
-			case 1:	//Go straight
+			case F:	//Go straight
 				FollowLine(1);
 				KeepGoing(1);
 			break;
 
-			case 2: //Turn Right
+			case R: //Turn Right
 				FollowLine(1);
 				TurnRight(1);
 			break;
 
-			case 3: //Turn Left
+			case L: //Turn Left
 				FollowLine(1);
 				TurnLeft(1);
 			break;
 
-			case 4: //Back and Right
-				FollowLine(1);
-				TurnBack(1,1);
-			break;
-
-			case 5: //Back and Left
-				FollowLine(1);
-				TurnBack(1,3);
-			break;
-
-			case 6: //Back and straight
-				FollowLine(1);
-				TurnBack(1,2);
+			case B: //Back and Right
+				i++;
+				if(circuit[i] == R){
+					FollowLine(1);
+					TurnBack(1,1);
+				}
+				if(circuit[i] == F){
+					FollowLine(1);
+					TurnBack(1,2);
+				}
+				if(circuit[i] == L){
+					FollowLine(1);
+					TurnBack(1,3);
+				}
 			break;
 		
 			default: //Go straight
