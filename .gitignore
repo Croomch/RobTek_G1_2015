@@ -1,10 +1,7 @@
-*.data
-*.cache
 *.out
-*.ppr
-*.jou
 *.log
 *.runs
+*.jou
 *.Xil
 *.aux
 *.gz
@@ -22,6 +19,7 @@
 *.ini
 *.sh
 *.wdb
+*.xml
 *.dgb
 *.html
 *.sim
@@ -32,5 +30,7 @@
 *.lof
 *.lot
 *.toc
+*.vho
+*.wpc
 *~
 AI1/Programs/sokoban/build-main-Desktop-Default
