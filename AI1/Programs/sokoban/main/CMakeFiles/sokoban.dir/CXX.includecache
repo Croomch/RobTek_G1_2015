@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/graph.h
+algorithm
+-
+vector
+-
+iostream
+-
+unordered_map
+-
+
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/main.cpp
+iostream
+-
+sokoban.h
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/sokoban.h
+
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/sokoban.h
+string
+-
+iostream
+-
+vector
+-
+fstream
+-
+math.h
+-
+graph.h
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/graph.h
+
