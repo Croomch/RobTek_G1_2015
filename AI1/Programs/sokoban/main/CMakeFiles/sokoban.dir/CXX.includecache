@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/graph.cpp
+graph.h
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/graph.h
+
 /home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/graph.h
 algorithm
 -
@@ -19,6 +23,10 @@ unordered_map
 /home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/main.cpp
 iostream
 -
+sokoban.h
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/sokoban.h
+
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/sokoban.cpp
 sokoban.h
 /home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/sokoban.h
 
