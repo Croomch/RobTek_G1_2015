@@ -1,0 +1,1 @@
+/home/aitormig/Documents/Github/GitRep/AI1/Programs/sokoban/main/CMakeFiles/sokoban.dir

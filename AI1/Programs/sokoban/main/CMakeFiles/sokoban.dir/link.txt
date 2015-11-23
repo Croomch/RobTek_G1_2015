@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/sokoban.dir/sokoban.cpp.o CMakeFiles/sokoban.dir/graph.cpp.o CMakeFiles/sokoban.dir/main.cpp.o  -o sokoban -rdynamic 
