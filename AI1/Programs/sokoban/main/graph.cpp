@@ -114,6 +114,15 @@ void graph::createChild(node &obj){
     std::push_heap(leafs_.begin(), leafs_.end(), Comp());
 }
 
+void graph::createChild(std::vector< node > &obj){
+    for(int i = 0; i < obj.size(); i++){
+        node * _child = new node(obj[i]);
+        leafs_.push_back(_child);
+    }
+    std::push_heap(leafs_.begin(), leafs_.end(), Comp());
+}
+
+
 void graph::addChild(node* &obj, std::string & key){
     data_[key] = obj;
 }
@@ -137,7 +146,7 @@ bool graph::getNextChild(node * &nextChild){
 }
 
 // test node existence
-bool graph::nodeUnique(node &other, std::string & key){
+bool graph::nodeUnique(std::string & key){
     bool ret = false;
     std::unordered_map< std::string, node* >::iterator iter = data_.find(key);
 

@@ -171,6 +171,7 @@ public:
 
     // creats the child and add it to the heap, used in A* to get next shortest option
     void createChild(node &obj);
+    void createChild(std::vector< node > &obj);
 
     // add the child to final graph (adds the entry in the hash table)
     void addChild(node* &obj, std::string & key);
@@ -182,7 +183,7 @@ public:
     bool getNextChild(node * &nextChild);
 
     // test node existence
-    bool nodeUnique(node &other, std::string & key);
+    bool nodeUnique(std::string & key);
 
     // get some stats
     int getClosedListSize(){

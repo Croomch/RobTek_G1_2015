@@ -163,7 +163,7 @@ bool Sokoban::findPath(){
             // generate the key for the element
             std::string key = cheapest_leaf->getKey(map_size_.x_);
             // check that this node has not already been found, if so, remove it
-            bool unique_node = paths.nodeUnique(*cheapest_leaf, key);
+            bool unique_node = paths.nodeUnique(key);
             bool valid_node = false;
             std::vector< pos_t > * diamonds;
             if(unique_node){
@@ -177,8 +177,9 @@ bool Sokoban::findPath(){
             else{
                 paths.deleteChild(cheapest_leaf);
             }
-            std::vector< std::vector<char> > wf_map = map_;
+            std::vector< std::vector<char> > wf_map;
             if(unique_node && valid_node){
+                wf_map = map_;
                 // make wf map
                 for(int d = 0; d < diamonds->size(); d++){
                     int x = (*diamonds)[d].x_;
@@ -196,8 +197,9 @@ bool Sokoban::findPath(){
                     // update heuristics first
                     moves[newChild].updateHeuristic(heuristic_map);
                     // add the child
-                    paths.createChild(moves[newChild]);
+//                    paths.createChild(moves[newChild]);
                 }
+                paths.createChild(moves);
             }
         }
         else{
@@ -410,8 +412,8 @@ void Sokoban::wavefront(std::vector< std::vector<char> > &map_out, std::vector< 
     for(int i = 0; i < state.size(); i++){
         current.point_ = state[i];
         wfHeap.push_back(current);
-        std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
     }
+    std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
 
 
     // while something can be poped, do so
@@ -431,26 +433,23 @@ void Sokoban::wavefront(std::vector< std::vector<char> > &map_out, std::vector< 
                 next.point_.x_ = current.point_.x_;
                 next.point_.y_ = current.point_.y_- 1;
                 wfHeap.push_back(next);
-                std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
             }
             if(current.point_.y_ < map_size_.y_){
                 next.point_.x_ = current.point_.x_;
                 next.point_.y_ = current.point_.y_+ 1;
                 wfHeap.push_back(next);
-                std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
             }
             if(current.point_.x_ > 0){
                 next.point_.x_ = current.point_.x_ - 1;
                 next.point_.y_ = current.point_.y_;
                 wfHeap.push_back(next);
-                std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
             }
             if(current.point_.x_ < map_size_.x_){
                 next.point_.x_ = current.point_.x_ + 1;
                 next.point_.y_ = current.point_.y_;
                 wfHeap.push_back(next);
-                std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
             }
+            std::push_heap(wfHeap.begin(), wfHeap.end(), wfElement());
         }
     }
 }
@@ -563,11 +562,8 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
     // get cost ready, previous cost + the cost of pushing the diamond - the cost offset in the wavefront
     int currentCost = origo->getCost() + 1 - MAP_WALKABLE;
     pos_t robot;
-    // the path
-    std::string path;
     // pushing around
     pos_t pushTo;
-    pos_t pushFrom = *(origo->getRobotPos());
     // reset the move vector
     moves.clear();
     // loop through the set of diamonds
@@ -595,10 +591,6 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 // find path
                 pushTo = robot;
                 pushTo.y_ = robot.y_ + 1; // south
-//                if(findSubPath(path, wfmap_in, pushFrom, pushTo)){
-//                    path += "N";
-//                    tmp.setPath(path);
-//                }
                 // add it to the vector
                 moves.emplace_back(tmp);
             }
@@ -611,10 +603,6 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 // find path
                 pushTo = robot;
                 pushTo.y_ = robot.y_ - 1; // north
-//                if(findSubPath(path, wfmap_in, pushFrom, pushTo)){
-//                    path += "S";
-//                    tmp.setPath(path);
-//                }
                 // add it to the vector
                 moves.emplace_back(tmp);
             }
@@ -633,10 +621,6 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 // find path
                 pushTo = robot;
                 pushTo.x_ = robot.x_ + 1; // east
-//                if(findSubPath(path, wfmap_in, pushFrom, pushTo)){
-//                    path += "W";
-//                    tmp.setPath(path);
-//                }
                 // add it to the vector
                 moves.emplace_back(tmp);
             }
@@ -649,10 +633,6 @@ void Sokoban::possibleMoves(std::vector< std::vector<char> > &wfmap_in, std::vec
                 // find path
                 pushTo = robot;
                 pushTo.x_ = robot.x_ - 1; // west
-//                if(findSubPath(path, wfmap_in, pushFrom, pushTo)){
-//                    path += "E";
-//                    tmp.setPath(path);
-//                }
                 // add it to the vector
                 moves.emplace_back(tmp);
             }
@@ -733,9 +713,6 @@ bool Sokoban::isNotCorner(pos_t &diamond, std::vector< std::vector<char> > &wall
         bool verticalBlock = east | west;
         if(verticalBlock && horizontalBlock){
             ret = false;
-            //                std::cout << "Found a invalid node ";
-            //                diamonds->at(d).print();
-            //                std::cout << "\n";
         }
     }
 
