@@ -5,8 +5,4 @@ XX...X.GG..X
 XXJJJ.X.GXXX
 X..J....XXXX
 X...X...XXXX
-<<<<<<< HEAD
 XXXXXXXXXXXX
-=======
-XXXXXXXXXXXX
->>>>>>> ff3539d403fa820fd94a1c31d445fe2088920e5b
