@@ -301,7 +301,9 @@ void Sokoban::pathToRobot(std::string &path){
         }
         // check if it is supposed to push the can further
         if(i + 1 < path_.size()){
-            if(!(nextMove & 0x20) && (path_[i+1] & 0x20)){ // if current is upper and next is lowercase
+            if((!(nextMove & 0x20) && (path_[i+1] & 0x20))){ // if current is upper and next is lowercase
+                last_push = true;
+            } else if(((nextMove & ~0x20) != (path_[i+1] & ~0x20)) && !(nextMove & 0x20)){ //else if direction changes while it is pushing
                 last_push = true;
             }
         } else {
@@ -312,7 +314,7 @@ void Sokoban::pathToRobot(std::string &path){
         nextMove = nextMove & ~0x20; // always upper case
         char nextDirection;
         // check which direction to fo
-        if(nextMove == compas){ // go forward if it si in the same direction
+        if(nextMove == compas){ // go forward if it is in the same direction
             nextDirection = 'F';
 //            std::cout << compas << " and " << (char)(compas & ~0x20) << "\n";
         } else if(compas == 'N'){
