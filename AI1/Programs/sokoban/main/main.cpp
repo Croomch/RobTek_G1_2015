@@ -4,7 +4,6 @@
 
 
 // ****************** TODO**************
-// generate key only once and use it for the checks
 
 int main()
 {
