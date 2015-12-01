@@ -59,50 +59,47 @@ struct pos_t{
 class node
 {
 public:
-    node():parent_(nullptr),cost_(0),heuristic_(0),path_(""){
+    node():parent_(nullptr),cost_(0),heuristic_(0){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
-        makeKey();
+        //makeKey();
     }
-    node(int cost):cost_(cost),parent_(nullptr),heuristic_(0),path_(""){
+    node(int cost):cost_(cost),parent_(nullptr),heuristic_(0){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
-        makeKey();
+        //makeKey();
     }
-    node(int cost, node * &parent):cost_(cost),parent_(parent),heuristic_(0),path_(""){
+    node(int cost, node * &parent):cost_(cost),parent_(parent),heuristic_(0){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
-        makeKey();
+        //makeKey();
     }
-    node(int element, node * &parent, std::vector< std::vector<char> > &heuristicmap):cost_(element),parent_(parent),path_(""){
+    node(int element, node * &parent, std::vector< std::vector<char> > &heuristicmap):cost_(element),parent_(parent){
         robot_pos_.x_ = 0;
         robot_pos_.y_ = 0;
-        makeKey();
         updateHeuristic(heuristicmap);
     }
     node(const node &init){
         *this = init;
-        makeKey();
     }
 
-    std::string getPath(){return path_;}
+//    std::string getPath(){return path_;}
     int getCost(){return cost_;}
 
     int getHeuristic(){return heuristic_;}
 
-    std::string * getKey(){ return &key_;}
+    std::string getKey(int mapWidth);
 
     void setCost(int cost){
       cost_ = cost;
     }
 
-    void setPath(std::string &path){
-      path_ = path;
-    }
+//    void setPath(std::string &path){
+//      path_ = path;
+//    }
 
     void setRobot(pos_t pos){
         robot_pos_ = pos;
-        makeKey();
     }
 
     void setParent(node * &parent){
@@ -111,7 +108,6 @@ public:
 
     void setDiamonds(std::vector< pos_t > &diamonds){
         diamonds_ = diamonds;
-        makeKey();
     }
 
     node* getParent(){return parent_;}
@@ -120,7 +116,7 @@ public:
 
     pos_t * getRobotPos(){return &robot_pos_;}
 
-    void getPathToHere(std::string &path);
+//    void getPathToHere(std::string &path);
 
     void printPathToHere();
 
@@ -136,7 +132,7 @@ public:
 
 private:
 
-    void makeKey();
+//    void makeKey();
 
     // variables to store
     // cost and heuristic cost
@@ -147,10 +143,8 @@ private:
     pos_t robot_pos_;
     // the node the robot came from
     node * parent_;
-    // the unique key for this node
-    std::string key_;
     // the path taken to get her from the parent node
-    std::string path_;
+//    std::string path_;
 };
 
 
@@ -177,9 +171,10 @@ public:
 
     // creats the child and add it to the heap, used in A* to get next shortest option
     void createChild(node &obj);
+    void createChild(std::vector< node > &obj);
 
     // add the child to final graph (adds the entry in the hash table)
-    void addChild(node* &obj);
+    void addChild(node* &obj, std::string & key);
 
     // deletes the child (used when an identical node was already found to remove this option from memory)
     void deleteChild(node* &obj);
@@ -188,11 +183,15 @@ public:
     bool getNextChild(node * &nextChild);
 
     // test node existence
-    bool nodeUnique(node &other);
+    bool nodeUnique(std::string & key);
 
     // get some stats
     int getClosedListSize(){
         return data_.size();
+    }
+
+    int getOpenListSize(){
+        return leafs_.size();
     }
 
 private:

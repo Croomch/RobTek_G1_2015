@@ -11,13 +11,13 @@
 
 
 // defines
-#define SPEED 80
-#define PID_P 0.5
-#define PID_I 0.5
+#define SPEED 90
+#define PID_P 0.7
+#define PID_I 0.7
 #define BLACKLINE 550
 #define CALIB_FACTOR 0
-#define TURNVAL_L 80
-#define TURNVAL_R -80
+#define TURNVAL_L 100
+#define TURNVAL_R -100
 #define TURNBACK_L 80
 #define TURNBACK_R -80
 
@@ -240,8 +240,8 @@ int TurnBack(bool FindLine, int nxt_pos){
 	BackSensor = false;
 	flagt = false;
 
-	OnRev(MOTOR_L, -70);
-	OnRev(MOTOR_R, -70);
+	OnRev(MOTOR_L, -100);
+	OnRev(MOTOR_R, -100);
 
 	
 	while(!BackSensor){
@@ -258,18 +258,24 @@ int TurnBack(bool FindLine, int nxt_pos){
 	}
 	
 
-	while(FindLine){
+
+	switch(nxt_pos)
+	{
+	case 1:	//Turn Right
+		
+		OnRev(MOTOR_L, TURNBACK_L);
+		OnRev(MOTOR_R, TURNBACK_R);
+		Wait(10);
+	
+		while(FindLine){
 
 		light_l = GetInput(SENSE_LIGHT_L,RawValueField);
 		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
 		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
 
-		switch(nxt_pos)
-		{
-		case 1:	//Turn Right
-			
-			OnRev(MOTOR_L, TURNBACK_L);
-			OnRev(MOTOR_R, TURNBACK_R);
+		OnRev(MOTOR_L, TURNBACK_L);
+		OnRev(MOTOR_R, TURNBACK_R);
+
 			if (light_r > BLACKLINE && light_l < BLACKLINE)
 			{ 
 				RightSensor = true;
@@ -282,15 +288,27 @@ int TurnBack(bool FindLine, int nxt_pos){
 			{
 				FindLine = false;
 
-				OnRev(MOTOR_L, 0);
-				OnRev(MOTOR_R, 0);
+				OnRev(MOTOR_L, 80);
+				OnRev(MOTOR_R, 10);
 			}
+		}	
 		break;
 
 		case 2: //Turn all
+
+		OnRev(MOTOR_L, TURNBACK_L);
+		OnRev(MOTOR_R, TURNBACK_R);
+		Wait(10);
 	
-			OnRev(MOTOR_L, TURNBACK_L);
-			OnRev(MOTOR_R, TURNBACK_R);
+		while(FindLine){
+
+		
+		light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);	
+
+		OnRev(MOTOR_L, TURNBACK_L);
+		OnRev(MOTOR_R, TURNBACK_R);
 
 			if (light_r > BLACKLINE && light_l < BLACKLINE)
 			{ 
@@ -305,8 +323,8 @@ int TurnBack(bool FindLine, int nxt_pos){
 				if(flagt){
 					FindLine = false;
 
-					OnRev(MOTOR_L, 0);
-					OnRev(MOTOR_R, 0);
+					OnRev(MOTOR_L, 80);
+					OnRev(MOTOR_R, 10);
 				}
 				else{
 					flagt = true;
@@ -314,12 +332,23 @@ int TurnBack(bool FindLine, int nxt_pos){
 
 				}
 			}
+		}
 		break;
 
 		case 3: //Turn Left
 
-			OnRev(MOTOR_L, TURNBACK_R);
-			OnRev(MOTOR_R, TURNBACK_L);
+		OnRev(MOTOR_L, TURNBACK_R);
+		OnRev(MOTOR_R, TURNBACK_L);
+		Wait(10);
+	
+		while(FindLine){
+
+		light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
+			
+		OnRev(MOTOR_L, TURNBACK_R);
+		OnRev(MOTOR_R, TURNBACK_L);
 
 			if (light_l > BLACKLINE && light_r < BLACKLINE)
 			{ 
@@ -333,17 +362,22 @@ int TurnBack(bool FindLine, int nxt_pos){
 			{
 				FindLine = false;
 
-				OnRev(MOTOR_L, 0);
-				OnRev(MOTOR_R, 0);
+				OnRev(MOTOR_L, 10);
+				OnRev(MOTOR_R, 80);
 			}
+		}
 		break;
-
 	
+		default:
+			OnRev(MOTOR_L, 0);
+			OnRev(MOTOR_R, 0);
+
+		break;	
 		
 		}
 
 	
-	}
+	
 	return 0;
 }
 
@@ -367,12 +401,15 @@ task main()
     
 // Load circuit
 
-	int circuit[] = {1, 2, 2, 1, 3, 3, 1, 1, 3, 1, 6, 3, 5, 2, 3, 1, 3, 1, 1, 4, 5, 1, 3, 3};
-	int length = ArrayLen(circuit);
+//	string circuit = "LFFb";
+
+	string circuit = "rrffrffFFbrrfrRFFbRFbfLFFFbllLFFbllflflLFFbflfrfrLFblflflLFbrrRFFbflfLFbRFblLFFFbllLFFbllfrfrRFbllLFbflflLFblfrffflrfrRFFFFFbllLFFFbrrRFblffrfffrfrRFbllLFFFbllLFFb";
+	
+
+	int length = StrLen(circuit);
 
     
     
-	while(1){
 
 // Different test circuits
 
@@ -382,34 +419,72 @@ task main()
 
 			switch(actualcase)
 			{
-			case 1:	//Go straight
+			case 'F':	//Go straight
 				FollowLine(1);
 				KeepGoing(1);
 			break;
 
-			case 2: //Turn Right
+			case 'R': //Turn Right
 				FollowLine(1);
 				TurnRight(1);
 			break;
 
-			case 3: //Turn Left
+			case 'L': //Turn Left
 				FollowLine(1);
 				TurnLeft(1);
 			break;
 
-			case 4: //Back and Right
-				FollowLine(1);
-				TurnBack(1,1);
+			case 'B': //Back and Left
+				i++;
+				if(circuit[i] == 'L' || circuit[i] == 'l'){
+					FollowLine(1);
+					TurnBack(1,1);
+				}
+				 //Back and forward
+				if(circuit[i] == 'F' || circuit[i] == 'f'){
+					FollowLine(1);
+					TurnBack(1,2);
+				}
+				 //Back and right
+				if(circuit[i] == 'R' || circuit[i] == 'r'){
+					FollowLine(1);
+					TurnBack(1,3);
+				}
 			break;
 
-			case 5: //Back and Left
+			case 'f':	//Go straight
 				FollowLine(1);
-				TurnBack(1,3);
+				KeepGoing(1);
 			break;
 
-			case 6: //Back and straight
+			case 'r': //Turn Right
 				FollowLine(1);
-				TurnBack(1,2);
+				TurnRight(1);
+			break;
+
+			case 'l': //Turn Left
+				FollowLine(1);
+				TurnLeft(1);
+			break;
+
+			case 'b': //Back and Right
+				i++;
+				if(circuit[i] == 'L' || circuit[i] == 'l'){
+					FollowLine(1);
+					TurnBack(1,1);
+				}
+				if(circuit[i] == 'F' || circuit[i] == 'f'){
+					FollowLine(1);
+					TurnBack(1,2);
+				}
+				if(circuit[i] == 'R' || circuit[i] == 'r'){
+					FollowLine(1);
+					TurnBack(1,3);
+				}
+				if(i >= length){
+					FollowLine(1);
+					TurnBack(1,0);
+				}
 			break;
 		
 			default: //Go straight
@@ -422,92 +497,6 @@ task main()
 		} 
 
 
-
-/*		//Complete circuit		
-		FollowLine(1);
-		KeepGoing(1);
-
-		FollowLine(1);
-		TurnLeft(1);
-
-		FollowLine(1);
-		TurnBack(1,1);
-
-		FollowLine(1);
-		TurnRight(1);
-
-		FollowLine(1);
-		TurnRight(1);
-
-		FollowLine(1);
-		TurnBack(1,3);
-
-		FollowLine(1);
-		KeepGoing(1);
-	
-		FollowLine(1);
-		TurnBack(1,2);
-		
-		FollowLine(1);
-		TurnRight(1);
-		
-		FollowLine(1);
-		TurnLeft(1);
-		
-		FollowLine(1);
-		KeepGoing(1);
-
-		FollowLine(1);
-		TurnLeft(1);
-
-		FollowLine(1);
-		KeepGoing(1);
-
-		FollowLine(1);
-		KeepGoing(1);
-
-		FollowLine(1);
-		KeepGoing(1);
-
-		FollowLine(1);
-		TurnLeft(1);
-		
-		FollowLine(1);
-		TurnLeft(1);
-
-
-/*
-		FollowLine(1);
-		TurnBack(1,1);
-		FollowLine(1);
-		TurnBack(1,2);
-		FollowLine(1);
-		TurnBack(1,3);
-
-
-		FollowLine(1);
-		TurnLeft(1);
-		FollowLine(1);
-		TurnRight(1);
-		FollowLine(1);
-		TurnLeft(1);
-		FollowLine(1);
-		TurnRight(1);
-
-
-		FollowLine(1);
-		TurnRight(1);
-		FollowLine(1);
-		TurnRight(1);
-		FollowLine(1);
-		TurnRight(1);
-		FollowLine(1);
-		TurnRight(1);
-
-*/
-
-
-	}
 
     Off(MOTOR);
 
