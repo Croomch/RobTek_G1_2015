@@ -1,2 +1,9 @@
 \subsection{Path Converter}
+Once a path to the sokoban problem is found, it must be translated into something understandable by the robot.
+Hence a in between layer was created to make this conversation.
 
+This takes a path and converts it from north, south, east and west to forward, backward, left and right.
+Where the robot is executing its steps relative to the direction it is currently facing.
+
+This conversion is made taken into account the direction the robot is facing.
+Furthermore the robot has to push the diamonds on the map completely to the next position and then back away to its own square when the last of a sequence pushes is completed.
