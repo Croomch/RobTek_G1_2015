@@ -39,26 +39,26 @@ architecture Behavioral of Communication is
 constant CLK_SCALING: integer := 434; 
 
 
-signal CLK_BAUD: STD_LOGIC := "0";
-signal inputSignal: STD_LOGIC_VECTOR := "111111111";
-signal com : STD_LOGIC := "0";
+signal CLK_BAUD: STD_LOGIC := '0';
+--signal inputSignal: STD_LOGIC_VECTOR := "111111111";
+signal com : STD_LOGIC := '0';
 
 begin 
 
 -- BAUD GENERATION
 -- clk scaler to get 115200 bps == 115200 Hz
-process(CLK)
-variable scaler : integer range 0 to CLK_SCALING/2 := 0;
-begin
-    if rising_edge(CLK) and com = 1 then
-    scaler := scaler + 1;
-        if scaler >= CLK_SCALING/2 then 
-            scaler := 0;
-            CLK_BAUD <= NOT(CLK_BAUD);
-        end if;
-    end if;
+--process(CLK)
+--variable scaler : integer range 0 to CLK_SCALING/2 := 0;
+--begin
+--    if rising_edge(CLK) and com = 1 then
+--    scaler := scaler + 1;
+--        if scaler >= CLK_SCALING/2 then 
+--            scaler := 0;
+--            CLK_BAUD <= NOT(CLK_BAUD);
+--        end if;
+--    end if;
     
-end process;
+--end process;
 
 
 --Syncronize?
@@ -67,28 +67,28 @@ end process;
 -- if not communication on, wait for '0'
 -- if '0' -> start reading
 
-process(CLK, com)
-begin
-    if (rising_edge(CLK) and comin = 0) then
-        inputSignal <= inputSignal(8 downto 1) & RX;
-        if (inputSignal < "111111100") then
-            com <= 1;
-        end if;        
-    end if;
+--process(CLK, com)
+--begin
+--    if (rising_edge(CLK) and comin = 0) then
+--        inputSignal <= inputSignal(8 downto 1) & RX;
+--        if (inputSignal < "111111100") then
+--            com <= 1;
+--        end if;        
+--    end if;
 
-end process;
+--end process;
 
 -- READING 
 -- if reading and communication starts -> add bytes to signal with each BAUD_CLK
 -- when reading finish -> communication off
 
-process(CLK_BAUD,com)
-begin
-    if (rising_edge(CLK_BAUD) and com = 1) then 
-        instructions <= instructions(7 downto 0) & RX;
-        bitcounter <= bitcounter + "1";
-    end if;
-end process;
+--process(CLK_BAUD,com)
+--begin
+--    if (rising_edge(CLK_BAUD) and com = 1) then 
+--        instructions <= instructions(7 downto 0) & RX;
+--        bitcounter <= bitcounter + "1";
+--    end if;
+--end process;
 
 
 -- WRITING

@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 19.11.2015 12:13:28
+-- Create Date: 11/19/2015 01:17:28 PM
 -- Design Name: 
--- Module Name: rom - Behavioral
+-- Module Name: PID_Controller - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -21,6 +21,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,32 +33,34 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity rom is
+entity PID_Controller is
     Port ( 
         CLK : in STD_LOGIC;
-        address : in INTEGER RANGE 0 to 15;
-        data_out : out STD_LOGIC_VECTOR(7 downto 0)
-        );
-end rom;
+        Angle : in STD_LOGIC_VECTOR(15 downto 0);
+        MotorSignal : out STD_LOGIC_VECTOR(15 downto 0);
+    );
+end PID_Controller;
 
-architecture Behavioral of rom is
-
-SIGNAL reg_address: INTEGER RANGE 0 to 15;
-TYPE memory is array (0 to 15) of STD_LOGIC_VECTOR(7 downto 0);
-SIGNAL rom:memory;
-ATTRIBUTE ram_init_file: STRING;
-ATTRIBUTE ram_init_file OF rom: Signal is "rom_init.hex";
+architecture Behavioral of PID_Controller is
+<
+    signal AccError : integer := 0;
+    constant Paction : integer := 1;
+    constant Iaction : integer := 0.2;
+    constant ZeroMot : STD_LOGIC_VECTOR(15 downto 0)
 
 begin
 
--- Register the address --
-PROCESS(CLK)
-BEGIN
-    IF rising_edge(CLK) then
-        reg_address <= address;
-    end if;
-END PROCESS;
--- get unregistered output --
---data_out <= myrom(reg_address);
+    process(CLK)
+    begin
+        if rising_edge(CLK) then
+            MotorSignal <= ZeroMot + Angle * Paction + AccError * Iaction;
+            AccError = AccError + Angle;
+            
+        end if;
+    
+    
+    end process;
+    
+        
 
 end Behavioral;

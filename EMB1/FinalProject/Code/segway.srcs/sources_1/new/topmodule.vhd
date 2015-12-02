@@ -72,6 +72,11 @@ signal spi_tx_sig : STD_LOGIC := '0';
 signal spi_tx : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 -- alive signal --
 signal ALIVE_LED : STD_LOGIC := '0';
+-- PID signals --
+signal MotorDuty : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
+signal actualAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+
 
 ---- CONSTANTS ----
 CONSTANT CLK_FREQ : INTEGER := 50000000;
@@ -96,9 +101,7 @@ signal frq,flsh      : std_logic;
 
 
 COMPONENT motorcontrol IS
-Port ( 
-           CLK : in STD_LOGIC;
-           
+Port (     CLK : in STD_LOGIC;        
            PWM : out STD_LOGIC;
            duty : in STD_LOGIC_VECTOR (7 downto 0)
            );
@@ -135,6 +138,16 @@ COMPONENT SPI IS
            SPI_MSG : in STD_LOGIC_VECTOR (7 downto 0)
             );
 END COMPONENT;
+
+-- PID --
+COMPONENT PID_controller IS
+    Port (  CLK : in STD_LOGIC;
+            errorAngle : in STD_LOGIC_VECTOR (7 downto 0);
+            DesiredAngle : in STD_LOGIC_VECTOR (7 downto 0);
+            MotorOutput : out STD_LOGIC_VECTOR (8 downto 0)
+            );
+END COMPONENT;
+
 
 begin
 --------------------
@@ -195,6 +208,16 @@ spi_c : SPI Port map (
     SPI_MSG => spi_tx
 );
 
+pid : component PID_controller 
+    Port map(
+        CLK => CLK,
+        errorAngle => actualAngle,
+        MotorOutput => MotorDuty,
+        DesiredAngle => ZeroAngle
+
+    );
+
+
 -------------------
 ---- MAIN PART ----
 -------------------
@@ -252,6 +275,19 @@ begin
 end process;
 
 
+process(CLK)
+begin 
+    if rising_edge(CLK) then
+        if MotorDuty(8) = '0' then
+            L_FWD <= MotorDuty(7 downto 0);
+            R_FWD <= MotorDuty(7 downto 0);
+        else 
+            L_BACK <= MotorDuty(7 downto 0);
+            R_BACK <= MotorDuty(7 downto 0);
+        end if;
+    end if;
+            
+end process;
 
 -- alive timer --
 -- generate a regular blinking on the onboard led 
