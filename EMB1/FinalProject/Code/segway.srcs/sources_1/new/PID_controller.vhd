@@ -35,7 +35,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity PID_controller is
     Port (  CLK : in STD_LOGIC;
-            errorAngle : in STD_LOGIC_VECTOR(7 downto 0);
+            ErrorAngle : in STD_LOGIC_VECTOR(7 downto 0);
             DesiredAngle : in STD_LOGIC_VECTOR(7 downto 0);
             
             MotorOutput : out STD_LOGIC_VECTOR(8 downto 0)
@@ -44,7 +44,7 @@ end PID_controller;
 
 architecture Behavioral of PID_controller is
 
-    signal Paction, Iaction, Daction, TotalAction : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    signal Paction, Iaction, Daction : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     signal IState : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     signal PreviousError : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     
@@ -57,39 +57,57 @@ architecture Behavioral of PID_controller is
     
 
 begin
-  
-  process(CLK)
-  
-  begin  
+
+process(CLK)  
+    variable Error : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    variable ispositive : STD_LOGIC := '0';
+    variable TotalAction : STD_LOGIC_VECTOR(9 downto 0) := "0000000000";
+begin  
     -- PID Control. 
     -- P action: 
+    if rising_edge(CLK) then
     
-    Paction <= errorAngle*PGAIN;
+        if ErrorAngle >= "10000000" then
+            Error := ErrorAngle - "10000000";
+            ispositive := '1';
+        else
+            Error := "10000000" - ErrorAngle;
+            ispositive := '0';
+        end if; 
+        
+        Paction <= error*PGAIN;
     
-    -- I action:
-    IState <= IState+errorAngle;
-    Iaction <= IState * IGAIN;
-    
-    if Iaction > IactionMAX then
-        Iaction <= IactionMAX;
-        else if Iaction < IactionMIN then
-            Iaction <= IactionMIN;
+        -- I action:
+        IState <= IState+error;
+        Iaction <= IState * IGAIN;
+        
+        if Iaction > IactionMAX then
+            Iaction <= IactionMAX;
+            else if Iaction < IactionMIN then
+                Iaction <= IactionMIN;
+            end if;
         end if;
+        
+        
+        if PreviousError > errorAngle then
+            Daction <= (PreviousError - error) * DGAIN;
+            TotalAction := Paction+Daction+Iaction;
+        else 
+            Daction <= (error - PreviousError) * DGAIN;
+            TotalAction := Paction+Daction-Iaction;
+        end if;
+        
+        if TotalAction >= "0011111111" then
+            TotalAction := "0011111111";
+        end if;
+        
+        --Convert Action into 8 bits
+        MotorOutput <= ispositive & TotalAction(7 downto 0); 
+        
     end if;
-    
-    
-    if PreviousError > errorAngle then
-        Daction <= (PreviousError - errorAngle) * DGAIN;
-        TotalAction <= Paction+Daction+Iaction;
-    else 
-        Daction <= (errorAngle - PreviousError) * DGAIN;
-        TotalAction <= Paction+Daction-Iaction;
-    end if;
-    
-    --Convert Action into 8 bits
-    
+
     end process;
-    
-    MotorOutput <= "0" & TotalAction; 
+        
+
 
 end Behavioral;
