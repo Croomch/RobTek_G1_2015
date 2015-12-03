@@ -25,10 +25,14 @@
 *.b##
 *.s#*
 *.b#*
+*.edif
+*.wpc
+*.wdf
 *.user
 *.lof
 *.lot
 *.toc
-*.vho
 *~
 AI1/Programs/sokoban/build-main-Desktop-Default
+EMB1/Sorter_Project01/
+*.data
