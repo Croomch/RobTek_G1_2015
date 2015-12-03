@@ -45,6 +45,7 @@ entity topmodule is
     SPI_CS : out STD_LOGIC;
     
     ALIVE : out STD_LOGIC;
+    TESTLED : out STD_LOGIC;
     
     XB_SERIAL_O   		: out	STD_LOGIC;                       -- Serial stream to PC
     XB_SERIAL_I	   	: in	STD_LOGIC;                       -- Serial stream from PC
@@ -313,7 +314,7 @@ process(CLK)
 begin 
     if rising_edge(CLK) then
         if MotorDuty(8) = '0' then
-
+            TESTLED <= '0';
             ACTIVE_L_BACK <= '0';
             ACTIVE_R_BACK <= '0';
             ACTIVE_L_FWD <= '1';
@@ -323,6 +324,7 @@ begin
             R_FWD <= MotorDuty(7 downto 0);
         else 
                 
+            TESTLED <= '1';
             ACTIVE_L_FWD <= '0';
             ACTIVE_R_FWD <= '0';
             ACTIVE_L_BACK <= '1';
