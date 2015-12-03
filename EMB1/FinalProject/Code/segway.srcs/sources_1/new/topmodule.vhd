@@ -275,6 +275,8 @@ begin
 end process;
 
 
+actualAngle <= spi_rx;
+
 process(CLK)
 begin 
     if rising_edge(CLK) then
