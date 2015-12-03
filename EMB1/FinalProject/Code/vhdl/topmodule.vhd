@@ -63,7 +63,8 @@ signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
 
 -- signals for PWM
 signal L_FWD, L_BACK, R_FWD, R_BACK : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
-signal L_FWD_PWM, L_BACK_PWM, R_FWD_PWM, R_BACK_PWM : STD_LOGIC := '0';
+signal HIGH_L_FWD_PWM, HIGH_L_BACK_PWM, HIGH_R_FWD_PWM, HIGH_R_BACK_PWM : STD_LOGIC := '0';
+signal ACTIVE_L_FWD, ACTIVE_L_BACK, ACTIVE_R_FWD, ACTIVE_R_BACK : STD_LOGIC :='0';
 signal CLK_SLOW : STD_LOGIC := '0';
 -- SPI data --
 signal spi_rx : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
@@ -119,6 +120,7 @@ signal frq,flsh      : std_logic;
 COMPONENT motorcontrol IS
 Port (     CLK : in STD_LOGIC;        
            PWM : out STD_LOGIC;
+           ACTIVE : in STD_LOGIC;
            duty : in STD_LOGIC_VECTOR (7 downto 0)
            );
 END COMPONENT;
@@ -183,32 +185,41 @@ Port map (
 );
 
 -- init the components needed
-MOTOR_CONTROL(0) <= L_FWD_PWM;
-MOTOR_CONTROL(1) <= L_BACK_PWM;
-MOTOR_CONTROL(2) <= R_FWD_PWM;
-MOTOR_CONTROL(3) <= R_BACK_PWM;
-MOTOR_CONTROL(7 downto 4) <= "0000";
+MOTOR_CONTROL(0) <= ACTIVE_L_FWD;
+MOTOR_CONTROL(1) <= ACTIVE_R_FWD;
+MOTOR_CONTROL(2) <= ACTIVE_L_BACK;
+MOTOR_CONTROL(3) <= ACTIVE_R_BACK;
+
+MOTOR_CONTROL(4) <= HIGH_L_FWD_PWM;
+MOTOR_CONTROL(5) <= HIGH_L_BACK_PWM;
+MOTOR_CONTROL(6) <= HIGH_R_FWD_PWM;
+MOTOR_CONTROL(7) <= HIGH_R_BACK_PWM;
+
 L_F : motorcontrol Port map (
     CLK => CLK_SLOW,
-    PWM => L_FWD_PWM,
+    PWM => HIGH_L_FWD_PWM,
+    ACTIVE => ACTIVE_L_FWD,
     duty => L_FWD
 );
 
 L_B : motorcontrol Port map (
     CLK => CLK_SLOW,
-    PWM => L_BACK_PWM,
+    PWM => HIGH_L_BACK_PWM,
+    ACTIVE => ACTIVE_L_BACK,
     duty => L_BACK
 );
 
 R_F : motorcontrol Port map (
     CLK => CLK_SLOW,
-    PWM => R_FWD_PWM,
+    PWM => HIGH_R_FWD_PWM,
+    ACTIVE => ACTIVE_R_FWD,
     duty => R_FWD
 );
 
 R_B : motorcontrol Port map (
     CLK => CLK_SLOW,
-    PWM => R_BACK_PWM,
+    PWM => HIGH_R_BACK_PWM,
+    ACTIVE => ACTIVE_R_BACK,
     duty => R_BACK
 );
 
@@ -302,9 +313,20 @@ process(CLK)
 begin 
     if rising_edge(CLK) then
         if MotorDuty(8) = '0' then
+
+            ACTIVE_L_BACK <= '0';
+            ACTIVE_R_BACK <= '0';
+            ACTIVE_L_FWD <= '1';
+            ACTIVE_R_FWD <= '1';
+
             L_FWD <= MotorDuty(7 downto 0);
             R_FWD <= MotorDuty(7 downto 0);
         else 
+                
+            ACTIVE_L_FWD <= '0';
+            ACTIVE_R_FWD <= '0';
+            ACTIVE_L_BACK <= '1';
+            ACTIVE_R_BACK <= '1';
             L_BACK <= MotorDuty(7 downto 0);
             R_BACK <= MotorDuty(7 downto 0);
         end if;
