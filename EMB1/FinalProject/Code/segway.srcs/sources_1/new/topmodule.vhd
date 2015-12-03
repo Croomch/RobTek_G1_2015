@@ -75,13 +75,29 @@ signal ALIVE_LED : STD_LOGIC := '0';
 -- PID signals --
 signal MotorDuty : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
 signal actualAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
-CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
 
 
 ---- CONSTANTS ----
 CONSTANT CLK_FREQ : INTEGER := 50000000;
 CONSTANT CLK_SCALING : INTEGER := 10; -- for the generation of clk signal for the motors
 CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
+-- for SPI communication
+-- ACC
+CONSTANT GET_ACCX_H : STD_LOGIC_VECTOR(7 downto 0) := "00101001";
+CONSTANT GET_ACCX_L : STD_LOGIC_VECTOR(7 downto 0) := "00101000";
+CONSTANT GET_ACCY_H : STD_LOGIC_VECTOR(7 downto 0) := "00101011";
+CONSTANT GET_ACCY_L : STD_LOGIC_VECTOR(7 downto 0) := "00101010";
+CONSTANT GET_ACCZ_H : STD_LOGIC_VECTOR(7 downto 0) := "00101100";
+CONSTANT GET_ACCZ_L : STD_LOGIC_VECTOR(7 downto 0) := "00101101";
+-- GYR
+CONSTANT GET_GYRX_H : STD_LOGIC_VECTOR(7 downto 0) := "00100010";
+CONSTANT GET_GYRX_L : STD_LOGIC_VECTOR(7 downto 0) := "00100011";
+CONSTANT GET_GYRY_H : STD_LOGIC_VECTOR(7 downto 0) := "00100100";
+CONSTANT GET_GYRY_L : STD_LOGIC_VECTOR(7 downto 0) := "00100101";
+CONSTANT GET_GYRZ_H : STD_LOGIC_VECTOR(7 downto 0) := "00100110";
+CONSTANT GET_GYRZ_L : STD_LOGIC_VECTOR(7 downto 0) := "00100111";
+
 
 ---- COMPONENTS ----
 -- Signals below is used to connect to the Pseudo TosNet Controller component  
@@ -236,24 +252,29 @@ begin
     CASE pr_state IS
         WHEN send_data =>
             -- output --
+            spi_tx <= GET_ACCX_H;
+            spi_tx_sig <= '1';
             -- what is nx-state? 
             nx_state <= get_au;
         WHEN get_au =>
             -- output --
+            spi_tx <= GET_ACCX_H;
+            spi_tx_sig <= '1';
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
-                nx_state <= get_al;
+                actualAngle <= spi_rx;
+                nx_state <= send_data;
             else -- stay in the state
                 nx_state <= get_au;
             end if;
         WHEN get_al =>
-            -- output --
-            -- what is nx-state? 
-            if spi_rx_sig = '1' then -- wait for timer run out signal
-                nx_state <= send_data, get_au, get_al;
-            else -- stay in the state
-                nx_state <= send_data, get_au, get_al;
-            end if;
+--            -- output --
+--            -- what is nx-state? 
+--            if spi_rx_sig = '1' then -- wait for timer run out signal
+--                nx_state <= send_data, get_au, get_al;
+--            else -- stay in the state
+                nx_state <= send_data;
+--            end if;
     END CASE; 
 end process;
 
@@ -275,7 +296,7 @@ begin
 end process;
 
 
-actualAngle <= spi_rx;
+--actualAngle <= spi_rx;
 
 process(CLK)
 begin 

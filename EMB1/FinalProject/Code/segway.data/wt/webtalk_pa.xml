@@ -3,7 +3,11 @@
 <!--The data in this file is primarily intended for consumption by Xilinx tools.
 The structure and the elements are likely to change over the next few releases.
 This means code written to parse this file will need to be revisited each subsequent release.-->
+<<<<<<< HEAD
 <application name="pa" timeStamp="Thu Dec  3 09:33:50 2015">
+=======
+<application name="pa" timeStamp="Thu Dec 03 09:18:56 2015">
+>>>>>>> 60129cc0fff2cbb0eaa239e64353caeca20e0b5b
 <section name="Project Information" visible="false">
 <property name="ProjectID" value="6d5c552ce01546848bfac47851b4d58e" type="ProjectID"/>
 <property name="ProjectIteration" value="1" type="ProjectIteration"/>
@@ -20,22 +24,36 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="AddSrc" value="8" type="JavaHandler"/>
 <property name="EditDelete" value="2" type="JavaHandler"/>
 <property name="EditProperties" value="1" type="JavaHandler"/>
-<property name="LaunchImpact" value="4" type="JavaHandler"/>
+<property name="LaunchImpact" value="6" type="JavaHandler"/>
 <property name="NewProject" value="1" type="JavaHandler"/>
 <property name="OpenProject" value="22" type="JavaHandler"/>
 <property name="ProjectSettings" value="1" type="JavaHandler"/>
+<<<<<<< HEAD
 <property name="RunBitgen" value="23" type="JavaHandler"/>
 <property name="RunImplementation" value="6" type="JavaHandler"/>
 <property name="RunSynthesis" value="32" type="JavaHandler"/>
 <property name="SetTopNode" value="1" type="JavaHandler"/>
 <property name="ShowView" value="29" type="JavaHandler"/>
+=======
+<property name="RunBitgen" value="28" type="JavaHandler"/>
+<property name="RunImplementation" value="9" type="JavaHandler"/>
+<property name="RunSynthesis" value="39" type="JavaHandler"/>
+<property name="SetTopNode" value="1" type="JavaHandler"/>
+<property name="ShowView" value="31" type="JavaHandler"/>
+>>>>>>> 60129cc0fff2cbb0eaa239e64353caeca20e0b5b
 <property name="ToolsOptions" value="1" type="JavaHandler"/>
 <property name="UpdateSourceFiles" value="1" type="JavaHandler"/>
 </item>
 <item name="Other">
+<<<<<<< HEAD
 <property name="GuiMode" value="61" type="GuiMode"/>
 <property name="BatchMode" value="0" type="BatchMode"/>
 <property name="TclMode" value="53" type="TclMode"/>
+=======
+<property name="GuiMode" value="81" type="GuiMode"/>
+<property name="BatchMode" value="0" type="BatchMode"/>
+<property name="TclMode" value="62" type="TclMode"/>
+>>>>>>> 60129cc0fff2cbb0eaa239e64353caeca20e0b5b
 <property name="ISEMode" value="0" type="ISEMode"/>
 </item>
 </section>
