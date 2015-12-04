@@ -275,7 +275,6 @@ begin
             spi_tx_sig <= '1';
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
-                actualAngle <= spi_rx;
                 nx_state <= send_data;
             else -- stay in the state
                 nx_state <= init_spi;
@@ -283,13 +282,14 @@ begin
         WHEN send_data =>
             -- output --
             spi_tx_ctl <= GET_ACCX_H;
-            spi_tx_sig <= '1';
+            spi_tx_msg <= "00000000";
+            spi_tx_sig <= '0';
             -- what is nx-state? 
             nx_state <= get_au;
         WHEN get_au =>
             -- output --
             spi_tx_ctl <= GET_ACCX_H;
-            spi_tx_sig <= '0';
+            spi_tx_sig <= '1';
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 actualAngle <= spi_rx;

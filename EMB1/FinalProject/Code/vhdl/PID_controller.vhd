@@ -62,19 +62,22 @@ process(CLK)
     variable Error : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     variable ispositive : STD_LOGIC := '0';
     variable TotalAction : STD_LOGIC_VECTOR(9 downto 0) := "0000000000";
+    variable inclination : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 begin  
-    -- PID Control. 
-    -- P action: 
+    -- PID Control.
     if rising_edge(CLK) then
-    
-        if ErrorAngle >= "10000000" then
-            Error := ErrorAngle - "10000000";
+        
+        inclination := ErrorAngle+DesiredAngle;
+       
+        if inclination >= "10000000" then
+            Error := inclination - "10000000";
             ispositive := '1';
         else
-            Error := "10000000" - ErrorAngle;
+            Error := "10000000" - inclination;
             ispositive := '0';
         end if; 
-        
+                
+       -- P action: 
         Paction <= error;
     
         -- I action:
