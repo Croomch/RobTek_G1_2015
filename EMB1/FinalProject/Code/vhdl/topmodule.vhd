@@ -61,7 +61,8 @@ TYPE state IS (init_spi, send_data, get_au, get_al);
 signal pr_state, nx_state : state;
 -- data signals
 signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
-
+-- reinitiate signal
+signal reinitiate : STD_LOGIC := '0';
 -- signals for PWM
 signal L_FWD, L_BACK, R_FWD, R_BACK : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 signal HIGH_L_FWD_PWM, HIGH_L_BACK_PWM, HIGH_R_FWD_PWM, HIGH_R_BACK_PWM : STD_LOGIC := '0';
@@ -88,7 +89,9 @@ CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
 -- for SPI communication
 -- set data
 CONSTANT SET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "00010000";
+CONSTANT GET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "10010000";
 CONSTANT SET_CTRL1_ON : STD_LOGIC_VECTOR(7 downto 0) := "10100000";
+CONSTANT GET_STATUS : STD_LOGIC_VECTOR(7 downto 0) := "10011110";
 -- ACC
 CONSTANT GET_ACCX_H : STD_LOGIC_VECTOR(7 downto 0) := "10101001";
 CONSTANT GET_ACCX_L : STD_LOGIC_VECTOR(7 downto 0) := "10101000";
@@ -257,43 +260,70 @@ pid : component PID_controller
 -------------------
 -- lower FSM - flip-flop part, optn. add reset?! --
 process(CLK)
+--variable rst_count : integer range 0 to CLK_SCALING + 1000 := 0;
 begin
     if rising_edge(CLK) then -- update the state regularly
         pr_state <= nx_state;
+--        rst_count := rst_count + 1;
+--        if rst_count > CLK_SCALING then
+--            reinitiate <= '1';
+--        elsif rst_count  >= CLK_SCALING + 1000 then
+--            rst_count := 0;
+--        end if;
     end if;
 end process;
 
 -- upper FSM, could be concurrent code too - no flip-flops allowed --
 -- see state diagram for the design
-process(pr_state,spi_rx_sig) -- pr state and all other inputs
+-- jump to init state once in a while to ensuree that communication is up and running
+process(pr_state, spi_rx_sig) -- pr state and all other inputs
 begin
     CASE pr_state IS
         WHEN init_spi =>
             -- output --
-            spi_tx_ctl <= SET_CTRL1_XL;
-            spi_tx_msg <= SET_CTRL1_ON;
+            spi_tx_ctl <= GET_STATUS;
+            spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
-            -- what is nx-state? 
+            -- what is nx-state?
             if spi_rx_sig = '1' then -- wait for timer run out signal
-                nx_state <= send_data;
+                --nx_state <= send_data;
+                spi_tx_sig <= '1';
+                if spi_rx(0) = '1' then -- if new data ready on accelerometer
+                    nx_state <= send_data;
+                else
+                    nx_state <= init_spi;
+                end if;
             else -- stay in the state
                 nx_state <= init_spi;
             end if;
         WHEN send_data =>
             -- output --
-            spi_tx_ctl <= GET_ACCX_H;
-            spi_tx_msg <= "00000000";
-            spi_tx_sig <= '0';
+            spi_tx_ctl <= SET_CTRL1_XL;
+            spi_tx_msg <= SET_CTRL1_ON;
+            spi_tx_sig <= '1';
             -- what is nx-state? 
-            nx_state <= get_au;
+            --if reinitiate = '1' then
+           --     nx_state <= init_spi;              
+            --else
+           --     nx_state <= get_au;
+           -- end if;
+           if spi_rx_sig = '1' then -- wait for timer run out signal
+                actualAngle <= spi_rx;
+                spi_tx_sig <= '1';
+                nx_state <= get_au;
+           else -- stay in the state
+                nx_state <= send_data;
+           end if;
         WHEN get_au =>
             -- output --
             spi_tx_ctl <= GET_ACCX_H;
+            spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 actualAngle <= spi_rx;
-                nx_state <= send_data;
+                spi_tx_sig <= '1';
+                nx_state <= init_spi;
             else -- stay in the state
                 nx_state <= get_au;
             end if;

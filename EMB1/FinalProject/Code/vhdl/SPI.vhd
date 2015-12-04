@@ -65,12 +65,12 @@ SIGNAL data : STD_LOGIC_vector (7 downto 0) := "00000000";
 ---- Constants ----
 -- spi supports max of 10MHz
 -- scale down with factor 6 to get = 8.33MHz < 10MHz max
-CONSTANT CLK_SCALING : INTEGER := 10000;
+CONSTANT CLK_SCALING : INTEGER := 100;
 -- data msg info
-CONSTANT MSG_CS_START : INTEGER := 1;
-CONSTANT MSG_CS_END : INTEGER := 8;
-CONSTANT MSG_DATA_START : INTEGER := 9;
-CONSTANT MSG_DATA_END : INTEGER := 16;
+CONSTANT MSG_CS_START : INTEGER := 0;
+CONSTANT MSG_CS_END : INTEGER := 7;
+CONSTANT MSG_DATA_START : INTEGER := 8;
+CONSTANT MSG_DATA_END : INTEGER := 15;
 -- how often restart to sample --
 CONSTANT MSG_PERIOD : INTEGER := MSG_DATA_END+1;
 
@@ -104,26 +104,32 @@ begin
     if rising_edge(CLK) then 
         output_updated <= '0';
         -- signal new message 
-        if CLK_COUNT = MSG_DATA_END+1 AND pulsed = false then
+        if CLK_COUNT = MSG_DATA_END AND pulsed = false then
             pulsed := true;
             output_updated <= '1';
-        elsif  CLK_COUNT = 0 then
+        elsif  CLK_COUNT = 1 then
             pulsed := false;           
         end if;
     end if;
     if rising_edge(CLK_SPI) then
         -- increment counter --
-        if CLK_COUNT < MSG_PERIOD then 
+        if CLK_COUNT <= MSG_PERIOD then 
             CLK_COUNT := CLK_COUNT + 1;
         end if;
         -- put data on bus
         if CLK_COUNT = MSG_DATA_END+1 then
             output <= data;
         end if;
-        if CLK_COUNT >= MSG_PERIOD and getSample = '1' then
+        if CLK_COUNT > MSG_PERIOD and getSample = '1' then
             CLK_COUNT := 0;            
         end if;
-     
+        if CLK_COUNT = 0 then
+            -- drive CS low to initiate communication  
+            CS <= '0';
+        elsif CLK_COUNT = MSG_PERIOD then
+            -- put CS low to prep for next read
+            CS <= '1';
+        end if; 
         -- process the msg --
         if CLK_COUNT >= MSG_DATA_START and CLK_COUNT <= MSG_DATA_END then
             -- recieve the data
@@ -132,27 +138,18 @@ begin
     end if;
     if falling_edge(CLK_SPI) then
     -- send commands on falling edge
-        if CLK_COUNT = 0 then
-            -- drive CS low to initiate communication  
-            CS <= '0';
-            -- drive mosi high as startbit
-            MOSI <= '1';  
-        elsif CLK_COUNT >= MSG_CS_START and CLK_COUNT <= MSG_CS_END then
+        if CLK_COUNT >= MSG_CS_START and CLK_COUNT <= MSG_CS_END then
             -- send the Control selection
             MOSI <= CBS((MSG_CS_END - MSG_CS_START) - (CLK_COUNT - MSG_CS_START));
         elsif CLK_COUNT >= MSG_DATA_START and CLK_COUNT <= MSG_DATA_END then
             MOSI <= MSG((MSG_DATA_END - MSG_DATA_START) - (CLK_COUNT - MSG_DATA_START));
         end if;
-        -- put CS low to prep for next read 
-        if CLK_COUNT = MSG_DATA_END then
-            CS <= '1';
-        end if; 
     end if;
 end process;
 
 
 -- clk scaler to get less than 3.6MHz --
-SPI_CLK <= CLK_SPI;
+SPI_CLK <= CLK_SPI OR CS;
 process(CLK)
 variable scaler : integer range 0 to CLK_SCALING/2 := 0;
 begin
