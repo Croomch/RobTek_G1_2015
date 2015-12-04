@@ -38,6 +38,7 @@ entity motorcontrol is
            CLK : in STD_LOGIC;
     
            PWM : out STD_LOGIC;
+           ACTIVE : in STD_LOGIC;
            duty : in STD_LOGIC_VECTOR (7 downto 0)
            );
 end motorcontrol;
@@ -60,17 +61,19 @@ process(CLK)
 variable scaler : integer range 0 to 255 := 1;
 begin
     if rising_edge(CLK) then
-        scaler := scaler + 1;
-        if scaler > 255 then
-            scaler := 1;
-        end if;
-        if scaler > comp then 
-            pwm_out <= '0';
+        if ACTIVE = '0' then
+            scaler := scaler + 1;
+            if scaler > 255 then
+                scaler := 1;
+            end if;
+            if scaler > comp then 
+                pwm_out <= '0';
+            else
+                pwm_out <= '1';
+            end if;
         else
-            pwm_out <= '1';
+            pwm_out <= '0';                
         end if;
-        
-                
     end if;
 end process;
 

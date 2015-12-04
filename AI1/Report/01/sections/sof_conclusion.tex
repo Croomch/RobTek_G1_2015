@@ -7,7 +7,9 @@ This technique takes into account the walls on the map, but disregard the diamon
 Furthermore the cost of moving in between the diamonds and the fact that one goal may be considered the destination of multiple diamonds is not taken into account using this method.
 
 The nodes in the graph where also validated using their state, in form of the diamonds and robots position, as the key in a hashing table.
-Furthermore the states are checked for simple deadlock situations.
+The individual states are checked for simple deadlock situations to reduce the graph.
+
+Finally a path converter was implemented to fuse the physical robot and the sokoban solver together to a single system taking into account the physics of the robot.
 
 
 

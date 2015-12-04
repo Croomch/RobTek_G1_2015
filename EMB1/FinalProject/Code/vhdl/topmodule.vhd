@@ -45,6 +45,7 @@ entity topmodule is
     SPI_CS : out STD_LOGIC;
     
     ALIVE : out STD_LOGIC;
+    TESTLED : out STD_LOGIC;
     
     XB_SERIAL_O   		: out	STD_LOGIC;                       -- Serial stream to PC
     XB_SERIAL_I	   	: in	STD_LOGIC;                       -- Serial stream from PC
@@ -63,7 +64,8 @@ signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
 
 -- signals for PWM
 signal L_FWD, L_BACK, R_FWD, R_BACK : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
-signal L_FWD_PWM, L_BACK_PWM, R_FWD_PWM, R_BACK_PWM : STD_LOGIC := '0';
+signal HIGH_L_FWD_PWM, HIGH_L_BACK_PWM, HIGH_R_FWD_PWM, HIGH_R_BACK_PWM : STD_LOGIC := '0';
+signal ACTIVE_L_FWD, ACTIVE_L_BACK, ACTIVE_R_FWD, ACTIVE_R_BACK : STD_LOGIC :='0';
 signal CLK_SLOW : STD_LOGIC := '0';
 -- SPI data --
 signal spi_rx : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
@@ -72,11 +74,32 @@ signal spi_tx_sig : STD_LOGIC := '0';
 signal spi_tx : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 -- alive signal --
 signal ALIVE_LED : STD_LOGIC := '0';
+-- PID signals --
+signal MotorDuty : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
+signal actualAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
+
 
 ---- CONSTANTS ----
 CONSTANT CLK_FREQ : INTEGER := 50000000;
 CONSTANT CLK_SCALING : INTEGER := 10; -- for the generation of clk signal for the motors
 CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
+-- for SPI communication
+-- ACC
+CONSTANT GET_ACCX_H : STD_LOGIC_VECTOR(7 downto 0) := "10101001";
+CONSTANT GET_ACCX_L : STD_LOGIC_VECTOR(7 downto 0) := "10101000";
+CONSTANT GET_ACCY_H : STD_LOGIC_VECTOR(7 downto 0) := "10101011";
+CONSTANT GET_ACCY_L : STD_LOGIC_VECTOR(7 downto 0) := "10101010";
+CONSTANT GET_ACCZ_H : STD_LOGIC_VECTOR(7 downto 0) := "10101100";
+CONSTANT GET_ACCZ_L : STD_LOGIC_VECTOR(7 downto 0) := "10101101";
+-- GYR
+CONSTANT GET_GYRX_H : STD_LOGIC_VECTOR(7 downto 0) := "10100010";
+CONSTANT GET_GYRX_L : STD_LOGIC_VECTOR(7 downto 0) := "10100011";
+CONSTANT GET_GYRY_H : STD_LOGIC_VECTOR(7 downto 0) := "10100100";
+CONSTANT GET_GYRY_L : STD_LOGIC_VECTOR(7 downto 0) := "10100101";
+CONSTANT GET_GYRZ_H : STD_LOGIC_VECTOR(7 downto 0) := "10100110";
+CONSTANT GET_GYRZ_L : STD_LOGIC_VECTOR(7 downto 0) := "10100111";
+
 
 ---- COMPONENTS ----
 -- Signals below is used to connect to the Pseudo TosNet Controller component  
@@ -96,10 +119,9 @@ signal frq,flsh      : std_logic;
 
 
 COMPONENT motorcontrol IS
-Port ( 
-           CLK : in STD_LOGIC;
-           
+Port (     CLK : in STD_LOGIC;        
            PWM : out STD_LOGIC;
+           ACTIVE : in STD_LOGIC;
            duty : in STD_LOGIC_VECTOR (7 downto 0)
            );
 END COMPONENT;
@@ -136,6 +158,16 @@ COMPONENT SPI IS
             );
 END COMPONENT;
 
+-- PID --
+COMPONENT PID_controller IS
+    Port (  CLK : in STD_LOGIC;
+            errorAngle : in STD_LOGIC_VECTOR (7 downto 0);
+            DesiredAngle : in STD_LOGIC_VECTOR (7 downto 0);
+            MotorOutput : out STD_LOGIC_VECTOR (8 downto 0)
+            );
+END COMPONENT;
+
+
 begin
 --------------------
 ---- Components ----
@@ -154,32 +186,41 @@ Port map (
 );
 
 -- init the components needed
-MOTOR_CONTROL(0) <= L_FWD_PWM;
-MOTOR_CONTROL(1) <= L_BACK_PWM;
-MOTOR_CONTROL(2) <= R_FWD_PWM;
-MOTOR_CONTROL(3) <= R_BACK_PWM;
-MOTOR_CONTROL(7 downto 4) <= "0000";
+MOTOR_CONTROL(0) <= ACTIVE_L_FWD;
+MOTOR_CONTROL(1) <= ACTIVE_R_FWD;
+MOTOR_CONTROL(2) <= ACTIVE_L_BACK;
+MOTOR_CONTROL(3) <= ACTIVE_R_BACK;
+
+MOTOR_CONTROL(4) <= HIGH_L_FWD_PWM;
+MOTOR_CONTROL(5) <= HIGH_L_BACK_PWM;
+MOTOR_CONTROL(6) <= HIGH_R_FWD_PWM;
+MOTOR_CONTROL(7) <= HIGH_R_BACK_PWM;
+
 L_F : motorcontrol Port map (
     CLK => CLK_SLOW,
-    PWM => L_FWD_PWM,
+    PWM => HIGH_L_FWD_PWM,
+    ACTIVE => ACTIVE_L_FWD,
     duty => L_FWD
 );
 
 L_B : motorcontrol Port map (
     CLK => CLK_SLOW,
-    PWM => L_BACK_PWM,
+    PWM => HIGH_L_BACK_PWM,
+    ACTIVE => ACTIVE_L_BACK,
     duty => L_BACK
 );
 
 R_F : motorcontrol Port map (
     CLK => CLK_SLOW,
-    PWM => R_FWD_PWM,
+    PWM => HIGH_R_FWD_PWM,
+    ACTIVE => ACTIVE_R_FWD,
     duty => R_FWD
 );
 
 R_B : motorcontrol Port map (
     CLK => CLK_SLOW,
-    PWM => R_BACK_PWM,
+    PWM => HIGH_R_BACK_PWM,
+    ACTIVE => ACTIVE_R_BACK,
     duty => R_BACK
 );
 
@@ -194,6 +235,16 @@ spi_c : SPI Port map (
     getSample => spi_tx_sig,
     SPI_MSG => spi_tx
 );
+
+pid : component PID_controller 
+    Port map(
+        CLK => CLK,
+        errorAngle => actualAngle,
+        MotorOutput => MotorDuty,
+        DesiredAngle => ZeroAngle
+
+    );
+
 
 -------------------
 ---- MAIN PART ----
@@ -213,24 +264,29 @@ begin
     CASE pr_state IS
         WHEN send_data =>
             -- output --
+            spi_tx <= GET_ACCX_H;
+            spi_tx_sig <= '1';
             -- what is nx-state? 
             nx_state <= get_au;
         WHEN get_au =>
             -- output --
+            spi_tx <= GET_ACCX_H;
+            spi_tx_sig <= '1';
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
-                nx_state <= get_al;
+                actualAngle <= spi_rx;
+                nx_state <= send_data;
             else -- stay in the state
                 nx_state <= get_au;
             end if;
         WHEN get_al =>
-            -- output --
-            -- what is nx-state? 
-            if spi_rx_sig = '1' then -- wait for timer run out signal
-                nx_state <= send_data, get_au, get_al;
-            else -- stay in the state
-                nx_state <= send_data, get_au, get_al;
-            end if;
+--            -- output --
+--            -- what is nx-state? 
+--            if spi_rx_sig = '1' then -- wait for timer run out signal
+--                nx_state <= send_data, get_au, get_al;
+--            else -- stay in the state
+                nx_state <= send_data;
+--            end if;
     END CASE; 
 end process;
 
@@ -252,6 +308,33 @@ begin
 end process;
 
 
+--actualAngle <= spi_rx;
+
+process(CLK)
+begin 
+    if rising_edge(CLK) then
+        if MotorDuty(8) = '0' then
+            TESTLED <= '0';
+            ACTIVE_L_BACK <= '0';
+            ACTIVE_R_BACK <= '0';
+            ACTIVE_L_FWD <= '1';
+            ACTIVE_R_FWD <= '1';
+
+            L_FWD <= MotorDuty(7 downto 0);
+            R_FWD <= MotorDuty(7 downto 0);
+        else 
+                
+            TESTLED <= '1';
+            ACTIVE_L_FWD <= '0';
+            ACTIVE_R_FWD <= '0';
+            ACTIVE_L_BACK <= '1';
+            ACTIVE_R_BACK <= '1';
+            L_BACK <= MotorDuty(7 downto 0);
+            R_BACK <= MotorDuty(7 downto 0);
+        end if;
+    end if;
+            
+end process;
 
 -- alive timer --
 -- generate a regular blinking on the onboard led 

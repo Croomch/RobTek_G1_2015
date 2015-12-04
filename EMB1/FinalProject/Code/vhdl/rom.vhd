@@ -57,6 +57,6 @@ BEGIN
     end if;
 END PROCESS;
 -- get unregistered output --
-data_out <= myrom(reg_address);
+--data_out <= myrom(reg_address);
 
 end Behavioral;

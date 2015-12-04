@@ -11,27 +11,51 @@
 
 
 // defines
-#define SPEED 90
-#define PID_P 0.7
-#define PID_I 0.7
+#define SPEED 65
+#define PUSHING_SPEED 40
+
+//#define PID_P 0.90
+//#define PID_I 0.001
+//#define PID_D 0.6
+
+#define PID_P 0.35	
+#define PID_I 0
+#define PID_D 0
+
+
+#define INTEGRAL_MAX 5000
+#define INTEGRAL_MIN -5000
+
 #define BLACKLINE 550
 #define CALIB_FACTOR 0
-#define TURNVAL_L 100
-#define TURNVAL_R -100
-#define TURNBACK_L 80
-#define TURNBACK_R -80
+#define TURNVAL_L 20
+#define TURNVAL_R -60
+#define TURNBACKRight_L 65
+#define TURNBACKRight_R -20
+#define TURNBACKLeft_L -20
+#define TURNBACKLeft_R 65
+#define TURNBACKFwd_L 50
+#define TURNBACKFwd_R -50
 
 
 
-int FollowLine(bool drive_straight)
+int FollowLine(bool drive_straight, bool pushing)
 {	
     float light_l, light_r;
-    float err_prev = 0, err_act = 0;
+    float err_prev = 0, error = 0, ierr = 0, actP = 0, actI = 0, actD = 0;
+    float speed_followline;
+
+	if(pushing){
+		speed_followline = PUSHING_SPEED;
+	}
+	else{
+		speed_followline = SPEED;
+	}
 
 	while(drive_straight){
         	ClearScreen();
 
-        	TextOut(0, LCD_LINE1, "Turn:");
+        	TextOut(0, LCD_LINE1, "3:|");
 
         
         	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
@@ -39,25 +63,41 @@ int FollowLine(bool drive_straight)
                 
         	float speed_l, speed_r;
         
-        if( light_l > BLACKLINE  && light_r > BLACKLINE ){
+       if( light_l > BLACKLINE  && light_r > BLACKLINE ){
             speed_l = 0;
             speed_r = 0;
             drive_straight = false;
         }
         else{
 
-            err_act = (light_l - light_r + CALIB_FACTOR)*PID_P + err_prev*PID_I; // offset from the line
-            err_prev = err_act;
+            error = (light_l - light_r + CALIB_FACTOR); // offset from the line
+            
+	    actP = error * PID_P;
+	    
+            ierr = ierr+error;
+	    if(ierr>INTEGRAL_MAX){
+		ierr = INTEGRAL_MAX;
+	    }
+	    else{
+		if(ierr<INTEGRAL_MIN){
+		    ierr = INTEGRAL_MIN;		
+		}
+	    }
+	    
+            actI = ierr*PID_I;
 
-            if(err_act > 0){
+	    actD = (err_prev-error)*PID_D;
+	    err_prev = error;
+
+            if(error > 0){
               TextOut(40, LCD_LINE1, "Left");
             } 
             else {
                TextOut(40, LCD_LINE1, "Right");
             }
         
-            speed_l = SPEED - (err_act);
-            speed_r = SPEED + (err_act);
+            speed_l = speed_followline - (actP + actI + actD)/2;
+            speed_r = speed_followline + (actP + actI + actD)/2;
         
             if(speed_l < 0){
                 speed_l = 0;
@@ -88,12 +128,12 @@ int FollowLine(bool drive_straight)
 int KeepGoing(bool drive_straight)
 {	
     float light_l, light_r, light_b;
-    float err_prev = 0, err_act = 0;
+    float err_prev = 0, error = 0, ierr = 0, actP = 0, actI = 0, actD = 0;
 
 	while(drive_straight){
         	ClearScreen();
 
-        	TextOut(0, LCD_LINE1, "Turn:");
+        	TextOut(0, LCD_LINE1, "3:|");
 
         
         	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
@@ -107,18 +147,34 @@ int KeepGoing(bool drive_straight)
         }
         else{
 
-            err_act = (light_l - light_r + CALIB_FACTOR)*PID_P + err_prev*PID_I; // offset from the line
-            err_prev = err_act;
+       error = (light_l - light_r + CALIB_FACTOR); // offset from the line
+            
+	    actP = error * PID_P;
+	    
+            ierr = ierr+error;
+	    if(ierr>INTEGRAL_MAX){
+		ierr = INTEGRAL_MAX;
+	    }
+	    else{
+		if(ierr<INTEGRAL_MIN){
+		    ierr = INTEGRAL_MIN;		
+		}
+	    }
+	    
+            actI = ierr*PID_I;
 
-            if(err_act > 0){
+	    actD = (err_prev-error)*PID_D;
+	    err_prev = error;
+
+            if(error > 0){
               TextOut(40, LCD_LINE1, "Left");
             } 
             else {
                TextOut(40, LCD_LINE1, "Right");
             }
         
-            speed_l = SPEED - (err_act);
-            speed_r = SPEED + (err_act);
+            speed_l = SPEED - (actP + actI + actD)/2;
+            speed_r = SPEED + (actP + actI + actD)/2;
         
             if(speed_l < 0){
                 speed_l = 0;
@@ -132,7 +188,7 @@ int KeepGoing(bool drive_straight)
             if(speed_r > 100){
                 speed_r = 100;
             }
-	
+		
         }
 
         OnRev(MOTOR_L, speed_l);
@@ -150,16 +206,20 @@ int KeepGoing(bool drive_straight)
 int TurnRight(bool FindLine){
 
     float light_l, light_r;
+    float VelR, VelL;
     bool RightSensor = false;
+	
+	VelR = TURNVAL_R;
+	VelL = TURNVAL_L;
 
-
-	OnRev(MOTOR_L, 80);
-	OnRev(MOTOR_R, 50);
+	KeepGoing(1);	
 
 	Wait(100);
-	
-	OnRev(MOTOR_L, TURNVAL_L);
-	OnRev(MOTOR_R, TURNVAL_R);
+
+	OnRev(MOTOR_L, VelL);
+	OnRev(MOTOR_R, VelR);
+
+	Wait(400);
 	
 	while(FindLine){
 
@@ -169,17 +229,18 @@ int TurnRight(bool FindLine){
 		if (light_r > BLACKLINE && light_l < BLACKLINE)
 		{ 
 			RightSensor = true;
-		
-			OnRev(MOTOR_L, 40);
+			OnRev(MOTOR_L, 50);
 			OnRev(MOTOR_R, 10);
+			
 
 		}
-		if (light_r < BLACKLINE && RightSensor)
+		if (light_l >( BLACKLINE-30) && RightSensor)
 		{
 			FindLine = false;
 
-			OnRev(MOTOR_L, 0);
+			OnRev(MOTOR_L, 20);
 			OnRev(MOTOR_R, 0);
+			//Wait(50);
 		}
 
 
@@ -192,15 +253,21 @@ int TurnRight(bool FindLine){
 int TurnLeft(bool FindLine){
 
     float light_l, light_r;
+    float VelR, VelL;
     bool LeftSensor = false;
 
-	OnRev(MOTOR_L, 50);
-	OnRev(MOTOR_R, 80);
+	VelR = TURNVAL_R;
+	VelL = TURNVAL_L;
+
+	KeepGoing(1);	
 
 	Wait(100);
+
 	
-	OnRev(MOTOR_L, TURNVAL_R);
-	OnRev(MOTOR_R, TURNVAL_L);
+	OnRev(MOTOR_L, VelR);
+	OnRev(MOTOR_R, VelL);
+
+	Wait(400);
 	
 	while(FindLine){
 
@@ -212,15 +279,16 @@ int TurnLeft(bool FindLine){
 			LeftSensor = true;
 		
 			OnRev(MOTOR_L, 10);
-			OnRev(MOTOR_R, 40);
+			OnRev(MOTOR_R, 50);
 
 		}
-		if (light_l < BLACKLINE && LeftSensor)
+		if (light_r > (BLACKLINE-30) && LeftSensor)
 		{
 			FindLine = false;
 
 			OnRev(MOTOR_L, 0);
-			OnRev(MOTOR_R, 0);
+			OnRev(MOTOR_R, 20);
+			//Wait(50);
 		}
 
 
@@ -240,8 +308,8 @@ int TurnBack(bool FindLine, int nxt_pos){
 	BackSensor = false;
 	flagt = false;
 
-	OnRev(MOTOR_L, -100);
-	OnRev(MOTOR_R, -100);
+	OnRev(MOTOR_L, -60);
+	OnRev(MOTOR_R, -60);
 
 	
 	while(!BackSensor){
@@ -263,9 +331,9 @@ int TurnBack(bool FindLine, int nxt_pos){
 	{
 	case 1:	//Turn Right
 		
-		OnRev(MOTOR_L, TURNBACK_L);
-		OnRev(MOTOR_R, TURNBACK_R);
-		Wait(10);
+		OnRev(MOTOR_L, TURNBACKRight_L);
+		OnRev(MOTOR_R, TURNBACKRight_R);
+		Wait(200);
 	
 		while(FindLine){
 
@@ -273,8 +341,8 @@ int TurnBack(bool FindLine, int nxt_pos){
 		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
 		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
 
-		OnRev(MOTOR_L, TURNBACK_L);
-		OnRev(MOTOR_R, TURNBACK_R);
+		OnRev(MOTOR_L, TURNBACKRight_L);
+		OnRev(MOTOR_R, TURNBACKRight_R);
 
 			if (light_r > BLACKLINE && light_l < BLACKLINE)
 			{ 
@@ -283,22 +351,25 @@ int TurnBack(bool FindLine, int nxt_pos){
 				OnRev(MOTOR_L, 50);
 				OnRev(MOTOR_R, 10);
 
+
 			}
-			if (light_r < BLACKLINE && RightSensor)
+			if (light_r < (BLACKLINE-30) && RightSensor)
 			{
 				FindLine = false;
 
-				OnRev(MOTOR_L, 0);
+				OnRev(MOTOR_L, 20);
 				OnRev(MOTOR_R, 0);
+				Wait(40);
 			}
 		}	
 		break;
 
 		case 2: //Turn all
 
-		OnRev(MOTOR_L, TURNBACK_L);
-		OnRev(MOTOR_R, TURNBACK_R);
-		Wait(10);
+		KeepGoing(1);
+		OnRev(MOTOR_L, TURNBACKFwd_L);
+		OnRev(MOTOR_R, TURNBACKFwd_R);
+		Wait(200);
 	
 		while(FindLine){
 
@@ -307,28 +378,39 @@ int TurnBack(bool FindLine, int nxt_pos){
 		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
 		light_b = GetInput(SENSE_LIGHT_B,RawValueField);	
 
-		OnRev(MOTOR_L, TURNBACK_L);
-		OnRev(MOTOR_R, TURNBACK_R);
+		/*
+		if(!flagt){
+			OnRev(MOTOR_L, TURNBACKFwd_L);
+			OnRev(MOTOR_R, TURNBACKFwd_R);
+		}else{
+			OnRev(MOTOR_L, TURNBACKFwd_L-20);
+			OnRev(MOTOR_R, TURNBACKFwd_R+20);
+		}*/
 
 			if (light_r > BLACKLINE && light_l < BLACKLINE)
 			{ 
 				RightSensor = true;
 		
-				OnRev(MOTOR_L, 50);
-				OnRev(MOTOR_R, 10);
-
+				OnRev(MOTOR_L, 20);
+				OnRev(MOTOR_R, 5);
+				
 			}
-			if (light_r < BLACKLINE && RightSensor)
+			if (light_r < (BLACKLINE-30) && RightSensor)
 			{
 				if(flagt){
 					FindLine = false;
 
-					OnRev(MOTOR_L, 80);
-					OnRev(MOTOR_R, 10);
+					OnRev(MOTOR_L, 20);
+					OnRev(MOTOR_R, 0);
+					Wait(40);
 				}
 				else{
 					flagt = true;
 					RightSensor = false;
+
+					OnRev(MOTOR_L, TURNBACKFwd_L);
+					OnRev(MOTOR_R, TURNBACKFwd_R);
+
 
 				}
 			}
@@ -337,9 +419,9 @@ int TurnBack(bool FindLine, int nxt_pos){
 
 		case 3: //Turn Left
 
-		OnRev(MOTOR_L, TURNBACK_R);
-		OnRev(MOTOR_R, TURNBACK_L);
-		Wait(10);
+		OnRev(MOTOR_L, TURNBACKLeft_L);
+		OnRev(MOTOR_R, TURNBACKLeft_R);
+		Wait(200);
 	
 		while(FindLine){
 
@@ -347,8 +429,8 @@ int TurnBack(bool FindLine, int nxt_pos){
 		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
 		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
 			
-		OnRev(MOTOR_L, TURNBACK_R);
-		OnRev(MOTOR_R, TURNBACK_L);
+		OnRev(MOTOR_L, TURNBACKLeft_L);
+		OnRev(MOTOR_R, TURNBACKLeft_R);
 
 			if (light_l > BLACKLINE && light_r < BLACKLINE)
 			{ 
@@ -357,13 +439,15 @@ int TurnBack(bool FindLine, int nxt_pos){
 				OnRev(MOTOR_L, 10);
 				OnRev(MOTOR_R, 50);
 
+
 			}
-			if (light_l < BLACKLINE && LeftSensor)
+			if (light_l < (BLACKLINE-30) && LeftSensor)
 			{
 				FindLine = false;
 
 				OnRev(MOTOR_L, 0);
-				OnRev(MOTOR_R, 0);
+				OnRev(MOTOR_R, 20);
+				Wait(40);
 			}
 		}
 		break;
@@ -401,7 +485,7 @@ task main()
     
 // Load circuit
 
-//	string circuit = "LFFb";
+	//string circuit = "rblbfbrblbfb";
 
 	string circuit = "rrffrffFFbrrfrRFFbRFbfLFFFbllLFFbllflflLFFbflfrfrLFblflflLFbrrRFFbflfLFbRFblLFFFbllLFFbllfrfrRFbllLFbflflLFblfrffflrfrRFFFFFbllLFFFbrrRFblffrfffrfrRFbllLFFFbllLFFb";
 	
@@ -420,75 +504,75 @@ task main()
 			switch(actualcase)
 			{
 			case 'F':	//Go straight
-				FollowLine(1);
+				FollowLine(1,0);
 				KeepGoing(1);
 			break;
 
 			case 'R': //Turn Right
-				FollowLine(1);
+				FollowLine(1,0);
 				TurnRight(1);
 			break;
 
 			case 'L': //Turn Left
-				FollowLine(1);
+				FollowLine(1,0);
 				TurnLeft(1);
 			break;
 
 			case 'B': //Back and Left
 				i++;
 				if(circuit[i] == 'L' || circuit[i] == 'l'){
-					FollowLine(1);
+					FollowLine(1,1);
 					TurnBack(1,1);
 				}
 				 //Back and forward
 				if(circuit[i] == 'F' || circuit[i] == 'f'){
-					FollowLine(1);
+					FollowLine(1,1);
 					TurnBack(1,2);
 				}
 				 //Back and right
 				if(circuit[i] == 'R' || circuit[i] == 'r'){
-					FollowLine(1);
+					FollowLine(1,1);
 					TurnBack(1,3);
 				}
 			break;
 
 			case 'f':	//Go straight
-				FollowLine(1);
+				FollowLine(1,0);
 				KeepGoing(1);
 			break;
 
 			case 'r': //Turn Right
-				FollowLine(1);
+				FollowLine(1,0);
 				TurnRight(1);
 			break;
 
 			case 'l': //Turn Left
-				FollowLine(1);
+				FollowLine(1,0);
 				TurnLeft(1);
 			break;
 
 			case 'b': //Back and Right
 				i++;
 				if(circuit[i] == 'L' || circuit[i] == 'l'){
-					FollowLine(1);
+					FollowLine(1,1);
 					TurnBack(1,1);
 				}
 				if(circuit[i] == 'F' || circuit[i] == 'f'){
-					FollowLine(1);
+					FollowLine(1,1);
 					TurnBack(1,2);
 				}
 				if(circuit[i] == 'R' || circuit[i] == 'r'){
-					FollowLine(1);
+					FollowLine(1,1);
 					TurnBack(1,3);
 				}
 				if(i >= length){
-					FollowLine(1);
+					FollowLine(1,1);
 					TurnBack(1,0);
 				}
 			break;
 		
 			default: //Go straight
-				FollowLine(1);
+				FollowLine(1,0);
 				KeepGoing(1);
 			break;
 			
