@@ -75,7 +75,7 @@ begin
             ispositive := '0';
         end if; 
         
-        Paction <= error*PGAIN;
+        Paction <= error;
     
         -- I action:
         IState <= IState+error;

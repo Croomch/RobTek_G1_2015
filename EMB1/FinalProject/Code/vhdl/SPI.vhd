@@ -65,7 +65,7 @@ SIGNAL data : STD_LOGIC_vector (7 downto 0) := "00000000";
 ---- Constants ----
 -- spi supports max of 10MHz
 -- scale down with factor 6 to get = 8.33MHz < 10MHz max
-CONSTANT CLK_SCALING : INTEGER := 12;
+CONSTANT CLK_SCALING : INTEGER := 10000;
 -- data msg info
 CONSTANT MSG_CS_START : INTEGER := 1;
 CONSTANT MSG_CS_END : INTEGER := 8;
