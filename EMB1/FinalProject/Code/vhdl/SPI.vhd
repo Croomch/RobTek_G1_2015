@@ -44,6 +44,7 @@ entity SPI is
            output_updated : out STD_LOGIC;
            
            getSample : in STD_LOGIC;
+           SPI_CONTROL : in STD_LOGIC_VECTOR (7 downto 0);
            SPI_MSG : in STD_LOGIC_VECTOR (7 downto 0)
            );
 end SPI;
@@ -56,6 +57,7 @@ SIGNAL CS : STD_LOGIC := '1';
 SIGNAL MOSI : STD_LOGIC := '1';
 -- to get val --
 SIGNAL CBS : STD_LOGIC_vector (7 downto 0) := "10100010";
+SIGNAL MSG : STD_LOGIC_vector (7 downto 0) := "00000000";
 -- data recieved 
 SIGNAL data : STD_LOGIC_vector (7 downto 0) := "00000000";
 
@@ -75,7 +77,8 @@ CONSTANT MSG_PERIOD : INTEGER := MSG_DATA_END+1;
 begin
 
 -- first bit is R/W and remaining 7 (AD) is data, R/W = 1 for read, 0 for write, AD = address or index register 
-CBS <= SPI_MSG;
+CBS <= SPI_CONTROL;
+MSG <= SPI_MSG;
 SPI_CS <= CS;
 SPI_MOSI <= MOSI;
 
@@ -137,6 +140,8 @@ begin
         elsif CLK_COUNT >= MSG_CS_START and CLK_COUNT <= MSG_CS_END then
             -- send the Control selection
             MOSI <= CBS((MSG_CS_END - MSG_CS_START) - (CLK_COUNT - MSG_CS_START));
+        elsif CLK_COUNT >= MSG_DATA_START and CLK_COUNT <= MSG_DATA_END then
+            MOSI <= MSG((MSG_DATA_END - MSG_DATA_START) - (CLK_COUNT - MSG_DATA_START));
         end if;
         -- put CS low to prep for next read 
         if CLK_COUNT = MSG_DATA_END then

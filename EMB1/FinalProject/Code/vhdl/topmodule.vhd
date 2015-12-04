@@ -56,7 +56,7 @@ end topmodule;
 architecture Behavioral of topmodule is
 ---- SIGNALS ----
 -- FSM states --
-TYPE state IS (send_data, get_au, get_al);
+TYPE state IS (init_spi, send_data, get_au, get_al);
 signal pr_state, nx_state : state;
 -- data signals
 signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
@@ -70,7 +70,8 @@ signal CLK_SLOW : STD_LOGIC := '0';
 signal spi_rx : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 signal spi_rx_sig : STD_LOGIC := '0';
 signal spi_tx_sig : STD_LOGIC := '0';
-signal spi_tx : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+signal spi_tx_ctl : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+signal spi_tx_msg : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 -- alive signal --
 signal ALIVE_LED : STD_LOGIC := '0';
 -- PID signals --
@@ -84,6 +85,9 @@ CONSTANT CLK_FREQ : INTEGER := 50000000;
 CONSTANT CLK_SCALING : INTEGER := 10; -- for the generation of clk signal for the motors
 CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
 -- for SPI communication
+-- set data
+CONSTANT SET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "00010000";
+CONSTANT SET_CTRL1_ON : STD_LOGIC_VECTOR(7 downto 0) := "10100000";
 -- ACC
 CONSTANT GET_ACCX_H : STD_LOGIC_VECTOR(7 downto 0) := "10101001";
 CONSTANT GET_ACCX_L : STD_LOGIC_VECTOR(7 downto 0) := "10101000";
@@ -153,6 +157,7 @@ COMPONENT SPI IS
            output_updated : out STD_LOGIC;
            
            getSample : in STD_LOGIC;
+           SPI_CONTROL : in STD_LOGIC_VECTOR (7 downto 0);
            SPI_MSG : in STD_LOGIC_VECTOR (7 downto 0)
             );
 END COMPONENT;
@@ -232,7 +237,8 @@ spi_c : SPI Port map (
     output => spi_rx,
     output_updated => spi_rx_sig,
     getSample => spi_tx_sig,
-    SPI_MSG => spi_tx
+    SPI_MSG => spi_tx_msg,
+    SPI_CONTROL => spi_tx_ctl
 );
 
 pid : component PID_controller 
@@ -261,16 +267,28 @@ end process;
 process(pr_state,spi_rx_sig) -- pr state and all other inputs
 begin
     CASE pr_state IS
+        WHEN init_spi =>
+            -- output --
+            spi_tx_ctl <= SET_CTRL1_XL;
+            spi_tx_msg <= SET_CTRL1_ON;
+            spi_tx_sig <= '1';
+            -- what is nx-state? 
+            if spi_rx_sig = '1' then -- wait for timer run out signal
+                actualAngle <= spi_rx;
+                nx_state <= send_data;
+            else -- stay in the state
+                nx_state <= init_spi;
+            end if;
         WHEN send_data =>
             -- output --
-            spi_tx <= GET_ACCX_H;
+            spi_tx_ctl <= GET_ACCX_H;
             spi_tx_sig <= '1';
             -- what is nx-state? 
             nx_state <= get_au;
         WHEN get_au =>
             -- output --
-            spi_tx <= GET_ACCX_H;
-            spi_tx_sig <= '1';
+            spi_tx_ctl <= GET_ACCX_H;
+            spi_tx_sig <= '0';
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 actualAngle <= spi_rx;
