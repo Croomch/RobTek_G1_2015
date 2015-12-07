@@ -4,15 +4,14 @@ The graph is used to store the possible route to the solution of the sokoban pro
 It consist of a set of nodes representing states in the solution.
 The nodes link to each other depending on the possible ways in which one state can be reached from another.
 
-A state in the Sokoban problem can be represented in many ways.
-In this implementation it was chosen to have a new state for each diamond push.
-The extra cost of going from one state to another is the number of steps the robot has to take in order to reach the new state.
-Thus it is giving the optimal solution in terms of robot moves.
-This implementation hence only stores the points of interest in the graph, that is the points where the diamonds move and where on the map the robot is standing after the move reducing the memory consumption of the program considerably.
-The diamond position and the position of the robot was stored as a set of coordinates on the map.
+This implementation specifies a new state to be for each diamond push with intermediate costs as the number of steps to take in order to reach it.
+Thus the algorithm returns the optimal solution in terms of the theoretical robot moves.
+This also reduces the memory consumption since how the robot reaches a state is not stored, but only the cost of doing so.
+%Since only points of interest are stored in the graph and not the redundant information of how the individual steps in between, reducing the memory consumption of the program considerably.
+The diamond position and the position of the robot is stored as a set of coordinates on the map in each node.
 
 %One of the necessary data elements in each node, apart from the cost, is the shortest path of executing the change of state in terms of moves in the directions north, south, east and west.
-Once the solution to the problem is found, the shortest path from the starting configuration to the goal is then computed.
+Once a solution to the problem is found, the shortest path from the starting configuration to the goal is then computed.
 This is implemented using a string with the characters N, S, E and W.
 Upper case was used to indicate that the move required a diamond push and lower case for movement without.
 
