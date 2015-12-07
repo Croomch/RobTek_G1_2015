@@ -90,7 +90,7 @@ CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
 -- set data
 CONSTANT SET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "00010000";
 CONSTANT GET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "10010000";
-CONSTANT SET_CTRL1_ON : STD_LOGIC_VECTOR(7 downto 0) := "10100000";
+CONSTANT SET_CTRL1_ON : STD_LOGIC_VECTOR(7 downto 0) := "10100101";
 CONSTANT GET_STATUS : STD_LOGIC_VECTOR(7 downto 0) := "10011110";
 -- ACC
 CONSTANT GET_ACCX_H : STD_LOGIC_VECTOR(7 downto 0) := "10101001";
@@ -316,7 +316,7 @@ begin
            end if;
         WHEN get_au =>
             -- output --
-            spi_tx_ctl <= GET_ACCX_H;
+            spi_tx_ctl <= SET_CTRL1_XL;
             spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
             -- what is nx-state? 

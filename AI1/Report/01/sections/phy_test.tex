@@ -1,6 +1,33 @@
 
 \subsection{Tests of the Robot Behaviours}
 In order to test the functionality of the behaviours implemented each can be tested individually.
+Nevertheless, a more robust way of testing the behaviours is combine them in certain test circuits that can be looped to check the reliability of these behaviours.
+By building a more complex circuit to test, the different behaviours can be tested in different ways so the position of the robot changes before each of them.
+
+This way, three different experiments have been executed:
+First, a test to check the robot is able to find, follow and get a good position on a line after right and left turning. 
+With this test we can test the follow line, and turning behaviours.
+The circuit used in this test was a "8", that means, the robot should turn left 4 times and then right 4 times in a row, 
+as shown in figure algo.
+
+The second test executed has looked at the ability of the robot to go back in a intersection and turn to different directions after finding the previous intersection.
+This test has been done running a circuit where the robot goes back, find the next intersection and goes back to the previous one. 
+Then the robot turns in different directions each time, checking the response of all of them in different cases, as these directions are mixed.
+
+Finally, a experiment with a can has been executed to test the robot hability to push and place correctly the can.
+In this experiment, the robot has to use all the different behaviours to move the can from one position to another and then to the original position again.
+
+Each of the three experiments have been executed starting with a full power battery and the circuit set for each one has been repeated 20 times in up to 10 trials without a battery change or charge.
+The time needed to complete the 20 laps has been measured for each trial.
+This allows us to determine too the fucionality and response of the robot in long runs.
+
+About the light sensors, they have been tested apart with a built structure to measure their response to different light levels and test the efectivity of shielding these sensors.
+The description of this experiment is attached in \_reftolightsensors.
+
+
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
 The position controller used in the line following algorithm can be tested by letting the robot drive along a line and record the error of the line sensors.
 The smaller it is able to hold the error, the better it is.
 Furthermore the line following can be tested with and without the tomato can to check the response when the robot has a load.
@@ -8,3 +35,8 @@ Furthermore the line following can be tested with and without the tomato can to 
 To test the turning behaviours the robot can be told to drive in a square and if it is able to maintain the same square, the turning function works.
 
 \todo[inline]{turning both ways? dropping a can after a push?}
+
+\subsubsection{Results}
+
+The results of the different behaviour experiments are shown in tables \ref{1} \ref{2} and \ref{3}.
+

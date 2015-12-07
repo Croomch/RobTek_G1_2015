@@ -78,7 +78,7 @@ begin
         end if; 
                 
        -- P action: 
-        Paction <= error;
+        Paction <= error * PGAIN;
     
         -- I action:
         IState <= IState+error;

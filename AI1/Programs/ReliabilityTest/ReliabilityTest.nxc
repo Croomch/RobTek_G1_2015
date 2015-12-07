@@ -1,0 +1,605 @@
+
+// motor defines
+#define MOTOR_L OUT_A
+#define MOTOR_R OUT_B
+#define MOTOR OUT_AB
+
+// light sensor defines
+#define SENSE_LIGHT_L IN_1
+#define SENSE_LIGHT_R IN_2
+#define SENSE_LIGHT_B IN_3
+
+
+// defines
+#define SPEED 65
+#define PUSHING_SPEED 40
+
+//#define PID_P 0.90
+//#define PID_I 0.001
+//#define PID_D 0.6
+
+#define PID_P 0.7	
+#define PID_I 0
+#define PID_D 0
+
+
+#define INTEGRAL_MAX 5000
+#define INTEGRAL_MIN -5000
+
+
+#define BLACKLINE 550
+#define CALIB_FACTOR 0
+#define TURNVAL_L 30
+#define TURNVAL_R -60
+#define TURNBACKRight_L 65
+#define TURNBACKRight_R -20
+#define TURNBACKLeft_L -20
+#define TURNBACKLeft_R 65
+#define TURNBACKFwd_L 50
+#define TURNBACKFwd_R -50
+
+
+int FollowLine(bool drive_straight, bool pushing)
+{	
+    float light_l, light_r;
+    float err_prev = 0, error = 0, ierr = 0, actP = 0, actI = 0, actD = 0;
+    float speed_followline;
+
+	if(pushing){
+		speed_followline = PUSHING_SPEED;
+	}
+	else{
+		speed_followline = SPEED;
+	}
+
+        float speed_l= speed_followline, speed_r = speed_followline;
+        OnRev(MOTOR_L, speed_l);
+        OnRev(MOTOR_R, speed_r);
+
+	while(drive_straight){
+        	ClearScreen();
+
+        	TextOut(0, LCD_LINE1, "3:|");
+
+        
+        	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        	light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+                
+        
+       if( light_l > BLACKLINE  && light_r > BLACKLINE ){
+            speed_l = 0;
+            speed_r = 0;
+            drive_straight = false;
+        }
+        else{
+
+            error = (light_l - light_r + CALIB_FACTOR); // offset from the line
+            
+	    actP = error * PID_P;
+	    
+            ierr = ierr+error;
+	    if(ierr>INTEGRAL_MAX){
+		ierr = INTEGRAL_MAX;
+	    }
+	    else{
+		if(ierr<INTEGRAL_MIN){
+		    ierr = INTEGRAL_MIN;		
+		}
+	    }
+	    
+            actI = ierr*PID_I;
+
+	    actD = (err_prev-error)*PID_D;
+	    err_prev = error;
+
+            if(error > 0){
+              TextOut(40, LCD_LINE1, "Left");
+            speed_l = speed_followline - (actP + actI + actD)/2;
+	    speed_r = speed_followline;
+            } 
+            else {
+               TextOut(40, LCD_LINE1, "Right");
+            speed_r = speed_followline + (actP + actI + actD)/2;
+	    speed_l = speed_followline;
+            }
+        
+
+
+
+        
+            if(speed_l < 0){
+                speed_l = 0;
+            }
+            if(speed_r < 0){
+                speed_r = 0;
+            }
+	    if(speed_l > 100){
+                speed_l = 100;
+            }
+            if(speed_r > 100){
+                speed_r = 100;
+            }
+	
+        }
+
+        OnRev(MOTOR_L, speed_l);
+        OnRev(MOTOR_R, speed_r);
+                
+    }
+
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//
+int KeepGoing(bool drive_straight)
+{	
+    float light_l, light_r, light_b;
+    float err_prev = 0, error = 0, ierr = 0, actP = 0, actI = 0, actD = 0;
+
+	while(drive_straight){
+        	ClearScreen();
+
+        	TextOut(0, LCD_LINE1, "3:|");
+
+        
+        	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        	light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
+                
+        	float speed_l, speed_r;
+        
+        if( light_b > BLACKLINE ){
+            drive_straight = false;
+        }
+        else{
+
+       error = (light_l - light_r + CALIB_FACTOR); // offset from the line
+            
+	    actP = error * PID_P;
+	    
+            ierr = ierr+error;
+	    if(ierr>INTEGRAL_MAX){
+		ierr = INTEGRAL_MAX;
+	    }
+	    else{
+		if(ierr<INTEGRAL_MIN){
+		    ierr = INTEGRAL_MIN;		
+		}
+	    }
+	    
+            actI = ierr*PID_I;
+
+	    actD = (err_prev-error)*PID_D;
+	    err_prev = error;
+
+            if(error > 0){
+              TextOut(40, LCD_LINE1, "Left");
+            speed_l = SPEED - (actP + actI + actD)/2;
+	    speed_r = SPEED;
+            } 
+            else {
+               TextOut(40, LCD_LINE1, "Right");
+            speed_r = SPEED + (actP + actI + actD)/2;
+	    speed_l = SPEED;
+            }
+        
+
+        
+            if(speed_l < 0){
+                speed_l = 0;
+            }
+            if(speed_r < 0){
+                speed_r = 0;
+            }
+	    if(speed_l > 100){
+                speed_l = 100;
+            }
+            if(speed_r > 100){
+                speed_r = 100;
+            }
+		
+        }
+
+        OnRev(MOTOR_L, speed_l);
+        OnRev(MOTOR_R, speed_r);
+                
+    }
+
+
+	return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//
+int TurnRight(bool FindLine){
+
+    float light_l, light_r;
+    float VelR, VelL;
+    bool RightSensor = false;
+	
+	VelR = TURNVAL_R;
+	VelL = TURNVAL_L;
+
+	KeepGoing(1);	
+
+	Wait(100);
+
+	OnRev(MOTOR_L, VelL);
+	OnRev(MOTOR_R, VelR);
+
+	Wait(400);
+	
+	while(FindLine){
+
+        	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        	light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+
+		if (light_r > BLACKLINE && light_l < BLACKLINE)
+		{ 
+			RightSensor = true;
+			OnRev(MOTOR_L, 50);
+			OnRev(MOTOR_R, 10);
+			
+
+		}
+		if (light_l >( BLACKLINE-40) && RightSensor)
+		{
+			FindLine = false;
+
+			OnRev(MOTOR_L, 20);
+			OnRev(MOTOR_R, 0);
+			//Wait(50);
+		}
+
+
+	}
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+int TurnLeft(bool FindLine){
+
+    float light_l, light_r;
+    float VelR, VelL;
+    bool LeftSensor = false;
+
+	VelR = TURNVAL_R;
+	VelL = TURNVAL_L;
+
+	KeepGoing(1);	
+
+	Wait(100);
+
+	
+	OnRev(MOTOR_L, VelR);
+	OnRev(MOTOR_R, VelL);
+
+	Wait(400);
+	
+	while(FindLine){
+
+        	light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+        	light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+
+		if (light_l > BLACKLINE && light_r < BLACKLINE)
+		{ 
+			LeftSensor = true;
+		
+			OnRev(MOTOR_L, 10);
+			OnRev(MOTOR_R, 50);
+
+		}
+		if (light_r > (BLACKLINE-40) && LeftSensor)
+		{
+			FindLine = false;
+
+			OnRev(MOTOR_L, 0);
+			OnRev(MOTOR_R, 20);
+			//Wait(50);
+		}
+
+
+	}
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+int TurnBack(bool FindLine, int nxt_pos){
+
+	float light_l, light_r, light_b;
+	bool LeftSensor, RightSensor, BackSensor, flagt;
+
+	LeftSensor = false;
+	RightSensor = false;
+	BackSensor = false;
+	flagt = false;
+
+	OnRev(MOTOR_L, -60);
+	OnRev(MOTOR_R, -60);
+
+	
+	while(!BackSensor){
+
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
+
+		if (light_b > BLACKLINE)
+		{
+			BackSensor = true;
+			OnRev(MOTOR_L, 0);
+			OnRev(MOTOR_R, 0);
+			
+		}
+	}
+	
+
+
+	switch(nxt_pos)
+	{
+	case 1:	//Turn Right
+		
+		OnRev(MOTOR_L, TURNBACKRight_L);
+		OnRev(MOTOR_R, TURNBACKRight_R);
+		Wait(200);
+	
+		while(FindLine){
+
+		light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
+
+		OnRev(MOTOR_L, TURNBACKRight_L);
+		OnRev(MOTOR_R, TURNBACKRight_R);
+
+			if (light_r > BLACKLINE && light_l < BLACKLINE)
+			{ 
+				RightSensor = true;
+		
+				OnRev(MOTOR_L, 50);
+				OnRev(MOTOR_R, 10);
+
+
+			}
+			if (light_r < (BLACKLINE-30) && RightSensor)
+			{
+				FindLine = false;
+
+				OnRev(MOTOR_L, 20);
+				OnRev(MOTOR_R, 0);
+				Wait(40);
+			}
+		}	
+		break;
+
+		case 2: //Turn all
+
+		KeepGoing(1);
+		OnRev(MOTOR_L, TURNBACKFwd_L);
+		OnRev(MOTOR_R, TURNBACKFwd_R);
+		Wait(200);
+	
+		while(FindLine){
+
+		
+		light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);	
+
+		/*
+		if(!flagt){
+			OnRev(MOTOR_L, TURNBACKFwd_L);
+			OnRev(MOTOR_R, TURNBACKFwd_R);
+		}else{
+			OnRev(MOTOR_L, TURNBACKFwd_L-20);
+			OnRev(MOTOR_R, TURNBACKFwd_R+20);
+		}*/
+
+			if (light_r > BLACKLINE && light_l < BLACKLINE)
+			{ 
+				RightSensor = true;
+		
+				OnRev(MOTOR_L, 20);
+				OnRev(MOTOR_R, 5);
+				
+			}
+			if (light_r < (BLACKLINE-30) && RightSensor)
+			{
+				if(flagt){
+					FindLine = false;
+
+					OnRev(MOTOR_L, 20);
+					OnRev(MOTOR_R, 0);
+					Wait(40);
+				}
+				else{
+					flagt = true;
+					RightSensor = false;
+
+					OnRev(MOTOR_L, TURNBACKFwd_L);
+					OnRev(MOTOR_R, TURNBACKFwd_R);
+
+
+				}
+			}
+		}
+		break;
+
+		case 3: //Turn Left
+
+		OnRev(MOTOR_L, TURNBACKLeft_L);
+		OnRev(MOTOR_R, TURNBACKLeft_R);
+		Wait(200);
+	
+		while(FindLine){
+
+		light_l = GetInput(SENSE_LIGHT_L,RawValueField);
+		light_r = GetInput(SENSE_LIGHT_R,RawValueField);
+		light_b = GetInput(SENSE_LIGHT_B,RawValueField);
+			
+		OnRev(MOTOR_L, TURNBACKLeft_L);
+		OnRev(MOTOR_R, TURNBACKLeft_R);
+
+			if (light_l > BLACKLINE && light_r < BLACKLINE)
+			{ 
+				LeftSensor = true;
+		
+				OnRev(MOTOR_L, 10);
+				OnRev(MOTOR_R, 50);
+
+
+			}
+			if (light_l < (BLACKLINE-30) && LeftSensor)
+			{
+				FindLine = false;
+
+				OnRev(MOTOR_L, 0);
+				OnRev(MOTOR_R, 20);
+				Wait(40);
+			}
+		}
+		break;
+	
+		default:
+			OnRev(MOTOR_L, 0);
+			OnRev(MOTOR_R, 0);
+
+		break;	
+		
+		}
+
+	
+	
+	return 0;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+task main()
+{
+	// set sensors
+	SetSensor(SENSE_LIGHT_L, SENSOR_LIGHT);
+	SetSensor(SENSE_LIGHT_R, SENSOR_LIGHT);	
+	SetSensor(SENSE_LIGHT_B, SENSOR_LIGHT);
+
+
+	SetSensorLight(SENSE_LIGHT_L);
+	SetSensorLight(SENSE_LIGHT_R);
+	SetSensorLight(SENSE_LIGHT_B);
+    
+// Load circuit
+
+	//Circuit to test right and left turning. 
+	string circuit = "rllllrrr";
+
+	//Circuit to test back behaviours.
+	//string circuit = "brbfblbrblbf";
+
+	//Circuit to test pushing a can
+	//string circuit = "lfbrrfrrfbllfl";
+
+	int length = StrLen(circuit);
+
+    	//Test 20 loops:
+    	for(int j = 0; j< 20; j++){
+    
+
+// Different test circuits
+
+		for(int i = 0; i < length; i++){
+
+		int actualcase = circuit[i];
+
+			switch(actualcase)
+			{
+			case 'F':	//Go straight
+				FollowLine(1,0);
+				KeepGoing(1);
+			break;
+
+			case 'R': //Turn Right
+				FollowLine(1,0);
+				TurnRight(1);
+			break;
+
+			case 'L': //Turn Left
+				FollowLine(1,0);
+				TurnLeft(1);
+			break;
+
+			case 'B': //Back and Left
+				i++;
+				if(circuit[i] == 'L' || circuit[i] == 'l'){
+					FollowLine(1,1);
+					TurnBack(1,1);
+				}
+				 //Back and forward
+				if(circuit[i] == 'F' || circuit[i] == 'f'){
+					FollowLine(1,1);
+					TurnBack(1,2);
+				}
+				 //Back and right
+				if(circuit[i] == 'R' || circuit[i] == 'r'){
+					FollowLine(1,1);
+					TurnBack(1,3);
+				}
+			break;
+
+			case 'f':	//Go straight
+				FollowLine(1,0);
+				KeepGoing(1);
+			break;
+
+			case 'r': //Turn Right
+				FollowLine(1,0);
+				TurnRight(1);
+			break;
+
+			case 'l': //Turn Left
+				FollowLine(1,0);
+				TurnLeft(1);
+			break;
+
+			case 'b': //Back and Right
+				i++;
+				if(circuit[i] == 'L' || circuit[i] == 'l'){
+					FollowLine(1,1);
+					TurnBack(1,1);
+				}
+				if(circuit[i] == 'F' || circuit[i] == 'f'){
+					FollowLine(1,1);
+					TurnBack(1,2);
+				}
+				if(circuit[i] == 'R' || circuit[i] == 'r'){
+					FollowLine(1,1);
+					TurnBack(1,3);
+				}
+				if(i >= length){
+					FollowLine(1,1);
+					TurnBack(1,0);
+				}
+			break;
+		
+			default: //Go straight
+				FollowLine(1,0);
+				KeepGoing(1);
+			break;
+			
+			}
+
+		} 
+
+}
+
+    Off(MOTOR);
+
+}
+
+

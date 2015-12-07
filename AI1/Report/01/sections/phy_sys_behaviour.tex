@@ -8,7 +8,7 @@ this is illustrated in figure \ref{fig:behaviourSystem}.
 \center
 \begin{tikzpicture}[node distance=1cm]
 %  behaviour box
-\node[rectangle,draw,minimum width=10cm, minimum height=4cm, dashed, name=behaviour_box]  at (0,0) {};
+\node[rectangle,draw,minimum width=11cm, minimum height=4cm, dashed, name=behaviour_box]  at (0,0) {};
 \node[name=behaviour] at (-3.7,1.5) {Behaviours};
 
 % Brain node 
@@ -18,15 +18,15 @@ this is illustrated in figure \ref{fig:behaviourSystem}.
 \node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=fwd] at (-3.6,0.3) {Fwd};
 \node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=left] at (-1.8,-0.5) {Left};
 \node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=right] at (0,-1.) {Right};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=turn] at (1.8,-0.5) {Turn};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=follow] at (3.6,0.3) {Follow};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=follow] at (1.8,-0.5) {Follow};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=back] at (3.6,0.4) {Push and back};
 
 % arrows inside 
 \draw[->] (brain) -- (fwd) ;
 \draw[->] (brain) -- (left) ;
 \draw[->] (brain) -- (right) ;
 \draw[->] (brain) -- (follow) ;
-\draw[->] (brain) -- (turn) ;
+\draw[->] (brain) -- (back) ;
 \end{tikzpicture}
 \caption{Overview of the systems behaviours.}
 \label{fig:behaviourSystem}
@@ -43,7 +43,7 @@ The behaviours are defined in table \ref{tab:behaviourExplained} and based on di
 Behaviour & Description \\ \hline
 Fwd & Makes the robot go straight ahead in the next intersection. \\
 Left / Right & The robot turns left/right in the next intersection. \\
-Turn & Turns the robot 180 degrees around in the next intersection. \\
+Push and back & The robot pushes the can to the next intersection and \\ & goes back to the previous one. \\
 Follow & Makes the robot follow the line till next intersection.
 \end{tabular}
 \caption{Behaviour table.}

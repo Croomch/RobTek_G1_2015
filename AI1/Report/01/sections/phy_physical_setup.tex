@@ -2,18 +2,47 @@
 The structure of the robot should allow the movement of the robot across the map. 
 That means, the robot should have at least two motors to move in the plane of the circuit and a minimum of two light sensors to check its position referred to the black lines of the map and check when the robot has arrived to a crossroad.
 
+\subsubsection{Motor configuration and control}
 The chosen motor configuration consist in the use of two motors that move two parallel wheels. 
 This allows the robot to change the direction of the movement setting a different motor speed on each motor.
 
+The motors used are have a operational rank of speed that can be set to a integer value between -100 and 100.
+This limits the grade of actuation of the motors and can add difficulty to the control design. 
+
+To follow the line, the robot should be able to turn, what means that the motors should be set to different speeds.
+These speeds are chosen with a P controller.
+This controller slows down the speed of one or another wheel in function of the perpendicular displacement of the sensors 
+over the line. 
+
+The reason to use only a P controller instead of a full PID is that a P controller is fast enough to find and follow 
+the line between intersections and it's sintonization is much more simple than a PID.
+Also adding integral action can be dangerous sometimes, as the error allowed is low and the overshoot of this action 
+can make the robot get lost.
+
+
+\subsubsection{Sensor configuration}
 \todo[inline]{support? using the 3rd line sensor.}
 
-Two light sensors are used as seen in figure \ref{fig:robotscheme}. 
+Three light sensors are used as seen in figure \ref{fig:robotscheme}. 
+Two of these sensors are used in the line following control and are placed in the front of the robot.
+The distance between them is of about \_\_\_\_\_\_.
+This gives to the controller a big actuation rank.
+
 In the position control, the value of the sensors are compared and the robot is controlled having in mind that the value of the sensors should be the same when the robot is centred above the line.
 When the value of both sensors are low, the robot is facing a crossroad.
 
-The position of the light sensors is in the front of the robot, and the distance between them should be enough to correctly detect the line. 
-This means the light sensors should be placed close to the edges of the line such that they both detect a part of the line.
-Because of that the distance between them should be around the width of the line itself as shown in figure \ref{fig:robotscheme}.
+As this sensors are in charge of finding the intersections, whey should be placed the closest possible to the front.
+This is because the distance of this sensors to the can gripper set the minimum displacement of the can from the center
+of the intersection when it is pushed.
+
+About the third sensor, it is placed in the back of the robot, just before the wheels.
+It is placed in a lateral in the robot and is used to detect the lines of the crossroads when going back and turning.
+
+This sensor is placed the closest possible to the wheel's axis, and far enough to the robot center so it is not affected
+for the followed line.
+
+\ref{fig:robotscheme}.
+
 
 \todo[inline]{sensor offset? variability? stability?}
 
@@ -25,15 +54,29 @@ Because of that the distance between them should be around the width of the line
 \end{figure}
 
 
+About the light levels in the room, it has been tested and proved that the sensors are highly sensitive to changes in 
+the ambient light levels, specially under sunlight exposure. 
+
+There are multiple options to solve this problem.
+For example, the intensity levels of white and black zones in the map can be set with a dinamic calibration, or set 
+before the race starts. 
+This can be enough in a closed room, or if the sun light is smooth enough to make small shadows but under incident sunlight
+on the sensors, the difference between a shadow and a black line is too close.
+The first solution chosen to solve this problem has been use a shield around the three sensors, so the ambient light 
+doesn't affect the measures.
+This has shown a good result working in the lab, and under sunlight in cloudy days, but was unable to work in sunny days,
+as the sensors were still afected for the sunlight intensity.
+To minimize the effect of the sun, a second shield has been placed covering the robot base, so the sensors are allways in
+shadows.
+This system has shown to be robust under all conditions.
+
+\subsubsection{Tool configuration}
+
 To be able to push and guide the can across the map, the robot should have a proper tool that allows this task. 
 The proposed design consist of two bars placed making an angle that allows the guide of the bottle when driving straight forward, as is shown in figure \ref{fig:robotscheme}.
 This configuration allows catching the can even when its position is displaced, making the robot's job more easy.
 
-Considering the rules of the game then the can is not permitted to be pushed left or right and because of that, no special design enabling this are required. 
-The turning back behaviour is more difficult. 
-%As the distance between the lines are short, the turn back should be done in a small place because the sensors should find the line before the crossroad.
-The distance between the line intersections are short and the turn back has to happen in free space without interacting with the nearby placed cans.
-At the same time, the robot should also finish the turn before reaching the new intersection, so the full length of the robot should be short enough to allow these movements.
+Considering the rules of the game then the can is not permitted to be pushed left or right and because of that, no special design enabling this are required.
 
 
 The final build of the robot is seen in figure \ref{fig:robotImage}.
