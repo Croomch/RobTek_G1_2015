@@ -497,13 +497,13 @@ task main()
 // Load circuit
 
 	//Circuit to test right and left turning. 
-	string circuit = "rllllrrr";
+	//string circuit = "rllllrrr";
 
 	//Circuit to test back behaviours.
 	//string circuit = "brbfblbrblbf";
 
 	//Circuit to test pushing a can
-	//string circuit = "lfbrrfrrfbllfl";
+	string circuit = "lfbrrfrrfbllfl";
 
 	int length = StrLen(circuit);
 

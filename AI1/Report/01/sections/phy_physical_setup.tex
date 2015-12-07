@@ -6,62 +6,32 @@ That means, the robot should have at least two motors to move in the plane of th
 The chosen motor configuration consist in the use of two motors that move two parallel wheels. 
 This allows the robot to change the direction of the movement setting a different motor speed on each motor.
 
-The motors used are have a operational rank of speed that can be set to a integer value between -100 and 100.
-This limits the grade of actuation of the motors and can add difficulty to the control design. 
-
 To follow the line, the robot should be able to turn, what means that the motors should be set to different speeds.
 These speeds are chosen with a P controller.
 This controller slows down the speed of one or another wheel in function of the perpendicular displacement of the sensors 
 over the line. 
 
-The reason to use only a P controller instead of a full PID is that a P controller is fast enough to find and follow 
-the line between intersections and it's sintonization is much more simple than a PID.
-Also adding integral action can be dangerous sometimes, as the error allowed is low and the overshoot of this action 
-can make the robot get lost.
-
 
 \subsubsection{Sensor configuration}
-\todo[inline]{support? using the 3rd line sensor.}
 
 Three light sensors are used as seen in figure \ref{fig:robotscheme}. 
 Two of these sensors are used in the line following control and are placed in the front of the robot.
-The distance between them is of about \_\_\_\_\_\_.
-This gives to the controller a big actuation rank.
+The distance between them is of 40mm, which is bigger than te line width.
+This gives to the controller a big actuation rank, as the distance between the sensors is bigger than the width of the line.
 
 In the position control, the value of the sensors are compared and the robot is controlled having in mind that the value of the sensors should be the same when the robot is centred above the line.
 When the value of both sensors are low, the robot is facing a crossroad.
 
-As this sensors are in charge of finding the intersections, whey should be placed the closest possible to the front.
-This is because the distance of this sensors to the can gripper set the minimum displacement of the can from the center
-of the intersection when it is pushed.
 
 About the third sensor, it is placed in the back of the robot, just before the wheels.
-It is placed in a lateral in the robot and is used to detect the lines of the crossroads when going back and turning.
+It is used to detect the lines of the crossroads when going back and turning.
 
 This sensor is placed the closest possible to the wheel's axis, and far enough to the robot center so it is not affected
 for the followed line.
 
-\ref{fig:robotscheme}.
-
-
-\todo[inline]{sensor offset? variability? stability?}
-
-\begin{figure}[H]
-\includegraphics[width=10cm]{Fig2.png}
-\centering
-\caption{Scheme of the proposed configuration.}
-\label{fig:robotscheme}
-\end{figure}
-
-
 About the light levels in the room, it has been tested and proved that the sensors are highly sensitive to changes in 
 the ambient light levels, specially under sunlight exposure. 
 
-There are multiple options to solve this problem.
-For example, the intensity levels of white and black zones in the map can be set with a dinamic calibration, or set 
-before the race starts. 
-This can be enough in a closed room, or if the sun light is smooth enough to make small shadows but under incident sunlight
-on the sensors, the difference between a shadow and a black line is too close.
 The first solution chosen to solve this problem has been use a shield around the three sensors, so the ambient light 
 doesn't affect the measures.
 This has shown a good result working in the lab, and under sunlight in cloudy days, but was unable to work in sunny days,
@@ -69,6 +39,8 @@ as the sensors were still afected for the sunlight intensity.
 To minimize the effect of the sun, a second shield has been placed covering the robot base, so the sensors are allways in
 shadows.
 This system has shown to be robust under all conditions.
+
+
 
 \subsubsection{Tool configuration}
 
@@ -87,3 +59,4 @@ The final build of the robot is seen in figure \ref{fig:robotImage}.
 \caption{Images of the built robot.}
 \label{fig:robotImage}
 \end{figure}
+
