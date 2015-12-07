@@ -1,10 +1,9 @@
 
-In order for the sokoban robot to solve the sokoban problem, an algorithm capable of solving the problem of sokoban is required.
+In order for the robot to solve the sokoban problem, an algorithm capable of solving the problem of sokoban is required.
 This algorithm is made in C++ and made to run on a computer offline.
 The route the robot then has to take is afterwards downloaded to the robot for execution.
 
 The software implementation takes basis in the A* algorithm.
-For this to work, a graph structure is created and this is explained first in this section. 
-After which the heuristics calculation used is considered and how the nodes are validated in the design such that the program does not create loops.
-Finally how the computer generates a string of characters for the robot to understand is explained.
-Such that the robot is capable of following the route found by the solver.
+For this to work, a graph structure is created as explained first. 
+Thereafter a heuristic is found and how the nodes are validated in the design such that the program does not create loops.
+Finally how the solution is converted into a set of commands for the robot to execute is explained.

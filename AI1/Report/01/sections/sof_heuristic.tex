@@ -1,17 +1,18 @@
 \subsection{Heuristics Calculation}
-In order to boost the algorithms performance a heuristic is used to make it an A* algorithm.
-In order to have a valid A* algorithm, this heuristic should be equal to or less than the actual cost to reach the goal.
-This would then ensure that the shortest path, in terms of robot moves, is found as the first path by the algorithm.
+%In order to boost the algorithms performance a heuristic is used to make it an A* algorithm.
+In order to have a valid A* algorithm, a admissible heuristic is needed.
+This would then ensure that the shortest path is found as the first path by the algorithm.
 
 A good heuristic is a heuristic that comes as close to the actual distance to the goal as possible.
-A heuristic should hence be found to estimate the cost as accurately as possible, but without taking to much computational effort, since it has to be executed for every node created.
+It should hence be able to estimate the cost as accurately as possible, but without taking to much computation time, since it will be executed for every node created.
 
 The Manhattan distance is a fairly obvious chose for a heuristic when regarded that the robot is only 4-connected.
 The disadvantage of using this algorithm is, however, that it does not take the obstacles into account when calculated.
 This gives a heuristic which is in many cases much smaller than the actual cost to reach the goal.
 A cost taking the walls into account was therefore devised.
 Instead of taking the Manhattan distance from every object to the nearest goal on the map, the path from every possible spot on the map to the nearest goal can be precomputed taking the walls into account.
-The distance from a point in the 2D space to the nearest goal is then stored in a map such that the cost of bringing every diamond the nearest goal is found in constant time.
+The distance from a point in the 2D space to the nearest goal is then stored in a map.
+Hence the cost of bringing every diamond to the nearest goal is found in constant time.
 In order to find this cost a map is used where only the goals and walls are indicated.
 A wavefront originating in all the goals is then spread out across the map simultaneously such that all the reachable positions on the map are assigned their respective cost.
 The result of such a process is seen in figure \ref{fig:orig_testmap} and \ref{fig:orig_costmap} where they are the original (empty) map and the updated map with the cost for every position in the map respectively.
@@ -56,6 +57,6 @@ X & X & X & X & X & X & X & X \\
 \caption{Result of using the proposed heuristic calculations on a given map.}
 \end{table}
 
-This method will hence always give a heuristic which is equal to or larger than the Manhattan distance method and is hence a better and more accurate heuristic.
+This method will always give a value which is equal to or greater than the Manhattan distance and it is hence a better heuristic.
 It is however a method that does not take into account that the robot also needs to move in between the diamonds to push them in place.
 The method does also not take into account that the diamonds must stand on each there own goal and that the diamonds on the map obstructs the path of the remaining diamonds.
