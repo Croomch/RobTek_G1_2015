@@ -281,8 +281,8 @@ begin
     CASE pr_state IS
         WHEN init_spi =>
             -- output --
-            spi_tx_ctl <= GET_STATUS;
-            spi_tx_msg <= "00000000";
+            spi_tx_ctl <= SET_CTRL1_XL;
+            spi_tx_msg <= SET_CTRL1_ON;
             spi_tx_sig <= '1';
             -- what is nx-state?
             if spi_rx_sig = '1' then -- wait for timer run out signal
@@ -308,7 +308,7 @@ begin
            --     nx_state <= get_au;
            -- end if;
            if spi_rx_sig = '1' then -- wait for timer run out signal
-                actualAngle <= spi_rx;
+                --actualAngle <= spi_rx;
                 spi_tx_sig <= '1';
                 nx_state <= get_au;
            else -- stay in the state
@@ -316,12 +316,12 @@ begin
            end if;
         WHEN get_au =>
             -- output --
-            spi_tx_ctl <= SET_CTRL1_XL;
+            spi_tx_ctl <= GET_CTRL1_XL;
             spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
-                actualAngle <= spi_rx;
+                --actualAngle <= spi_rx;
                 spi_tx_sig <= '1';
                 nx_state <= init_spi;
             else -- stay in the state

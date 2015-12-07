@@ -61,9 +61,9 @@ process(CLK)
 variable scaler : integer range 0 to 255 := 1;
 begin
     if rising_edge(CLK) then
-        if ACTIVE = '0' then
+        if ACTIVE = '1' then
             scaler := scaler + 1;
-            if scaler > 255 then
+            if scaler >= 255 then
                 scaler := 1;
             end if;
             if scaler > comp then 
