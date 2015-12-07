@@ -80,7 +80,8 @@ signal ALIVE_LED : STD_LOGIC := '0';
 signal MotorDuty : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
 signal actualAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
-
+-- TosNet
+signal data_Bluetooth : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
 
 ---- CONSTANTS ----
 CONSTANT CLK_FREQ : INTEGER := 50000000;
@@ -88,6 +89,7 @@ CONSTANT CLK_SCALING : INTEGER := 10; -- for the generation of clk signal for th
 CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
 -- for SPI communication
 -- set data
+CONSTANT GET_CTRL9_XL : STD_LOGIC_VECTOR(7 downto 0) := "10011001";
 CONSTANT SET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "00010000";
 CONSTANT GET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "10010000";
 CONSTANT SET_CTRL1_ON : STD_LOGIC_VECTOR(7 downto 0) := "10100101";
@@ -288,11 +290,11 @@ begin
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 --nx_state <= send_data;
                 spi_tx_sig <= '1';
-                if spi_rx(0) = '1' then -- if new data ready on accelerometer
-                    nx_state <= send_data;
-                else
-                    nx_state <= init_spi;
-                end if;
+            --    if spi_rx(0) = '1' then -- if new data ready on accelerometer
+                    nx_state <= get_au;
+            --    else
+            --        nx_state <= init_spi;
+            --    end if;
             else -- stay in the state
                 nx_state <= init_spi;
             end if;
@@ -314,26 +316,34 @@ begin
            else -- stay in the state
                 nx_state <= send_data;
            end if;
-        WHEN get_au =>
+        WHEN get_au => 
             -- output --
-            spi_tx_ctl <= GET_CTRL1_XL;
+            spi_tx_ctl <= GET_CTRL9_XL;
             spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 --actualAngle <= spi_rx;
                 spi_tx_sig <= '1';
-                nx_state <= init_spi;
+                nx_state <= send_data;
             else -- stay in the state
                 nx_state <= get_au;
             end if;
         WHEN get_al =>
 --            -- output --
+            spi_tx_ctl <= data_Bluetooth(15 downto 8);
+            spi_tx_msg <= data_Bluetooth(7 downto 0);
+            spi_tx_sig <= '1';
 --            -- what is nx-state? 
+            if spi_rx_sig = '1';
+                spi_tx_sig <= '1';
+                nx_state <= send_data;
+            else
+                nx_state <= get_al;
+            end if;
 --            if spi_rx_sig = '1' then -- wait for timer run out signal
 --                nx_state <= send_data, get_au, get_al;
 --            else -- stay in the state
-                nx_state <= send_data;
 --            end if;
     END CASE; 
 end process;
@@ -412,7 +422,7 @@ end process;
   begin -- process
     if (CLK'event and CLK='1' and T_data_from_mem_latch='1') then
 	   case (T_reg_ptr & T_word_ptr) is                        -- The addresses are concatenated for compact code
---		  when "00000" => period    <= T_data_from_mem;               -- Register 0, word 0 - all 32 bits
+		  when "00000" => data_Bluetooth <= T_data_from_mem;               -- Register 0, word 0 - all 32 bits
 --		  when "00001" => pwm_value <= T_data_from_mem(15 downto 0);  -- Register 0, word 1 - low 16 bits
 --		                  flash     <= T_data_from_mem(31 downto 24); --                      high 8 bits
 --		  when "00100" => v_leds    <= T_data_from_mem;               -- Register 1, word 0 - all 32 bits
