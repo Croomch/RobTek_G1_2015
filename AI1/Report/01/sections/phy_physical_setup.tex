@@ -14,14 +14,13 @@ over the line.
 
 \subsubsection{Sensor configuration}
 
-Three light sensors are used as seen in figure \ref{fig:robotscheme}. 
+Three light sensors are used in this configuration. 
 Two of these sensors are used in the line following control and are placed in the front of the robot.
 The distance between them is of 40mm, which is bigger than te line width.
 This gives to the controller a big actuation rank, as the distance between the sensors is bigger than the width of the line.
 
-In the position control, the value of the sensors are compared and the robot is controlled having in mind that the value of the sensors should be the same when the robot is centred above the line.
+In the position control, the value of the sensors are compared, knowing that this value should be the same when the robot is centred above the line.
 When the value of both sensors are low, the robot is facing a crossroad.
-
 
 About the third sensor, it is placed in the back of the robot, just before the wheels.
 It is used to detect the lines of the crossroads when going back and turning.
@@ -38,7 +37,7 @@ This has shown a good result working in the lab, and under sunlight in cloudy da
 as the sensors were still afected for the sunlight intensity.
 To minimize the effect of the sun, a second shield has been placed covering the robot base, so the sensors are allways in
 shadows.
-This system has shown to be robust under all conditions.
+This system has shown good results under all conditions.
 
 
 

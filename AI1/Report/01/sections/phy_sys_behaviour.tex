@@ -8,16 +8,16 @@ this is illustrated in figure \ref{fig:behaviourSystem}.
 \center
 \begin{tikzpicture}[node distance=1cm]
 %  behaviour box
-\node[rectangle,draw,minimum width=11cm, minimum height=4cm, dashed, name=behaviour_box]  at (0,0) {};
-\node[name=behaviour] at (-3.7,1.5) {Behaviours};
+\node[rectangle,draw,minimum width=11cm, minimum height=3cm, dashed, name=behaviour_box]  at (0,0) {};
+\node[name=behaviour] at (-3.7,1.2) {Behaviours};
 
 % Brain node 
-\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=brain, above=of behaviour_box] {Brain};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=brain, above=of behaviour_box] at (0,0.6) {Brain};
 
 % behaviours
 \node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=fwd] at (-3.6,0.3) {Fwd};
 \node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=left] at (-1.8,-0.5) {Left};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=right] at (0,-1.) {Right};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=right] at (0,-0.5) {Right};
 \node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=follow] at (1.8,-0.5) {Follow};
 \node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=back] at (3.6,0.4) {Push and back};
 
@@ -35,8 +35,7 @@ this is illustrated in figure \ref{fig:behaviourSystem}.
 Here the central unit, the \textit{Brain} is responsible for finding the solution to the sokoban problem by invoking the five behaviours.
 The \textit{Brain} is hence a combination of both the computer processing the map offline and the Lego-robot online when using the offline generated data to solve the puzzle.
 
-The behaviours are defined in table \ref{tab:behaviourExplained} and based on dividing the behaviours into simple tasks which are easy to program.
-
+The behaviours are defined in table \ref{tab:behaviourExplained}.
 \begin{table}[H]
 \center
 \begin{tabular}{c|l}
