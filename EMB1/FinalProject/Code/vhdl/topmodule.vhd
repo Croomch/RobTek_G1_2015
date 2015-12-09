@@ -80,6 +80,7 @@ signal ALIVE_LED : STD_LOGIC := '0';
 signal MotorDuty : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
 signal actualAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
+CONSTANT DutyTest : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
 -- TosNet
 signal data_Bluetooth : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
 
@@ -198,13 +199,13 @@ Port map (
 -- init the components needed
 MOTOR_CONTROL(0) <= ACTIVE_L_FWD;
 MOTOR_CONTROL(1) <= ACTIVE_R_FWD;
-MOTOR_CONTROL(2) <= ACTIVE_L_BACK;
-MOTOR_CONTROL(3) <= ACTIVE_R_BACK;
+MOTOR_CONTROL(4) <= ACTIVE_L_BACK;
+MOTOR_CONTROL(5) <= ACTIVE_R_BACK;
 
-MOTOR_CONTROL(4) <= HIGH_L_FWD_PWM;
-MOTOR_CONTROL(5) <= HIGH_L_BACK_PWM;
-MOTOR_CONTROL(6) <= HIGH_R_FWD_PWM;
-MOTOR_CONTROL(7) <= HIGH_R_BACK_PWM;
+MOTOR_CONTROL(2) <= HIGH_L_FWD_PWM;
+MOTOR_CONTROL(3) <= HIGH_R_FWD_PWM;
+MOTOR_CONTROL(6) <= HIGH_L_BACK_PWM;
+ MOTOR_CONTROL(7) <= HIGH_R_BACK_PWM;
 
 L_F : motorcontrol Port map (
     CLK => CLK_SLOW,
@@ -318,9 +319,10 @@ begin
            end if;
         WHEN get_au => 
             -- output --
-            spi_tx_ctl <= GET_CTRL9_XL;
+            spi_tx_ctl <= GET_ACCY_H;
             spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
+            actualAngle <= spi_rx;
             -- what is nx-state? 
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 --actualAngle <= spi_rx;
@@ -331,16 +333,16 @@ begin
             end if;
         WHEN get_al =>
 --            -- output --
-            spi_tx_ctl <= data_Bluetooth(15 downto 8);
-            spi_tx_msg <= data_Bluetooth(7 downto 0);
-            spi_tx_sig <= '1';
+            --spi_tx_ctl <= data_Bluetooth(15 downto 8);
+            --spi_tx_msg <= data_Bluetooth(7 downto 0);
+            --spi_tx_sig <= '1';
 --            -- what is nx-state? 
-            if spi_rx_sig = '1';
-                spi_tx_sig <= '1';
-                nx_state <= send_data;
-            else
-                nx_state <= get_al;
-            end if;
+            --if spi_rx_sig = '1';
+            --    spi_tx_sig <= '1';
+            --    nx_state <= send_data;
+            --else
+                nx_state <= get_au;
+            --end if
 --            if spi_rx_sig = '1' then -- wait for timer run out signal
 --                nx_state <= send_data, get_au, get_al;
 --            else -- stay in the state
@@ -369,6 +371,7 @@ end process;
 --actualAngle <= spi_rx;
 
 process(CLK)
+
 begin 
     if rising_edge(CLK) then
         if MotorDuty(8) = '0' then
@@ -379,7 +382,7 @@ begin
             ACTIVE_R_FWD <= '1';
 
             L_FWD <= MotorDuty(7 downto 0);
-            R_FWD <= MotorDuty(7 downto 0);
+           R_FWD <= MotorDuty(7 downto 0);
         else 
                 
             TESTLED <= '1';
@@ -387,8 +390,8 @@ begin
             ACTIVE_R_FWD <= '0';
             ACTIVE_L_BACK <= '1';
             ACTIVE_R_BACK <= '1';
-            L_BACK <= MotorDuty(7 downto 0);
-            R_BACK <= MotorDuty(7 downto 0);
+            L_BACK <= DutyTest(7 downto 0);
+            R_BACK <= DutyTest(7 downto 0);
         end if;
     end if;
             
