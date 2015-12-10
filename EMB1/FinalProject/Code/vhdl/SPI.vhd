@@ -21,6 +21,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.numeric_std.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -97,45 +99,51 @@ SPI_MOSI <= MOSI;
 -- Z_L X2C, Z_H X2D
 
 
--- actual data part --
-process(CLK_SPI, CLK)
-variable CLK_COUNT : integer range 0 to MSG_PERIOD+1 := MSG_PERIOD;
+-- notify arrival of data
+process(CLK)
 -- var to make sure you only pulse once
 variable pulsed : boolean := false;
 begin
-    if rising_edge(CLK) then 
-        output_updated <= '0';
-        -- signal new message 
-        if CLK_COUNT = MSG_PERIOD AND pulsed = false then
-            pulsed := true;
-            output_updated <= '1';
-        elsif  CLK_COUNT = 1 then
-            pulsed := false;           
-        end if;
+if rising_edge(CLK) then 
+    -- signal new message 
+    if CS = '1' and pulsed = false then
+        pulsed := true;
+        output_updated <= '1';
+    elsif  CS = '0' then
+        pulsed := false;
+        output_updated <= '0';           
     end if;
+end if;
+end process;
+
+-- actual data part --
+process(CLK_SPI)
+variable CLK_COUNT : integer range 0 to MSG_PERIOD+1 := MSG_PERIOD;
+begin
     if rising_edge(CLK_SPI) then
         -- increment counter --
         if CLK_COUNT <= MSG_PERIOD then 
             CLK_COUNT := CLK_COUNT + 1;
+        elsif CLK_COUNT > MSG_PERIOD and getSample = '1' then
+            CLK_COUNT := 0;
+        else
+            CLK_COUNT := MSG_PERIOD+1;             
         end if;
         -- put data on bus
-        if CLK_COUNT = MSG_DATAR_END+1 then
-            output <= data;
-        end if;
-        if CLK_COUNT > MSG_PERIOD and getSample = '1' then
-            CLK_COUNT := 0;            
-        end if;
-        if CLK_COUNT = 0 then
-            -- drive CS low to initiate communication  
+        
+        if CLK_COUNT >= MSG_CS_START and CLK_COUNT <= MSG_DATAR_END then
+        -- put CS low to prep for next read
             CS <= '0';
-        elsif CLK_COUNT = MSG_PERIOD then
-            -- put CS low to prep for next read
+        else
             CS <= '1';
         end if; 
         -- process the msg --
         if CLK_COUNT >= MSG_DATAR_START and CLK_COUNT <= MSG_DATAR_END then
             -- recieve the data
             data <= data(6 downto 0) & SPI_MISO;
+        end if;
+        if CLK_COUNT = MSG_DATAR_END + 1 then
+            output <= data;
         end if;
     end if;
     if falling_edge(CLK_SPI) then

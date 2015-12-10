@@ -21,8 +21,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.numeric_std.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -64,7 +64,7 @@ signal pr_data, nx_data : state_data;
 -- data signals
 signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
 -- reinitiate signal
-signal reinitiate : STD_LOGIC := '0';
+signal pr_reinitiate, nx_reinitiate: STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 -- signals for PWM
 signal L_FWD, L_BACK, R_FWD, R_BACK : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 signal HIGH_L_FWD_PWM, HIGH_L_BACK_PWM, HIGH_R_FWD_PWM, HIGH_R_BACK_PWM : STD_LOGIC := '0';
@@ -265,25 +265,18 @@ pid : component PID_controller
 -------------------
 -- lower FSM - flip-flop part, optn. add reset?! --
 process(CLK)
-variable rst_count : integer range 0 to CLK_SCALING + 1000 := 0;
 begin
     if rising_edge(CLK) then -- update the state regularly
         pr_state <= nx_state;
         pr_data <= nx_data;
-        rst_count := rst_count + 1;
-        reinitiate <= '0';
-        if rst_count > CLK_SCALING then
-            reinitiate <= '1';
-        elsif rst_count  >= CLK_SCALING + 1000 then
-            rst_count := 0;
-        end if;
+        pr_reinitiate <= nx_reinitiate;
     end if;
 end process;
 
 -- upper FSM, could be concurrent code too - no flip-flops allowed --
 -- see state diagram for the design
 -- jump to init state once in a while to ensuree that communication is up and running
-process(pr_state, spi_rx_sig, pr_data) -- pr state and all other inputs
+process(pr_state, spi_rx_sig, pr_data)--, pr_reinitiate) -- pr state and all other inputs
 begin
     CASE pr_state IS
         WHEN init_spi =>
@@ -309,8 +302,9 @@ begin
             spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
             -- what is nx-state? 
-            if reinitiate = '1' then
-                nx_state <= init_spi;              
+            if pr_reinitiate = "11111111" then
+                nx_state <= init_spi;
+                nx_reinitiate <= "00000000";              
             else
                 nx_state <= get_data;
             end if;
@@ -320,8 +314,8 @@ begin
             -- inner state to change what data to read
             CASE pr_data IS
             WHEN get_acc_x =>
-                spi_tx_ctl <= GET_ACCX_H;
-                spi_tx_msg <= "00000000";
+                spi_tx_ctl <= SET_CTRL1_XL;
+                spi_tx_msg <= SET_CTRL1_ON;
 
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_y;
@@ -329,7 +323,7 @@ begin
                     nx_data <= get_acc_x;
                 end if;
             WHEN get_acc_y =>
-                spi_tx_ctl <= GET_ACCY_H;
+                spi_tx_ctl <= GET_ACCX_H;
                 spi_tx_msg <= "00000000";
 
                 if spi_rx_sig = '1' then -- wait for timer run out signal
@@ -351,6 +345,7 @@ begin
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 actualAngle <= spi_rx;
                 nx_state <= control;
+                nx_reinitiate <= pr_reinitiate + 1;
             else -- stay in the state
                 nx_state <= get_data;
             end if;
