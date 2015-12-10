@@ -69,10 +69,12 @@ CONSTANT CLK_SCALING : INTEGER := 100;
 -- data msg info
 CONSTANT MSG_CS_START : INTEGER := 0;
 CONSTANT MSG_CS_END : INTEGER := 7;
-CONSTANT MSG_DATA_START : INTEGER := 8;
-CONSTANT MSG_DATA_END : INTEGER := 16;
+CONSTANT MSG_DATAW_START : INTEGER := 8; -- write
+CONSTANT MSG_DATAW_END : INTEGER := 15;
+CONSTANT MSG_DATAR_START : INTEGER := 9; -- read
+CONSTANT MSG_DATAR_END : INTEGER := 16;
 -- how often restart to sample --
-CONSTANT MSG_PERIOD : INTEGER := MSG_DATA_END+1;
+CONSTANT MSG_PERIOD : INTEGER := 17;
 
 begin
 
@@ -97,14 +99,14 @@ SPI_MOSI <= MOSI;
 
 -- actual data part --
 process(CLK_SPI, CLK, getSample)
-variable CLK_COUNT : integer range 0 to MSG_PERIOD := MSG_PERIOD;
+variable CLK_COUNT : integer range 0 to MSG_PERIOD+1 := MSG_PERIOD;
 -- var to make sure you only pulse once
 variable pulsed : boolean := false;
 begin
     if rising_edge(CLK) then 
         output_updated <= '0';
         -- signal new message 
-        if CLK_COUNT = MSG_DATA_END AND pulsed = false then
+        if CLK_COUNT = MSG_PERIOD AND pulsed = false then
             pulsed := true;
             output_updated <= '1';
         elsif  CLK_COUNT = 1 then
@@ -117,7 +119,7 @@ begin
             CLK_COUNT := CLK_COUNT + 1;
         end if;
         -- put data on bus
-        if CLK_COUNT = MSG_DATA_END+1 then
+        if CLK_COUNT = MSG_DATAR_END+1 then
             output <= data;
         end if;
         if CLK_COUNT > MSG_PERIOD and getSample = '1' then
@@ -131,7 +133,7 @@ begin
             CS <= '1';
         end if; 
         -- process the msg --
-        if CLK_COUNT >= MSG_DATA_START and CLK_COUNT <= MSG_DATA_END then
+        if CLK_COUNT >= MSG_DATAR_START and CLK_COUNT <= MSG_DATAR_END then
             -- recieve the data
             data <= data(6 downto 0) & SPI_MISO;
         end if;
@@ -141,8 +143,8 @@ begin
         if CLK_COUNT >= MSG_CS_START and CLK_COUNT <= MSG_CS_END then
             -- send the Control selection
             MOSI <= CBS((MSG_CS_END - MSG_CS_START) - (CLK_COUNT - MSG_CS_START));
-        elsif CLK_COUNT >= MSG_DATA_START and CLK_COUNT <= MSG_DATA_END then
-            MOSI <= MSG((MSG_DATA_END - MSG_DATA_START) - (CLK_COUNT - MSG_DATA_START));
+        elsif CLK_COUNT >= MSG_DATAW_START and CLK_COUNT <= MSG_DATAW_END then
+            MOSI <= MSG((MSG_DATAW_END - MSG_DATAW_START) - (CLK_COUNT - MSG_DATAW_START));
         end if;
     end if;
 end process;
