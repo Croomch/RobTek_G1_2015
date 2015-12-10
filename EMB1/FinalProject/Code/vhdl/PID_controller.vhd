@@ -21,7 +21,6 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- Uncomment the following library declaration if using
@@ -44,40 +43,40 @@ end PID_controller;
 
 architecture Behavioral of PID_controller is
 
-    signal Paction, Iaction, Daction : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    signal Paction, Iaction, Daction : integer range 0 to 2048 := 0;
     signal IState : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     signal PreviousError : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     
-    constant PGAIN : STD_LOGIC_VECTOR := "00000001";
-    constant IGAIN : STD_LOGIC_VECTOR := "00000000";
-    constant DGAIN : STD_LOGIC_VECTOR := "00000000";
+    constant PGAIN : integer := 1;
+    constant IGAIN : integer := 0;
+    constant DGAIN : integer := 0;
     
-    constant IactionMAX : STD_LOGIC_VECTOR(7 downto 0) := "11111111";
-    constant IactionMIN : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    constant IactionMAX : integer := 512;
+    constant IactionMIN : integer := 0;
     
 
 begin
 
 process(CLK)  
-    variable Error : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    variable Error : integer range 0 to 2048  := 0;
     variable ispositive : STD_LOGIC := '0';
-    variable TotalAction : STD_LOGIC_VECTOR(9 downto 0) := "0000000000";
-    variable inclination : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    variable TotalAction : integer range 0 to 2048 := 0;
+    variable inclination : integer range 0 to 2048 := 0;
 begin  
     -- PID Control.
     if rising_edge(CLK) then
                
         if errorAngle >= DesiredAngle then
-            Error := errorAngle-DesiredAngle;
+            Error := to_integer(unsigned(errorAngle-DesiredAngle));
             ispositive := '1';
         else
-            Error := DesiredAngle-errorAngle;
+            Error := to_integer(unsigned(DesiredAngle-errorAngle;
             ispositive := '0';
         end if; 
                 
-       -- P action: 
+        -- P action: 
         Paction <= error * PGAIN;
-    
+           
         -- I action:
         IState <= IState+error;
         Iaction <= IState * IGAIN;
@@ -98,12 +97,13 @@ begin
             TotalAction := Paction+Daction-Iaction;
         end if;
         
-        if TotalAction >= "0011111111" then
-            TotalAction := "0011111111";
+        if TotalAction >= 2047 then
+            TotalAction := 2047;
         end if;
         
         --Convert Action into 8 bits
-        MotorOutput <= ispositive & TotalAction(7 downto 0); 
+        
+        MotorOutput <= ispositive & std_logic_vector(to_unsigned(TotalAction, 10))(9 downto 3); 
         
     end if;
 
