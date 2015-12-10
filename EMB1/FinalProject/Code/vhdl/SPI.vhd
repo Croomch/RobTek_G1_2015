@@ -98,7 +98,7 @@ SPI_MOSI <= MOSI;
 
 
 -- actual data part --
-process(CLK_SPI, CLK, getSample)
+process(CLK_SPI, CLK)
 variable CLK_COUNT : integer range 0 to MSG_PERIOD+1 := MSG_PERIOD;
 -- var to make sure you only pulse once
 variable pulsed : boolean := false;
