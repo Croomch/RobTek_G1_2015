@@ -70,7 +70,7 @@ begin
             Error := to_integer(unsigned(errorAngle-DesiredAngle));
             ispositive := '1';
         else
-            Error := to_integer(unsigned(DesiredAngle-errorAngle;
+            Error := to_integer(unsigned(DesiredAngle-errorAngle));
             ispositive := '0';
         end if; 
                 
