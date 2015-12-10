@@ -3,7 +3,7 @@ NET "CLK" LOC = P60;
 #TIMESPEC TIME_NET = PERIODE "CLK" 50MHZ HIGH 50%;
 
 NET "ALIVE" LOC = P47; # yellow onboard (2nd)
-NET "TESTLED" LOC = P44;  #test signal port 5
+#NET "TESTLED" LOC = P44;  #test signal port 5
 
 NET "SPI_CLK" LOC = P69; #16
 NET "SPI_MISO" LOC = P68; #15

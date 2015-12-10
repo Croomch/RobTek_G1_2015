@@ -61,6 +61,8 @@ TYPE state IS (init_spi, control, get_data);
 signal pr_state, nx_state : state;
 TYPE state_data IS (get_acc_y, get_acc_x, get_acc_z);
 signal pr_data, nx_data : state_data;
+TYPE state_motor IS (fwd, back, back_w, fwd_w);
+signal pr_motor, nx_motor : state_motor;
 -- data signals
 signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
 -- reinitiate signal
@@ -88,7 +90,7 @@ signal data_Bluetooth : STD_LOGIC_VECTOR(31 downto 0) := "0000000000000000000000
 
 ---- CONSTANTS ----
 CONSTANT CLK_FREQ : INTEGER := 50000000;
-CONSTANT CLK_SCALING : INTEGER := 10; -- for the generation of clk signal for the motors
+CONSTANT CLK_SCALING : INTEGER := 1000; -- for the generation of clk signal for the motors
 CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
 -- for SPI communication
 -- set data
@@ -270,6 +272,7 @@ begin
         pr_state <= nx_state;
         pr_data <= nx_data;
         pr_reinitiate <= nx_reinitiate;
+        pr_motor <= nx_motor;
     end if;
 end process;
 
@@ -319,6 +322,7 @@ begin
 
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_y;
+                    actualAngle <= spi_rx;
                 else -- stay in the state
                     nx_data <= get_acc_x;
                 end if;
@@ -343,7 +347,6 @@ begin
             END CASE;
             -- change state to control
             if spi_rx_sig = '1' then -- wait for timer run out signal
-                actualAngle <= spi_rx;
                 nx_state <= control;
                 nx_reinitiate <= pr_reinitiate + 1;
             else -- stay in the state
@@ -388,31 +391,102 @@ end process;
 
 
 --actualAngle <= spi_rx;
-
-process(CLK)
-
+-- statemachin for motor
+-- fwd -> back_w -> back -> fwd_w -> fwd (circle)
+process(pr_motor)
 begin 
-    if rising_edge(CLK) then
-        if MotorDuty(8) = '0' then
-            TESTLED <= '0';
-            ACTIVE_L_BACK <= '0';
-            ACTIVE_R_BACK <= '0';
-            ACTIVE_L_FWD <= '1';
-            ACTIVE_R_FWD <= '1';
-
-            L_FWD <= MotorDuty(7 downto 0);
-           R_FWD <= MotorDuty(7 downto 0);
-        else 
-                
-            TESTLED <= '1';
-            ACTIVE_L_FWD <= '0';
-            ACTIVE_R_FWD <= '0';
-            ACTIVE_L_BACK <= '1';
-            ACTIVE_R_BACK <= '1';
-            L_BACK <= DutyTest(7 downto 0);
-            R_BACK <= DutyTest(7 downto 0);
-        end if;
+CASE pr_motor IS
+WHEN fwd =>
+    -- output
+    ACTIVE_L_BACK <= '0';
+    ACTIVE_R_BACK <= '0';
+    ACTIVE_L_FWD <= '1';
+    ACTIVE_R_FWD <= '1';
+    
+    L_FWD <= MotorDuty(7 downto 0);
+    R_FWD <= MotorDuty(7 downto 0);
+    L_BACK <= "00000000";
+    R_BACK <= "00000000";
+    -- change state
+    if MotorDuty(8) = '0' then
+        nx_motor <= back_w;
+    else
+        nx_motor <= fwd;
     end if;
+WHEN back =>
+    -- output
+    ACTIVE_L_BACK <= '1';
+    ACTIVE_R_BACK <= '1';
+    ACTIVE_L_FWD <= '0';
+    ACTIVE_R_FWD <= '0';
+    
+    L_FWD <= "00000000";
+    R_FWD <= "00000000";
+    L_BACK <= MotorDuty(7 downto 0);
+    R_BACK <= MotorDuty(7 downto 0);
+    -- change state
+    if MotorDuty(8) = '1' then
+        nx_motor <= fwd_w;
+    else
+        nx_motor <= back;
+    end if;
+WHEN fwd_w =>
+    -- output
+    ACTIVE_L_BACK <= '0';
+    ACTIVE_R_BACK <= '0';
+    ACTIVE_L_FWD <= '0';
+    ACTIVE_R_FWD <= '0';
+    
+    L_FWD <= "00000000";
+    R_FWD <= "00000000";
+    L_BACK <= "00000000";
+    R_BACK <= "00000000";
+    -- change state
+    if MotorDuty(8) = '1' then -- wait for timeout
+        nx_motor <= fwd;
+    else
+        nx_motor <= fwd_w;
+    end if;
+WHEN back_w =>
+    -- output
+    ACTIVE_L_BACK <= '0';
+    ACTIVE_R_BACK <= '0';
+    ACTIVE_L_FWD <= '0';
+    ACTIVE_R_FWD <= '0';
+    
+    L_FWD <= "00000000";
+    R_FWD <= "00000000";
+    L_BACK <= "00000000";
+    R_BACK <= "00000000";
+    -- change state
+    if MotorDuty(8) = '0' then -- wait for timeout
+        nx_motor <= back;
+    else
+        nx_motor <= back_w;
+    end if;
+END CASE;
+
+--    if rising_edge(CLK) then
+--        if MotorDuty(8) = '0' then
+--            TESTLED <= '0';
+--            ACTIVE_L_BACK <= '0';
+--            ACTIVE_R_BACK <= '0';
+--            ACTIVE_L_FWD <= '1';
+--            ACTIVE_R_FWD <= '1';
+
+--            L_FWD <= MotorDuty(7 downto 0);
+--           R_FWD <= MotorDuty(7 downto 0);
+--        else 
+                
+--            TESTLED <= '1';
+--            ACTIVE_L_FWD <= '0';
+--            ACTIVE_R_FWD <= '0';
+--            ACTIVE_L_BACK <= '1';
+--            ACTIVE_R_BACK <= '1';
+--            L_BACK <= DutyTest(7 downto 0);
+--            R_BACK <= DutyTest(7 downto 0);
+--        end if;
+--    end if;
             
 end process;
 
