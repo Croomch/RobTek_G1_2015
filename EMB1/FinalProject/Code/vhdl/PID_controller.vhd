@@ -46,7 +46,7 @@ architecture Behavioral of PID_controller is
 
     signal Paction, Iaction, Daction : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     signal IState : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
-    signal PreviousError : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
+    signal PreviousError : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     
     constant PGAIN : STD_LOGIC_VECTOR := "00000001";
     constant IGAIN : STD_LOGIC_VECTOR := "00000000";
@@ -59,21 +59,19 @@ architecture Behavioral of PID_controller is
 begin
 
 process(CLK)  
-    variable Error : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
+    variable Error : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     variable ispositive : STD_LOGIC := '0';
     variable TotalAction : STD_LOGIC_VECTOR(9 downto 0) := "0000000000";
-    variable inclination : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
+    variable inclination : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 begin  
     -- PID Control.
     if rising_edge(CLK) then
-        
-        inclination := ErrorAngle+DesiredAngle;
-       
-        if inclination >= "100000000" then
-            Error := inclination - "100000000";
+               
+        if errorAngle >= DesiredAngle then
+            Error := errorAngle-DesiredAngle;
             ispositive := '1';
         else
-            Error := "100000000" - inclination;
+            Error := DesiredAngle-errorAngle;
             ispositive := '0';
         end if; 
                 
