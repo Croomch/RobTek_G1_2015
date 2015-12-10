@@ -71,12 +71,12 @@ begin
     if rising_edge(CLK) then
                
         if errorAngle >= DesiredAngle then
-            error_vec <= errorAngle-DesiredAngle;
-            Error := to_integer(unsigned(error_vec));
+            error_vec := errorAngle-DesiredAngle;
+            Error := conv_integer(unsigned(error_vec));
             ispositive := '1';
         else
-            error_vec <= DesiredAngle-errorAngle;
-            Error := to_integer(unsigned(error_vec));
+            error_vec := DesiredAngle-errorAngle;
+            Error := conv_integer(unsigned(error_vec));
             ispositive := '0';
         end if; 
                 
@@ -108,7 +108,7 @@ begin
         end if;
         
         --Convert Action into 8 bits
-        totalAction_vec <= std_logic_vector(to_unsigned(TotalAction,11)); 
+        totalAction_vec := std_logic_vector(to_unsigned(TotalAction,11)); 
         MotorOutput <= ispositive & totalAction_vec(10 downto 3); 
         
     end if;
