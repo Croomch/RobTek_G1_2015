@@ -21,6 +21,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.numeric_std.all;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- Uncomment the following library declaration if using
@@ -43,34 +45,38 @@ end PID_controller;
 
 architecture Behavioral of PID_controller is
 
-    signal Paction, Iaction, Daction : integer range 0 to 2048 := 0;
-    signal IState : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
-    signal PreviousError : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    signal Paction, Iaction, Daction : integer range 0 to 2047 := 0;
+    signal IState : integer range 0 to 2047 := 0;
+    signal PreviousError : integer range 0 to 2047 := 0;
     
     constant PGAIN : integer := 1;
     constant IGAIN : integer := 0;
     constant DGAIN : integer := 0;
     
-    constant IactionMAX : integer := 512;
+    constant IactionMAX : integer := 511;
     constant IactionMIN : integer := 0;
     
 
 begin
 
 process(CLK)  
-    variable Error : integer range 0 to 2048  := 0;
+    variable Error : integer range 0 to 2047  := 0;
     variable ispositive : STD_LOGIC := '0';
-    variable TotalAction : integer range 0 to 2048 := 0;
-    variable inclination : integer range 0 to 2048 := 0;
+    variable TotalAction : integer range 0 to 2047 := 0;
+    variable inclination : integer range 0 to 2047 := 0;
+    variable error_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    variable TotalAction_vec : STD_LOGIC_VECTOR(10 downto 0) := "00000000000";
 begin  
     -- PID Control.
     if rising_edge(CLK) then
                
         if errorAngle >= DesiredAngle then
-            Error := to_integer(unsigned(errorAngle-DesiredAngle));
+            error_vec <= errorAngle-DesiredAngle;
+            Error := to_integer(unsigned(error_vec));
             ispositive := '1';
         else
-            Error := to_integer(unsigned(DesiredAngle-errorAngle));
+            error_vec <= DesiredAngle-errorAngle;
+            Error := to_integer(unsigned(error_vec));
             ispositive := '0';
         end if; 
                 
@@ -102,8 +108,8 @@ begin
         end if;
         
         --Convert Action into 8 bits
-        
-        MotorOutput <= ispositive & std_logic_vector(to_unsigned(TotalAction, 10))(9 downto 3); 
+        totalAction_vec <= std_logic_vector(to_unsigned(TotalAction,11)); 
+        MotorOutput <= ispositive & totalAction_vec(10 downto 3); 
         
     end if;
 
