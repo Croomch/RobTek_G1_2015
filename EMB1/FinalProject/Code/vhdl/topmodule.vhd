@@ -57,8 +57,10 @@ end topmodule;
 architecture Behavioral of topmodule is
 ---- SIGNALS ----
 -- FSM states --
-TYPE state IS (init_spi, send_data, get_au, get_al);
+TYPE state IS (init_spi, control, get_data);
 signal pr_state, nx_state : state;
+TYPE state_data IS (get_acc_y, get_acc_x, get_acc_z);
+signal pr_data, nx_data : state_data;
 -- data signals
 signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
 -- reinitiate signal
@@ -263,23 +265,25 @@ pid : component PID_controller
 -------------------
 -- lower FSM - flip-flop part, optn. add reset?! --
 process(CLK)
---variable rst_count : integer range 0 to CLK_SCALING + 1000 := 0;
+variable rst_count : integer range 0 to CLK_SCALING + 1000 := 0;
 begin
     if rising_edge(CLK) then -- update the state regularly
         pr_state <= nx_state;
---        rst_count := rst_count + 1;
---        if rst_count > CLK_SCALING then
---            reinitiate <= '1';
---        elsif rst_count  >= CLK_SCALING + 1000 then
---            rst_count := 0;
---        end if;
+        pr_data <= nx_data;
+        rst_count := rst_count + 1;
+        reinitiate <= '0';
+        if rst_count > CLK_SCALING then
+            reinitiate <= '1';
+        elsif rst_count  >= CLK_SCALING + 1000 then
+            rst_count := 0;
+        end if;
     end if;
 end process;
 
 -- upper FSM, could be concurrent code too - no flip-flops allowed --
 -- see state diagram for the design
 -- jump to init state once in a while to ensuree that communication is up and running
-process(pr_state, spi_rx_sig) -- pr state and all other inputs
+process(pr_state, spi_rx_sig, pr_data) -- pr state and all other inputs
 begin
     CASE pr_state IS
         WHEN init_spi =>
@@ -292,46 +296,66 @@ begin
                 --nx_state <= send_data;
                 spi_tx_sig <= '1';
             --    if spi_rx(0) = '1' then -- if new data ready on accelerometer
-                    nx_state <= get_au;
+                    nx_state <= control;
             --    else
             --        nx_state <= init_spi;
             --    end if;
             else -- stay in the state
                 nx_state <= init_spi;
             end if;
-        WHEN send_data =>
+        WHEN control =>
             -- output --
-            spi_tx_ctl <= SET_CTRL1_XL;
-            spi_tx_msg <= SET_CTRL1_ON;
-            spi_tx_sig <= '1';
-            -- what is nx-state? 
-            --if reinitiate = '1' then
-           --     nx_state <= init_spi;              
-            --else
-           --     nx_state <= get_au;
-           -- end if;
-           if spi_rx_sig = '1' then -- wait for timer run out signal
-                --actualAngle <= spi_rx;
-                spi_tx_sig <= '1';
-                nx_state <= get_au;
-           else -- stay in the state
-                nx_state <= send_data;
-           end if;
-        WHEN get_au => 
-            -- output --
-            spi_tx_ctl <= GET_ACCY_H;
+            spi_tx_ctl <= "00000000";
             spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
-            actualAngle <= spi_rx;
             -- what is nx-state? 
-            if spi_rx_sig = '1' then -- wait for timer run out signal
-                --actualAngle <= spi_rx;
-                spi_tx_sig <= '1';
-                nx_state <= send_data;
-            else -- stay in the state
-                nx_state <= get_au;
+            if reinitiate = '1' then
+                nx_state <= init_spi;              
+            else
+                nx_state <= get_data;
             end if;
-        WHEN get_al =>
+        WHEN get_data => 
+            -- output --
+            spi_tx_sig <= '1';
+            -- inner state to change what data to read
+            CASE pr_data IS
+            WHEN get_acc_x =>
+                spi_tx_ctl <= GET_ACCX_H;
+                spi_tx_msg <= "00000000";
+
+                if spi_rx_sig = '1' then -- wait for timer run out signal
+                    nx_data <= get_acc_y;
+                else -- stay in the state
+                    nx_data <= get_acc_x;
+                end if;
+            WHEN get_acc_y =>
+                spi_tx_ctl <= GET_ACCY_H;
+                spi_tx_msg <= "00000000";
+
+                if spi_rx_sig = '1' then -- wait for timer run out signal
+                    nx_data <= get_acc_z;
+                else -- stay in the state
+                    nx_data <= get_acc_y;
+                end if;
+            WHEN get_acc_z =>
+                spi_tx_ctl <= GET_ACCZ_H;
+                spi_tx_msg <= "00000000";
+
+                if spi_rx_sig = '1' then -- wait for timer run out signal
+                    nx_data <= get_acc_x;
+                else -- stay in the state
+                    nx_data <= get_acc_z;
+                end if;
+            END CASE;
+            -- change state to control
+            if spi_rx_sig = '1' then -- wait for timer run out signal
+                actualAngle <= spi_rx;
+                nx_state <= control;
+            else -- stay in the state
+                nx_state <= get_data;
+            end if;
+
+--        WHEN get_al =>
 --            -- output --
             --spi_tx_ctl <= data_Bluetooth(15 downto 8);
             --spi_tx_msg <= data_Bluetooth(7 downto 0);
@@ -341,7 +365,7 @@ begin
             --    spi_tx_sig <= '1';
             --    nx_state <= send_data;
             --else
-                nx_state <= get_au;
+--                nx_state <= get_au;
             --end if
 --            if spi_rx_sig = '1' then -- wait for timer run out signal
 --                nx_state <= send_data, get_au, get_al;
