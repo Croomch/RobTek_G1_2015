@@ -4,12 +4,12 @@ That means, the robot should have at least two motors to move in the plane of th
 
 \subsubsection{Motor configuration and control}
 The chosen motor configuration consist in the use of two motors that move two parallel wheels. 
-This allows the robot to change the direction of the movement setting a different motor speed on each motor.
+This allows the robot to change the direction of the movement setting a different duty cycle on each motor.
 
-To follow the line, the robot should be able to turn, what means that the motors should be set to different speeds.
+To follow a line, the robot should be able to turn depending on how far from the center of the line it is.
+The two motors should hence be set to different speeds while driving to account for the robot leaving the line.
 These speeds are chosen with a P controller.
-This controller slows down the speed of one or another wheel in function of the perpendicular displacement of the sensors 
-over the line. 
+This controller slows down the speed of one or another wheel in relation to the displacement of the sensors from the line. 
 
 
 \subsubsection{Sensor configuration}
