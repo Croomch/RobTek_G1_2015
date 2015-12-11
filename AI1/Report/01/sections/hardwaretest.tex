@@ -10,8 +10,8 @@ This way, three different experiments have been executed to test the reliability
 \begin{enumerate}
 	\item First, a test to check the robot is able to find, follow and get a good position on a line after right and left turning. 
 With this test we can test the follow line, and turning behaviours.
-The circuit used in this test was a "8", that means, the robot should turn left 4 times and then right 4 times in a row, 
-as shown in figure \ref{fig:testMaps}.1.
+The circuit used in this test was a "8", that means, the robot should turn left 4 times and then right 4 times in a row
+.
 
 	\item The second test executed has looked at the ability of the robot to go back in a intersection and turn to different directions after finding the previous intersection.
 This test has been done running a circuit where the robot goes back, find the next intersection and goes back to the previous one. 
@@ -22,7 +22,7 @@ In this experiment, the robot has to use all the different behaviours to move th
 
 \end{enumerate}
 
-The circuits used in each experiments are shown in the figure \ref{testMaps}
+The circuits used in each experiments are shown in the figure \ref{fig:testMaps}
 
 Each of the three experiments have been executed starting with a full power battery and the circuit set for each one has been repeated 20 times in up to 10 trials without a battery change or charge.
 The time needed to complete the 20 laps has been measured for each trial.
@@ -40,6 +40,13 @@ The information about this research is attached in \_reftolightsensors.
 \end{figure}
 
 
+\subsection{Results}
+	The results of the tests shown in table \ref{tab:Experiment1} allow to conclude that the chosen configuration is robust enough to complete any sokoban map.
+	As the time spent running without battery charge has been above the 30 minutes in all experiments, it can be assumed that the robot will not have power problems during it's operating time, which is of 15 minutes as maximum during a race.
+	Also it can be seen that the different robot behaviours are strong enough to be successfully executed in most of the times, but is not perfect, as can be seen in some failed tests.
+	
+	Finally, it is possible to say that the robot configuration is robust under different light levels thanks to the used shield, and also can be said that the robot control is able to complete its task.
+
 
 \begin{table}[H]
 	\center
@@ -47,9 +54,9 @@ The information about this research is attached in \_reftolightsensors.
 	\begin{tabular}{|l|c|r|c|r|c|r|}
 	  	\cline{2-7}
 	  	\multicolumn{1}{r}{}
- 		&  \multicolumn{2}{|c|}{Experiment 1}
- 		& \multicolumn{2}{|c|}{Experiment 2} 
- 		& \multicolumn{2}{|c|}{Experiment 3}  
+ 		&  \multicolumn{2}{|c|}{Map 1}
+ 		& \multicolumn{2}{|c|}{Map 2} 
+ 		& \multicolumn{2}{|c|}{Map 3}  
 		 \\ \cline{2-7}
 		\hline
 		Run & Success & Time & Success & Time & Success & time \\
@@ -70,13 +77,3 @@ The information about this research is attached in \_reftolightsensors.
 	\caption{Table of results for the experiments. It is shown for each experiment and result the success or failure of the test and the time expended on it. In the case of the failed trials, the time shown represents the moment when the robot was lost. The LOWBAT statement means the robot finished his power and the experiment finished.}
 	\label{tab:Experiment1}
 \end{table}
-
-
-\subsection{Conclusion}
-	The results of the tests show that the chosen configuration is robust enough to complete any sokoban map.
-	As the time spent running without battery charge is above the 30 minutes, it can be assumed that the robot will not have power problems during it's operating time, which is of 15 minutes as maximum during a race.
-	Also it can be seen that the different robot behaviours are strong enough to be successfully executed in most of the times, but is not perfect, as can be seen in some failed tests.
-	
-	To conclude, it is possible to say that the robot configuration is robust under different light levels thanks to the used shield, and also can be said that the robot control should be enough to complete its task.
-	
-	
