@@ -45,9 +45,9 @@ end PID_controller;
 
 architecture Behavioral of PID_controller is
 
-    signal Paction, Iaction, Daction : integer range 0 to 2047 := 0;
-    signal IState : integer range 0 to 2047 := 0;
-    signal PreviousError : integer range 0 to 2047 := 0;
+    signal Paction, Iaction, Daction : integer range -1023 to 1024 := 0;
+    signal IState : integer range -1023 to 1024 := 0;
+    signal PreviousError : integer range -1023 to 1024 := 0;
     
     constant PGAIN : integer := 1;
     constant IGAIN : integer := 0;
@@ -60,10 +60,9 @@ architecture Behavioral of PID_controller is
 begin
 
 process(CLK)  
-    variable Error : integer range 0 to 2047  := 0;
+    variable Error : integer range -1023 to 1024  := 0;
     variable ispositive : STD_LOGIC := '0';
-    variable TotalAction : integer range 0 to 2047 := 0;
-    variable inclination : integer range 0 to 2047 := 0;
+    variable TotalAction : integer range -1023 to 1024 := 0;
     variable error_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     variable TotalAction_vec : STD_LOGIC_VECTOR(10 downto 0) := "00000000000";
 begin  
@@ -73,11 +72,9 @@ begin
         if errorAngle >= DesiredAngle then
             error_vec := errorAngle-DesiredAngle;
             Error := conv_integer(unsigned(error_vec));
-            ispositive := '1';
         else
             error_vec := DesiredAngle-errorAngle;
-            Error := conv_integer(unsigned(error_vec));
-            ispositive := '0';
+            Error := -conv_integer(unsigned(error_vec));
         end if; 
                 
         -- P action: 
@@ -95,21 +92,30 @@ begin
         end if;
         
         
-        if PreviousError > errorAngle then
-            Daction <= (PreviousError - error) * DGAIN;
-            TotalAction := Paction+Daction+Iaction;
-        else 
-            Daction <= (error - PreviousError) * DGAIN;
-            TotalAction := Paction+Daction-Iaction;
+        Daction <= (PreviousError - error) * DGAIN;
+        PreviousError <= error;
+        
+        TotalAction := Paction+Daction+Iaction;
+
+        
+        if TotalAction >= 1024 then
+            TotalAction := 1024;
+        else if TotalAction <= -1023 then
+                 TotalAction := -1023;
+             end if;
         end if;
         
-        if TotalAction >= 2047 then
-            TotalAction := 2047;
+        if TotalAction < 0 then
+            TotalAction := -TotalAction;
+            ispositive := '0';
+        else
+            ispositive := '1';    
         end if;
         
+           
         --Convert Action into 8 bits
-        totalAction_vec := std_logic_vector(to_unsigned(TotalAction,11)); 
-        MotorOutput <= ispositive & totalAction_vec(10 downto 3); 
+        totalAction_vec := std_logic_vector(to_unsigned(TotalAction,10)); 
+        MotorOutput <= ispositive & totalAction_vec(9 downto 2); 
         
     end if;
 

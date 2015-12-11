@@ -61,7 +61,7 @@ TYPE state IS (init_spi, control, get_data);
 signal pr_state, nx_state : state;
 TYPE state_data IS (get_acc_y, get_acc_x, get_acc_z);
 signal pr_data, nx_data : state_data;
-TYPE state_motor IS (fwd, back, back_w, fwd_w);
+TYPE state_motor IS (fwd, back, pause);
 signal pr_motor, nx_motor : state_motor;
 -- data signals
 signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
@@ -87,6 +87,11 @@ CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
 CONSTANT DutyTest : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
 -- TosNet
 signal data_Bluetooth : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+-- Mean Filter
+signal new_data : STD_LOGIC := '0';
+signal newAcc_Value : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+signal FilteredAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+
 
 ---- CONSTANTS ----
 CONSTANT CLK_FREQ : INTEGER := 50000000;
@@ -182,6 +187,15 @@ COMPONENT PID_controller IS
             );
 END COMPONENT;
 
+-- Median filter -- 
+COMPONENT MeanFilter is
+    Port ( 
+        newdata_sig : in STD_LOGIC;
+	newdata_array : in STD_LOGIC_VECTOR (7 downto 0);
+	filtered : out STD_LOGIC_VECTOR (7 downto 0)
+    );
+END COMPONENT;
+
 
 begin
 --------------------
@@ -261,6 +275,13 @@ pid : component PID_controller
 
     );
 
+filter : component MeanFilter
+	Port map(
+        newdata_sig => new_data,
+	newdata_array => newAcc_Value,
+	filtered => FilteredAngle
+
+);
 
 -------------------
 ---- MAIN PART ----
@@ -281,6 +302,7 @@ end process;
 -- jump to init state once in a while to ensuree that communication is up and running
 process(pr_state, spi_rx_sig, pr_data)--, pr_reinitiate) -- pr state and all other inputs
 begin
+    new_data <= '0';
     CASE pr_state IS
         WHEN init_spi =>
             -- output --
@@ -322,7 +344,11 @@ begin
 
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_y;
-                    actualAngle <= spi_rx;
+
+		-- Signal filtering
+		    new_data <= '1';
+		    newAcc_Value <= spi_rx;
+
                 else -- stay in the state
                     nx_data <= get_acc_x;
                 end if;
@@ -372,6 +398,9 @@ begin
     END CASE; 
 end process;
 
+-- Angle read
+actualAngle <= FilteredAngle;
+
 ---------------------
 ---- Extra stuff ----
 ---------------------
@@ -391,9 +420,10 @@ end process;
 
 
 --actualAngle <= spi_rx;
--- statemachin for motor
+-- statemachine for motor
 -- fwd -> back_w -> back -> fwd_w -> fwd (circle)
 process(pr_motor)
+    variable counter : integer range 0 to 255 := 0;
 begin 
 CASE pr_motor IS
 WHEN fwd =>
@@ -409,7 +439,7 @@ WHEN fwd =>
     R_BACK <= "00000000";
     -- change state
     if MotorDuty(8) = '0' then
-        nx_motor <= back_w;
+        nx_motor <= pause;
     else
         nx_motor <= fwd;
     end if;
@@ -424,13 +454,15 @@ WHEN back =>
     R_FWD <= "00000000";
     L_BACK <= MotorDuty(7 downto 0);
     R_BACK <= MotorDuty(7 downto 0);
+
     -- change state
     if MotorDuty(8) = '1' then
-        nx_motor <= fwd_w;
+        nx_motor <= pause;
     else
         nx_motor <= back;
     end if;
-WHEN fwd_w =>
+
+WHEN pause =>
     -- output
     ACTIVE_L_BACK <= '0';
     ACTIVE_R_BACK <= '0';
@@ -441,53 +473,21 @@ WHEN fwd_w =>
     R_FWD <= "00000000";
     L_BACK <= "00000000";
     R_BACK <= "00000000";
+    -- Counter up
+    counter := counter + 1;
     -- change state
-    if MotorDuty(8) = '1' then -- wait for timeout
-        nx_motor <= fwd;
-    else
-        nx_motor <= fwd_w;
+    if counter >= 255 then
+        counter := 0;
+        if MotorDuty(8) = '1' then 
+            nx_motor <= fwd;
+        else
+            nx_motor <= back;
+        end if;
     end if;
-WHEN back_w =>
-    -- output
-    ACTIVE_L_BACK <= '0';
-    ACTIVE_R_BACK <= '0';
-    ACTIVE_L_FWD <= '0';
-    ACTIVE_R_FWD <= '0';
     
-    L_FWD <= "00000000";
-    R_FWD <= "00000000";
-    L_BACK <= "00000000";
-    R_BACK <= "00000000";
-    -- change state
-    if MotorDuty(8) = '0' then -- wait for timeout
-        nx_motor <= back;
-    else
-        nx_motor <= back_w;
-    end if;
 END CASE;
 
---    if rising_edge(CLK) then
---        if MotorDuty(8) = '0' then
---            TESTLED <= '0';
---            ACTIVE_L_BACK <= '0';
---            ACTIVE_R_BACK <= '0';
---            ACTIVE_L_FWD <= '1';
---            ACTIVE_R_FWD <= '1';
 
---            L_FWD <= MotorDuty(7 downto 0);
---           R_FWD <= MotorDuty(7 downto 0);
---        else 
-                
---            TESTLED <= '1';
---            ACTIVE_L_FWD <= '0';
---            ACTIVE_R_FWD <= '0';
---            ACTIVE_L_BACK <= '1';
---            ACTIVE_R_BACK <= '1';
---            L_BACK <= DutyTest(7 downto 0);
---            R_BACK <= DutyTest(7 downto 0);
---        end if;
---    end if;
-            
 end process;
 
 -- alive timer --
