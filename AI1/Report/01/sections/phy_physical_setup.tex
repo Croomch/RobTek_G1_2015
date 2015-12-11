@@ -16,36 +16,32 @@ This controller slows down the speed of one or another wheel in relation to the 
 
 Three light sensors are used in this configuration. 
 Two of these sensors are used in the line following control and are placed in the front of the robot.
-The distance between them is of 40mm, which is bigger than te line width.
-This gives to the controller a big actuation rank, as the distance between the sensors is bigger than the width of the line.
+The distance between them is 40mm, which is bigger than the line width.
+This gives to the controller a big actuation range, as the distance between the sensors is bigger than the width of the line.
 
-In the position control, the value of the sensors are compared, knowing that this value should be the same when the robot is centred above the line.
-When the value of both sensors are low, the robot is facing a crossroad.
+In the position control, the value of the sensors are compared.
+These values should then be equal when the robot is centred above the line
+and both sensors should be low when the robot is facing a crossroad.
 
-About the third sensor, it is placed in the back of the robot, just before the wheels.
+The third sensor is placed in the rear end of the robot, just before the wheels.
 It is used to detect the lines of the crossroads when going back and turning.
 
-This sensor is placed the closest possible to the wheel's axis, and far enough to the robot center so it is not affected
-for the followed line.
+This sensor is placed the closest possible to the wheels axis and far away from the robot center so it is not affected by the followed line.
 
-About the light levels in the room, it has been tested and proved that the sensors are highly sensitive to changes in 
-the ambient light levels, specially under sunlight exposure. 
-
-The first solution chosen to solve this problem has been use a shield around the three sensors, so the ambient light 
-doesn't affect the measures.
-This has shown a good result working in the lab, and under sunlight in cloudy days, but was unable to work in sunny days,
-as the sensors were still afected for the sunlight intensity.
-To minimize the effect of the sun, a second shield has been placed covering the robot base, so the sensors are allways in
-shadows.
+Since the light sensors highly sensitive to changes in the ambient light levels, especially under sunlight exposure, a shielding from such is needed.
+To solve this problem, first a shield around the three sensors was added such that the ambient light does not affect the measurements.
+This gave good results in the laboratory and under sunlight on cloudy days, but was unable to work on sunny days as the sensors were still affected by the high intensity of the sun.
+To minimize the effect of the sun, a second shield is placed covering the robots base, so the sensors are always in the shadow.
 This system has shown good results under all conditions.
+This shielding is shown on figure \ref{fig:robotImage}.
 
 
 
 \subsubsection{Tool configuration}
 
 To be able to push and guide the can across the map, the robot should have a proper tool that allows this task. 
-The proposed design consist of two bars placed making an angle that allows the guide of the bottle when driving straight forward.
-This configuration allows catching the can even when its position is displaced, making the robot's job more easy.
+The proposed design consist of two bars placed making an angle such that the can is guided to the center when driving straight forward.
+This configuration allows catching the can even when its displaced from the crossings, making the robots job simpler.
 
 Considering the rules of the game then the can is not permitted to be pushed left or right and because of that, no special design enabling this are required.
 

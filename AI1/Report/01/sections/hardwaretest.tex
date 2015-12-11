@@ -3,9 +3,9 @@
 
 The functionality of the behaviours implemented can be tested individually.
 Nevertheless, a more robust way of testing the behaviours is to combine them in certain test circuits that can be looped to check the reliability of these behaviours.
-By building a more complex circuit to test, the different behaviours can be tested in different ways so the position of the robot changes before each of them.
+By building a more complex test circuit, the different behaviours can be tested in different ways so the position of the robot changes before each of them.
 
-This way, three different experiments have been executed to test the reliability of the robot:
+This way, three different experiments were conducted to test the reliability of the robot:
 
 \begin{enumerate}
 	\item First, a test to check the robot is able to find, follow and get a good position on a line after right and left turning. 
@@ -13,23 +13,25 @@ With this test we can test the follow line, and turning behaviours.
 The circuit used in this test was a "8", that means, the robot should turn left 4 times and then right 4 times in a row
 .
 
-	\item The second test executed has looked at the ability of the robot to go back in a intersection and turn to different directions after finding the previous intersection.
-This test has been done running a circuit where the robot goes back, find the next intersection and goes back to the previous one. 
+	\item The second test looks at the ability of the robot to go back in a intersection and turn to different directions after finding the previous intersection.
+This test has been done running a circuit where the robot goes back, finds the next intersection and goes back to the previous one. 
 Then the robot turns in different directions each time, checking the response of all of them in different cases, as these directions are mixed.
 
-	\item Finally, a experiment with a can has been executed to test the robot hability to push and place correctly the can.
+	\item Finally, a experiment with a can was conducted to test the robots ability to push and place correctly the can.
 In this experiment, the robot has to use all the different behaviours to move the can from one position to another and then to the original position again.
 
 \end{enumerate}
 
 The circuits used in each experiments are shown in the figure \ref{fig:testMaps}
 
-Each of the three experiments have been executed starting with a full power battery and the circuit set for each one has been repeated 20 times in up to 10 trials without a battery change or charge.
-The time needed to complete the 20 laps has been measured for each trial.
-This allows us to determine too the fucionality and response of the robot in long runs.
+All of the three experiments where started with a fully charged battery and the test was repeated 20 times in up to 10 trials without a battery change or charge.
+The time needed to complete the 20 laps was measured for each trial.
+This makes it possible to determine the functionality and response of the robot in long runs.
+The result of such is seen in table \ref{tab:Experiment1}.
 
-About the light sensors, they have been tested to measure their response to different ambient light levels and the efectivity of shielding these sensors has been proved.
-The information about this research is attached in \_reftolightsensors.
+The light sensors response to different ambient light levels was tested and the shielding was found to protect the sensors efficiently.
+Furthermore the can was still able to pass through the shielding added in the front of the robot for when the robot drives towards a light source.
+%The information about this research is attached in \textbf{reftolightsensors}.
 
 
 \begin{figure}[H]
@@ -41,15 +43,17 @@ The information about this research is attached in \_reftolightsensors.
 
 
 \subsection{Results}
-	The results of the tests shown in table \ref{tab:Experiment1} allow to conclude that the chosen configuration is robust enough to complete any sokoban map.
-	All the behaviours have been tested and have worked in the most of the cases, but they failed a couple of times probably because a low battery problem, as the failures start when the robot has been running for a long time.
-	This has happened in the pushing and going back behaviour concretely, what means it is the weakest part of the implementation.
+	The results of the tests in table \ref{tab:Experiment1} show that the chosen configuration is robust enough to complete any sokoban map.
+	All the behaviours have been tested and have worked in the most of the cases, but they failed a couple of times mainly because of low battery.
+	%, as the failures start when the robot has been running for a long time.
+	This has happened when doing the pushing and going back behaviour, which means it is the weakest part of the implementation.
 	Nevertheless, the number of failures of this behaviour is small enough to ignore them.
 	
-	As the time spent running without battery charge has been above the 30 minutes in all experiments, it can be assumed that the robot will not have power problems during it's operating time, which is of 15 minutes as maximum during a race.
+	As the time spent running without battery charge has been above the 30 minutes in all experiments, it can be assumed that the robot will not have power problems during it's operating time, which is of 15 minutes at max during the competition.
 	
 	
-	Finally, it is possible to say that the robot configuration is robust under different light levels thanks to the used shield, and also can be said that the robot control is able to complete its task.
+	Finally, it is possible to say that the robot configuration is robust under different light levels due to the used shield.
+	Furthermore the robot control is able to complete the map.
 
 
 \begin{table}[H]
@@ -78,6 +82,6 @@ The information about this research is attached in \_reftolightsensors.
 		\hline
 	\end{tabular}
 
-	\caption{Table of results for the experiments. It is shown for each experiment and result the success or failure of the test and the time expended on it. In the case of the failed trials, the time shown represents the moment when the robot was lost. The LOWBAT statement means the robot finished his power and the experiment finished.}
+	\caption[Experimental results of the robot behaviour.]{Results of the experiments. It is shown for each experiment and result the success or failure of the test and the time used on completing it. In the case of the failed trials, the time shown represents the moment when the robot was lost. The LOWBAT statement means the robot finished his power and the experiment finished.}
 	\label{tab:Experiment1}
 \end{table}

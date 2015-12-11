@@ -1,19 +1,17 @@
 
-After building the robot and testing all the implemented behaviours for him, it has been seen that the proposed solution is robust enough to execute any given path.
-The robot can work under different ambient light levels thanks to a mounted shield that shadows the sensors, making them less sensitive to ambient light.
-The robot can run for over 30 minutes without problems derivated from having a low battery level.
+After building the robot and testing all the implemented behaviours, it was found that the proposed solution is robust enough to execute any given path.
+The robot works under different ambient light levels due to a mounted shield that shadows the sensors, making them less sensitive to external light.
+The robot can run for over 30 minutes without problems from having a low battery level.
 
 To find a solution for the Sokoban problem an A* algorithm has been devised.
-Using the diamond pushes as nodes and the number of steps of the robot to achieve a certain state as cost function, this algorithm calculates the cost of moving each diamond from their position to the nearest goal.
-The nodes in the graph are validated using their state.
-The individual states are checked for deadlock situations and are used to reduce the graph.
-
-This system takes into account the walls but ignores the diamonds on the map. 
-Also the fact that one goal could be the destination of multiple diamonds is not taken in consideration.
+Using the diamond pushes as nodes and the number of steps of the robot to achieve a certain state as the cost.
+The algorithm uses, as heuristics, the cost of moving each diamond from their position to the nearest goal when having to push them around the walls in a else completely empty map.
+The nodes in the graph are validated using the diamonds and robots state.
+The individual states are checked for deadlock situations to reduce the graph.
 
 The solver can work for any map satisfying a constrained map size.
 
-To load the generated path into the robot, a path converter function was implemented.
+To load the generated path into the robot, a path converter was implemented.
 This function can convert the generated path to be executable for the robot.
 
-By combining the two parts of this project, it is possible to load a certain sokoban map, find a solution for it and solve fisically the maze with the robot.
+By combining the two parts of this project, it is possible to load a certain sokoban map, find a solution for it and solve physically the challenge with the robot.
