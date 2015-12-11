@@ -8,18 +8,19 @@ this is illustrated in figure \ref{fig:behaviourSystem}.
 \center
 \begin{tikzpicture}[node distance=1cm]
 %  behaviour box
-\node[rectangle,draw,minimum width=11cm, minimum height=3cm, dashed, name=behaviour_box]  at (0,0) {};
-\node[name=behaviour] at (-3.7,1.2) {Behaviours};
+\node[rectangle,draw,minimum width=13cm, minimum height=3cm, dashed, name=behaviour_box]  at (0,0) {};
+\node[name=behaviour] at (-5,1.2) {Behaviours};
 
 % Brain node 
-\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=brain, above=of behaviour_box] at (0,0.6) {Brain};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=brain, above=of behaviour_box] at (0,0.8) {Brain};
 
 % behaviours
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=fwd] at (-3.6,0.3) {Fwd};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=left] at (-1.8,-0.5) {Left};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=right] at (0,-0.5) {Right};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=follow] at (1.8,-0.5) {Follow};
-\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=back] at (3.6,0.4) {Push and back};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=fwd] at (-5,0.4) {Fwd};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=left] at (-3,-0.5) {Left};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=right] at (-1,-0.5) {Right};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=follow] at (1,-0.5) {Follow};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=push] at (3,-0.5) {Push};
+\node[rectangle,draw,minimum width=1.5cm, minimum height=0.8cm, name=back] at (5,0.4) {Back};
 
 % arrows inside 
 \draw[->] (brain) -- (fwd) ;
@@ -27,12 +28,13 @@ this is illustrated in figure \ref{fig:behaviourSystem}.
 \draw[->] (brain) -- (right) ;
 \draw[->] (brain) -- (follow) ;
 \draw[->] (brain) -- (back) ;
+\draw[->] (brain) -- (push) ;
 \end{tikzpicture}
 \caption{Overview of the systems behaviours.}
 \label{fig:behaviourSystem}
 \end{figure}
 
-Here the central unit, the \textit{Brain} is responsible for finding the solution to the sokoban problem by invoking the five behaviours.
+Here the central unit, the \textit{Brain} is responsible for finding the solution to the sokoban problem by invoking the six behaviours.
 The \textit{Brain} is hence a combination of both the computer processing the map offline and the Lego-robot online when using the offline generated data to solve the puzzle.
 
 The behaviours are defined in table \ref{tab:behaviourExplained}.
@@ -42,7 +44,8 @@ The behaviours are defined in table \ref{tab:behaviourExplained}.
 Behaviour & Description \\ \hline
 Fwd & Makes the robot go straight ahead in the next intersection. \\
 Left / Right & The robot turns left/right in the next intersection. \\
-Push and back & The robot pushes the can to the next intersection and \\ & goes back to the previous one. \\
+Push & The robot pushes the can to the next intersection. \\
+Back & The robot turns around and returns to the previous intersection. \\
 Follow & Makes the robot follow the line till next intersection.
 \end{tabular}
 \caption{Behaviour table.}
