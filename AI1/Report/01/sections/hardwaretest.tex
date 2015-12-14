@@ -10,11 +10,11 @@ This way, three different experiments were conducted to test the reliability of 
 \begin{enumerate}
 	\item First, a test to check the robot is able to find, follow and get a good position on a line after right and left turning. 
 With this test we can test the follow line, and turning behaviours.
-The circuit used in this test was a "8", that means, the robot should turn left 4 times and then right 4 times in a row
+The circuit used in this test was a "8", that means, the robot should turn left four times and then right four times in a row
 .
 
 	\item The second test looks at the ability of the robot to go back in a intersection and turn to different directions after finding the previous intersection.
-This test has been done running a circuit where the robot goes back, finds the next intersection and goes back to the previous one. 
+This test has the robot going in loops where it goes back, finds the next intersection and goes back again to the previous one. 
 Then the robot turns in different directions each time, checking the response of all of them in different cases, as these directions are mixed.
 
 	\item Finally, a experiment with a can was conducted to test the robots ability to push and place correctly the can.
@@ -24,7 +24,7 @@ In this experiment, the robot has to use all the different behaviours to move th
 
 The circuits used in each experiments are shown in the figure \ref{fig:testMaps}
 
-All of the three experiments where started with a fully charged battery and the test was repeated 20 times in up to 10 trials without a battery change or charge.
+All of the three experiments were started with a fully charged battery and the test was repeated 20 times in up to 10 trials without a battery change or charge.
 The time needed to complete the 20 laps was measured for each trial.
 This makes it possible to determine the functionality and response of the robot in long runs.
 The result of such is seen in table \ref{tab:Experiment1}.
@@ -37,19 +37,18 @@ Furthermore the can was still able to pass through the shielding added in the fr
 \begin{figure}[H]
 \includegraphics[width=10cm]{Test_circuits.png}
 \centering
-\caption{Scheme of the circuits used in the tests. 1, loop for turning behaviours. 2, used for pushing and going back behaviours. 3, used for testing the pushing behaviour with a can. }
+\caption[Behaviours used for testing.]{Scheme of the circuits used in the tests. 1, loop for turning behaviours. 2, used for pushing and going back behaviours. 3, used for testing the pushing behaviour with a can. }
 \label{fig:testMaps}
 \end{figure}
 
 
 \subsection{Results}
 	The results of the tests in table \ref{tab:Experiment1} show that the chosen configuration is robust enough to complete any sokoban map.
-	All the behaviours have been tested and have worked in the most of the cases, but they failed a couple of times mainly because of low battery.
+	All the behaviours have been tested and work for all the test or just a period of time, after which they then fail mainly because of low battery.
 	%, as the failures start when the robot has been running for a long time.
-	This has happened when doing the pushing and going back behaviour, which means it is the weakest part of the implementation.
-	Nevertheless, the number of failures of this behaviour is small enough to ignore them.
-	
-	As the time spent running without battery charge has been above the 30 minutes in all experiments, it can be assumed that the robot will not have power problems during it's operating time, which is of 15 minutes at max during the competition.
+	This happens when doing the pushing and going back behaviour, which means this is the weakest part of the implementation.
+	Nevertheless, the number of failures of this behaviour is small enough to be ignored.
+This is because the time spent running without battery charge has been above the 30 minutes in all experiments and it can be assumed that the robot will not have power problems during its operating time, which is of 15 minutes at max during the competition.
 	
 	
 	Finally, it is possible to say that the robot configuration is robust under different light levels due to the used shield.
