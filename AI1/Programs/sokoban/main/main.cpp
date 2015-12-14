@@ -8,8 +8,8 @@
 int main()
 {
     std::cout << "Hello Sokoban Solver!" << std::endl;
-      Sokoban solver("../../../sokoban_maps/2015competition.txt"); //
-//    Sokoban solver("../../../sokoban_maps/2014competition.txt"); // 124 // cl 212228 // ol 33561
+//      Sokoban solver("../../../sokoban_maps/2015competition.txt"); //
+    Sokoban solver("../../../sokoban_maps/2014competition.txt"); // 124 // cl 212228 // ol 33561
 //    Sokoban solver("../../../sokoban_maps/simple_map.txt");
 //    Sokoban solver("../../../sokoban_maps/Example02.txt"); // 168
 //    Sokoban solver("../../../sokoban_maps/Original001.txt"); // 230
