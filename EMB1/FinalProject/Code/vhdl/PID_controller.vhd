@@ -49,7 +49,7 @@ architecture Behavioral of PID_controller is
     signal IState : integer range -1023 to 1024 := 0;
     signal PreviousError : integer range -1023 to 1024 := 0;
     
-    constant PGAIN : integer := 1;
+    constant PGAIN : integer := 10;
     constant IGAIN : integer := 0;
     constant DGAIN : integer := 0;
     

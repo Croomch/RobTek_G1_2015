@@ -46,6 +46,7 @@ entity topmodule is
     
     ALIVE : out STD_LOGIC;
     TESTLED : out STD_LOGIC;
+--    LED_TEST : out STD_LOGIC_VECTOR(7 downto 0);
     
     XB_SERIAL_O   		: out	STD_LOGIC;                       -- Serial stream to PC
     XB_SERIAL_I	   	: in	STD_LOGIC;                       -- Serial stream from PC
@@ -59,7 +60,7 @@ architecture Behavioral of topmodule is
 -- FSM states --
 TYPE state IS (init_spi, control, get_data);
 signal pr_state, nx_state : state;
-TYPE state_data IS (get_acc_y, get_acc_x, get_acc_z);
+TYPE state_data IS (stup_initState, get_acc_y, get_acc_x, get_acc_z);
 signal pr_data, nx_data : state_data;
 TYPE state_motor IS (fwd, back, pause);
 signal pr_motor, nx_motor : state_motor;
@@ -307,7 +308,7 @@ begin
         WHEN init_spi =>
             -- output --
             spi_tx_ctl <= SET_CTRL1_XL;
-            spi_tx_msg <= SET_CTRL1_ON;
+            spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
             -- what is nx-state?
             if spi_rx_sig = '1' then -- wait for timer run out signal
@@ -323,25 +324,37 @@ begin
             end if;
         WHEN control =>
             -- output --
-            spi_tx_ctl <= "00000000";
-            spi_tx_msg <= "00000000";
+ --           spi_tx_ctl <= "00000000";
+ --           spi_tx_msg <= "00000000";
             spi_tx_sig <= '1';
             -- what is nx-state? 
-            if pr_reinitiate = "11111111" then
-                nx_state <= init_spi;
-                nx_reinitiate <= "00000000";              
-            else
+           -- if pr_reinitiate = "11111111" then
+             --   nx_state <= init_spi;
+               -- nx_reinitiate <= "00000000";              
+            --else
                 nx_state <= get_data;
-            end if;
+            --end if;
         WHEN get_data => 
             -- output --
             spi_tx_sig <= '1';
             -- inner state to change what data to read
             CASE pr_data IS
-            WHEN get_acc_x =>
+            WHEN stup_initState =>
                 spi_tx_ctl <= SET_CTRL1_XL;
                 spi_tx_msg <= SET_CTRL1_ON;
-
+                
+                if spi_rx_sig = '1' then -- wait for timer run out signal
+                    nx_data <= get_acc_x;
+    
+                    else -- stay in the state
+                      nx_data <= stup_initState;
+                    end if;
+                    
+            WHEN get_acc_x =>
+    
+                spi_tx_ctl <= GET_ACCX_H;
+                spi_tx_msg <= "00000000";
+            
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_y;
 
@@ -353,11 +366,11 @@ begin
                     nx_data <= get_acc_x;
                 end if;
             WHEN get_acc_y =>
-                spi_tx_ctl <= GET_ACCX_H;
+                spi_tx_ctl <= GET_ACCX_L;
                 spi_tx_msg <= "00000000";
 
                 if spi_rx_sig = '1' then -- wait for timer run out signal
-                    nx_data <= get_acc_z;
+                    nx_data <= stup_initState;
                 else -- stay in the state
                     nx_data <= get_acc_y;
                 end if;
@@ -366,7 +379,7 @@ begin
                 spi_tx_msg <= "00000000";
 
                 if spi_rx_sig = '1' then -- wait for timer run out signal
-                    nx_data <= get_acc_x;
+                    nx_data <= stup_initState;
                 else -- stay in the state
                     nx_data <= get_acc_z;
                 end if;
@@ -400,7 +413,7 @@ end process;
 
 -- Angle read
 actualAngle <= FilteredAngle;
-
+--LED_TEST <= actualAngle;
 ---------------------
 ---- Extra stuff ----
 ---------------------
@@ -490,6 +503,7 @@ END CASE;
 
 end process;
 
+testled <= spi_rx_sig;
 -- alive timer --
 -- generate a regular blinking on the onboard led 
 ALIVE <= ALIVE_LED;

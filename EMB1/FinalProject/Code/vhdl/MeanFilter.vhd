@@ -42,25 +42,39 @@ entity MeanFilter is
 end MeanFilter;
 
 architecture Behavioral of MeanFilter is
-	signal val1, val2, val3, val4 : STD_LOGIC_VECTOR (7 downto 0) := "00000000";
-    signal sumofvalues : STD_LOGIC_VECTOR(9 downto 0) := "0000000000"; 
+	signal val1, val2, val3, val4, val5, val6, val7, val8 : STD_LOGIC_VECTOR (11 downto 0) := "000000000000";
+    signal sumofvalues : STD_LOGIC_VECTOR(11 downto 0) := "000000000000"; 
 
 begin
 
 	process(newdata_sig)
+	   variable dataConverted : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 	begin
 
 	if rising_edge(newdata_sig) then
+	
+	if newdata_array(7) = '0' then
+	   dataConverted := "11111111"-newdata_array;
+	   dataConverted := "10000000"+newdata_array;
+   else 
+	   dataConverted := newdata_array;
+   end if;
+
+
+--	    val8 <= val7;
+--	    val7 <= val6;
+--	    val6 <= val5;
+--	    val5 <= val4;
 		val4 <= val3;
 		val3 <= val2;
 		val2 <= val1;
-		val1 <= newdata_array;
+		val1(7 downto 0) <= dataConverted;
 		
 	end if;
 
 	end process;
 
-    	sumofvalues <= newdata_array + val3 + val2 + val1;
+    	sumofvalues <= val4 + val3 + val2 + val1+ val5 + val6 + val7 +val8;
 		filtered <= sumofvalues(9 downto 2);
 
 

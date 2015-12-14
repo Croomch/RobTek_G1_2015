@@ -111,7 +111,9 @@ if rising_edge(CLK) then
         output_updated <= '1';
     elsif  CS = '0' then
         pulsed := false;
-        output_updated <= '0';           
+        output_updated <= '0';
+    else
+        output_updated <= '0';       
     end if;
 end if;
 end process;
