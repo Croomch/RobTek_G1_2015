@@ -53,11 +53,11 @@ begin
 
 	if rising_edge(newdata_sig) then
 	
-	if newdata_array(7) = '0' then
+	if newdata_array >= "10000000" then
 	   dataConverted := "11111111"-newdata_array;
-	   dataConverted := "10000000"+newdata_array;
+	   dataConverted := "10000000"-dataConverted;
    else 
-	   dataConverted := newdata_array;
+	   dataConverted := newdata_array+"10000000";
    end if;
 
 

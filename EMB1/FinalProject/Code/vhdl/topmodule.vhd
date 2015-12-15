@@ -413,7 +413,7 @@ end process;
 
 -- Angle read
 actualAngle <= FilteredAngle;
---LED_TEST <= actualAngle;
+--LED_TEST <= FilteredAngle(7 downto 0);
 ---------------------
 ---- Extra stuff ----
 ---------------------
@@ -489,7 +489,7 @@ WHEN pause =>
     -- Counter up
     counter := counter + 1;
     -- change state
-    if counter >= 255 then
+    if counter >= 1 then
         counter := 0;
         if MotorDuty(8) = '1' then 
             nx_motor <= fwd;
