@@ -136,7 +136,8 @@ signal freq_out          : std_logic := '0';
 signal bb_leds				: std_logic_vector(7 downto 0);  -- register for 8 leds
 signal dipsw             : std_logic_vector(3 downto 0);
 signal frq,flsh      : std_logic;
-
+signal counter : integer range 0 to 255 := 0;
+signal startWaiting : std_logic := '0';
 
 COMPONENT motorcontrol IS
 Port (     CLK : in STD_LOGIC;        
@@ -436,7 +437,6 @@ end process;
 -- statemachine for motor
 -- fwd -> back_w -> back -> fwd_w -> fwd (circle)
 process(pr_motor)
-    variable counter : integer range 0 to 255 := 0;
 begin 
 CASE pr_motor IS
 WHEN fwd =>
@@ -453,6 +453,8 @@ WHEN fwd =>
     -- change state
     if MotorDuty(8) = '0' then
         nx_motor <= pause;
+        startWaiting <= '1';
+
     else
         nx_motor <= fwd;
     end if;
@@ -470,7 +472,9 @@ WHEN back =>
 
     -- change state
     if MotorDuty(8) = '1' then
-        nx_motor <= pause;
+        nx_motor <= pause;   
+        startWaiting <= '1';
+
     else
         nx_motor <= back;
     end if;
@@ -486,11 +490,10 @@ WHEN pause =>
     R_FWD <= "00000000";
     L_BACK <= "00000000";
     R_BACK <= "00000000";
-    -- Counter up
-    counter := counter + 1;
+    
     -- change state
     if counter >= 1 then
-        counter := 0;
+        startWaiting <= '0';
         if MotorDuty(8) = '1' then 
             nx_motor <= fwd;
         else
@@ -499,11 +502,23 @@ WHEN pause =>
     end if;
     
 END CASE;
-
-
 end process;
 
-testled <= spi_rx_sig;
+--Set the time to wait to change direction of the motors
+process(CLK)
+begin
+    if rising_edge(CLK) then
+        if startWaiting = '1' then
+                counter <= counter+1;
+        else
+                counter <= 0;
+        end if;
+    end if;
+end process;
+
+
+
+testled <= startWaiting;
 -- alive timer --
 -- generate a regular blinking on the onboard led 
 ALIVE <= ALIVE_LED;
