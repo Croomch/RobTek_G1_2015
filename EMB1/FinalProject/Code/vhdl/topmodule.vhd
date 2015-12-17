@@ -136,8 +136,7 @@ signal freq_out          : std_logic := '0';
 signal bb_leds				: std_logic_vector(7 downto 0);  -- register for 8 leds
 signal dipsw             : std_logic_vector(3 downto 0);
 signal frq,flsh      : std_logic;
-signal counter : integer range 0 to 255 := 0;
-signal startWaiting : std_logic := '0';
+signal start_timeout, end_timeout : std_logic := '0';
 
 COMPONENT motorcontrol IS
 Port (     CLK : in STD_LOGIC;        
@@ -309,14 +308,14 @@ begin
         WHEN init_spi =>
             -- output --
             spi_tx_ctl <= SET_CTRL1_XL;
-            spi_tx_msg <= "00000000";
+            spi_tx_msg <= SET_CTRL1_ON;
             spi_tx_sig <= '1';
             -- what is nx-state?
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 --nx_state <= send_data;
                 spi_tx_sig <= '1';
             --    if spi_rx(0) = '1' then -- if new data ready on accelerometer
-                    nx_state <= control;
+		  nx_state <= control;
             --    else
             --        nx_state <= init_spi;
             --    end if;
@@ -346,10 +345,9 @@ begin
                 
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_x;
-    
-                    else -- stay in the state
-                      nx_data <= stup_initState;
-                    end if;
+		else -- stay in the state
+                    nx_data <= stup_initState;
+		end if;
                     
             WHEN get_acc_x =>
     
@@ -358,11 +356,9 @@ begin
             
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_y;
-
 		-- Signal filtering
 		    new_data <= '1';
 		    newAcc_Value <= spi_rx;
-
                 else -- stay in the state
                     nx_data <= get_acc_x;
                 end if;
@@ -436,11 +432,13 @@ end process;
 --actualAngle <= spi_rx;
 -- statemachine for motor
 -- fwd -> back_w -> back -> fwd_w -> fwd (circle)
-process(pr_motor)
+process(pr_motor, end_timeout)
 begin 
 CASE pr_motor IS
 WHEN fwd =>
     -- output
+    start_timeout <= '0';
+    
     ACTIVE_L_BACK <= '0';
     ACTIVE_R_BACK <= '0';
     ACTIVE_L_FWD <= '1';
@@ -460,6 +458,8 @@ WHEN fwd =>
     end if;
 WHEN back =>
     -- output
+    start_timeout <= '0';
+    
     ACTIVE_L_BACK <= '1';
     ACTIVE_R_BACK <= '1';
     ACTIVE_L_FWD <= '0';
@@ -474,13 +474,14 @@ WHEN back =>
     if MotorDuty(8) = '1' then
         nx_motor <= pause;   
         startWaiting <= '1';
-
     else
         nx_motor <= back;
     end if;
 
 WHEN pause =>
     -- output
+    start_timeout <= '1';
+    
     ACTIVE_L_BACK <= '0';
     ACTIVE_R_BACK <= '0';
     ACTIVE_L_FWD <= '0';
@@ -492,13 +493,15 @@ WHEN pause =>
     R_BACK <= "00000000";
     
     -- change state
-    if counter >= 1 then
-        startWaiting <= '0';
+    if end_timeout = '1' then
+        start_timeout <= '0';
         if MotorDuty(8) = '1' then 
             nx_motor <= fwd;
         else
             nx_motor <= back;
         end if;
+    else
+      nx_motor <= pause;
     end if;
     
 END CASE;
@@ -506,13 +509,18 @@ end process;
 
 --Set the time to wait to change direction of the motors
 process(CLK)
+variable counter : integer range 0 to 10 := 0;
 begin
     if rising_edge(CLK) then
-        if startWaiting = '1' then
-                counter <= counter+1;
-        else
-                counter <= 0;
+      if start_timeout = '1' then
+	counter := counter + 1;
+        if counter >= 9 then
+	  counter := 0;
+	  end_timeout <= '1';
         end if;
+      else
+	counter := 0;
+      end if;
     end if;
 end process;
 
