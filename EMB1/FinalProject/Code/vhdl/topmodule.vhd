@@ -83,15 +83,15 @@ signal spi_tx_msg : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 signal ALIVE_LED : STD_LOGIC := '0';
 -- PID signals --
 signal MotorDuty : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
-signal actualAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+signal actualAngle : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
 CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
 CONSTANT DutyTest : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
 -- TosNet
 signal data_Bluetooth : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
 -- Mean Filter
 signal new_data : STD_LOGIC := '0';
-signal newAcc_Value : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
-signal FilteredAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+signal newAcc_Value : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal FilteredAngle : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
 
 
 ---- CONSTANTS ----
@@ -103,7 +103,7 @@ CONSTANT ALIVE_PERIOD : INTEGER := CLK_FREQ;
 CONSTANT GET_CTRL9_XL : STD_LOGIC_VECTOR(7 downto 0) := "10011001";
 CONSTANT SET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "00010000";
 CONSTANT GET_CTRL1_XL : STD_LOGIC_VECTOR(7 downto 0) := "10010000";
-CONSTANT SET_CTRL1_ON : STD_LOGIC_VECTOR(7 downto 0) := "10100101";
+CONSTANT SET_CTRL1_ON : STD_LOGIC_VECTOR(7 downto 0) := "10100001";
 CONSTANT GET_STATUS : STD_LOGIC_VECTOR(7 downto 0) := "10011110";
 -- ACC
 CONSTANT GET_ACCX_H : STD_LOGIC_VECTOR(7 downto 0) := "10101001";
@@ -182,7 +182,7 @@ END COMPONENT;
 -- PID --
 COMPONENT PID_controller IS
     Port (  CLK : in STD_LOGIC;
-            errorAngle : in STD_LOGIC_VECTOR (7 downto 0);
+            errorAngle : in STD_LOGIC_VECTOR (15 downto 0);
             DesiredAngle : in STD_LOGIC_VECTOR (7 downto 0);
             MotorOutput : out STD_LOGIC_VECTOR (8 downto 0)
             );
@@ -192,8 +192,8 @@ END COMPONENT;
 COMPONENT MeanFilter is
     Port ( 
         newdata_sig : in STD_LOGIC;
-	newdata_array : in STD_LOGIC_VECTOR (7 downto 0);
-	filtered : out STD_LOGIC_VECTOR (7 downto 0)
+	newdata_array : in STD_LOGIC_VECTOR (15 downto 0);
+	filtered : out STD_LOGIC_VECTOR (15 downto 0)
     );
 END COMPONENT;
 
@@ -343,11 +343,11 @@ begin
                 spi_tx_ctl <= SET_CTRL1_XL;
                 spi_tx_msg <= SET_CTRL1_ON;
                 
-                if spi_rx_sig = '1' then -- wait for timer run out signal
+              if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_x;
-		else -- stay in the state
+		      else -- stay in the state
                     nx_data <= stup_initState;
-		end if;
+		      end if;
                     
             WHEN get_acc_x =>
     
@@ -356,9 +356,8 @@ begin
             
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_y;
-		-- Signal filtering
-		    new_data <= '1';
-		    newAcc_Value <= spi_rx;
+		      -- Signal filtering
+		            newAcc_Value(15 downto 8) <= spi_rx;
                 else -- stay in the state
                     nx_data <= get_acc_x;
                 end if;
@@ -368,6 +367,8 @@ begin
 
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= stup_initState;
+                    newAcc_Value(7 downto 0) <= spi_rx;
+                    new_data <= '1';
                 else -- stay in the state
                     nx_data <= get_acc_y;
                 end if;
@@ -451,7 +452,7 @@ WHEN fwd =>
     -- change state
     if MotorDuty(8) = '0' then
         nx_motor <= pause;
-        startWaiting <= '1';
+        start_timeout <= '1';
 
     else
         nx_motor <= fwd;
@@ -473,7 +474,7 @@ WHEN back =>
     -- change state
     if MotorDuty(8) = '1' then
         nx_motor <= pause;   
-        startWaiting <= '1';
+        start_timeout <= '1';
     else
         nx_motor <= back;
     end if;
@@ -494,7 +495,7 @@ WHEN pause =>
     
     -- change state
     if end_timeout = '1' then
-        start_timeout <= '0';
+        start_timeout <= '1';
         if MotorDuty(8) = '1' then 
             nx_motor <= fwd;
         else
@@ -515,18 +516,22 @@ begin
       if start_timeout = '1' then
 	counter := counter + 1;
         if counter >= 9 then
-	  counter := 0;
 	  end_timeout <= '1';
+	  counter := 0;
+	  else
+	  	  end_timeout <= '0';
         end if;
       else
 	counter := 0;
+		  end_timeout <= '0';
       end if;
     end if;
 end process;
 
 
 
-testled <= startWaiting;
+testled <= start_timeout;
+--testled <= "10101010";
 -- alive timer --
 -- generate a regular blinking on the onboard led 
 ALIVE <= ALIVE_LED;
