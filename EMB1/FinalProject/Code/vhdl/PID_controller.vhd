@@ -46,24 +46,25 @@ end PID_controller;
 architecture Behavioral of PID_controller is
 
     
-    constant PGAIN : integer := 10;
+    constant PGAIN : integer := 8;
     constant MAXERROR : integer := (PGAIN * 256 * 256);
-    constant IGAIN : integer := 0;
-    constant DGAIN : integer := 0;
+    --constant IGAIN : integer := 0;
+    --constant DGAIN : integer := 0;
     
-    constant IactionMAX : integer := 511;
-    constant IactionMIN : integer := 0;
+    --constant IactionMAX : integer := 511;
+    --constant IactionMIN : integer := 0;
     
-        signal Paction, Iaction, Daction : integer range -MAXERROR to MAXERROR := 0;
-        signal IState : integer range -1023 to 1024 := 0;
-        signal PreviousError : integer range -1023 to 1024 := 0;
+        signal Paction : integer range -MAXERROR to MAXERROR := 0;
+        --, Iaction, Daction
+        --signal IState : integer range -1023 to 1024 := 0;
+        --signal PreviousError : integer range -1023 to 1024 := 0;
         signal TotalAction_vec : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
         signal ispositive : STD_LOGIC := '0';
         
     
 begin
 
-MotorOutput <= ispositive & totalAction_vec(15 downto 8); 
+MotorOutput <= ispositive & TotalAction_vec(15 downto 8); 
 
 
 process(CLK)  
@@ -105,14 +106,14 @@ begin
 
         TotalAction := Paction;
         
-        if TotalAction >= (256*256-1) then
-            TotalAction := (256*256-1);
-        --elsif TotalAction < 20 then
-       --     TotalAction := 0;
+        if TotalAction >= ((256 * 256) - 1) then
+            TotalAction := ((256 * 256) - 1);
+        --elsif TotalAction < 256 then
+        --    TotalAction := 0;
         end if;        
            
         --Convert Action into 8 bits
-        totalAction_vec <= std_logic_vector(to_unsigned(TotalAction,16));         
+        TotalAction_vec <= std_logic_vector(to_unsigned(TotalAction,16));         
     end if;
 
 end process;
