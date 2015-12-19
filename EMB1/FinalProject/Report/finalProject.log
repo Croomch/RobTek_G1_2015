@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.17)  19 DEC 2015 14:25
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.17)  19 DEC 2015 15:29
 entering extended mode
 **finalProject.tex
 
@@ -1174,23 +1174,16 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 121.
 roject.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 121.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 121.
-
-
-Package rerunfilecheck Warning: File `finalProject.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `finalProject.out':
-(rerunfilecheck)             Before: DD921C110420D8E1BD0DD63FD9A3066C;880
-(rerunfilecheck)             After:  3D13BCD692DF33C5FF8B69F3AA050FDD;927.
+Package rerunfilecheck Info: File `finalProject.out' has not changed.
+(rerunfilecheck)             Checksum: 3D13BCD692DF33C5FF8B69F3AA050FDD;927.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 121.
  ) 
 Here is how much of TeX's memory you used:
- 19282 strings out of 494045
- 378267 string characters out of 3145969
- 453273 words of memory out of 3000000
- 22129 multiletter control sequences out of 15000+200000
- 14906 words of font info for 57 fonts, out of 3000000 for 9000
+ 19283 strings out of 494045
+ 378283 string characters out of 3145969
+ 454273 words of memory out of 3000000
+ 22131 multiletter control sequences out of 15000+200000
+ 15253 words of font info for 58 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  55i,11n,80p,461b,672s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
@@ -1201,9 +1194,9 @@ ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Progr
 am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program F
 iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files
  (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on finalProject.pdf (11 pages, 127587 bytes).
+Output written on finalProject.pdf (11 pages, 129993 bytes).
 PDF statistics:
- 195 PDF objects out of 1000 (max. 8388607)
- 39 named destinations out of 1000 (max. 500000)
- 133 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 198 PDF objects out of 1000 (max. 8388607)
+ 38 named destinations out of 1000 (max. 500000)
+ 141 words of extra memory for PDF output out of 10000 (max. 10000000)
 
