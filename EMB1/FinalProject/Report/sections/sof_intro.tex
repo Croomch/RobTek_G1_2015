@@ -1,0 +1,51 @@
+In order to control and stabilize the segway a the communication with the accelerometer/gyroscope must be established.
+This must data received must then be processed in order to control the motors according to the segways position.
+
+To do this the system was build up from the modules seen in figure \ref{fig:fpga_sof_design}.
+
+
+
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=1cm]
+% FPGA border
+\node[rectangle,draw,minimum width=9cm, minimum height=7cm, dashed, name=FPGA]  {};
+
+% used to align the insides of FPGA
+\node[rectangle,minimum width=5cm, minimum height=5cm, name=FPGAaligne] {};
+
+% components of FPGA
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=pid] at (FPGAaligne.-135) {PID};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=communiction] at (FPGAaligne.45) {SPI Module};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=mc] at (FPGAaligne.-45) {Motor Control};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=filter] at (FPGAaligne.180) {Filter};
+\node[rectangle,draw,minimum width=3cm, minimum height=1cm, name=segway] at (FPGAaligne.135) {Segway Control};
+
+% nodes outside FPGA
+%\node [left=of utos,name=pc] {PC};
+\node [right=of communiction,name=spi] {SPI};
+%\node [left=of color,name=rgb] {RGB(2:0)};
+\node [right=of mc,name=motor] {DC Motors};
+
+% arrows inside FPGA
+\draw[<->] (segway) -- node[] {} (communiction) ;
+\draw[->] (segway) -- node[left] {16 bit} (filter) ;
+\draw[->] (filter) --  node[left] {16 bit} (pid) ;
+\draw[->] (segway) -- node[above right] {8 bit} (mc) ;
+\draw[->] (pid) --(-0.2,-2.5)--(-0.2,2)-- node[below left] {9 bit} (segway) ;
+ 
+% arrows connected to the outside of FPGA
+\draw[<->] (spi) -- node[] {} (communiction) ;
+\draw[<->] (mc) -- node[] {} (motor) ;
+%\draw[->] (adc) to[out=180, in=0] node[] {} (ad) ;
+%\draw[->] (color) to[out=180, in=0] node[] {} (rgb) ;
+%\draw[->] (mc) to[out=0, in=180] node[] {} (servo) ;
+\end{tikzpicture}
+
+\caption{Block design of the FPGA.}
+\label{fig:fpga_sof_design}
+\end{figure}
+
+\todo[inline]{very short something about the different blocks after which they are explained in detail in the main part}
