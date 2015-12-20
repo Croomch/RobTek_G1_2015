@@ -308,10 +308,9 @@ end process;
 -- jump to init state once in a while to ensuree that communication is up and running
 process(pr_state, spi_rx_sig, pr_data)--, pr_reinitiate) -- pr state and all other inputs
 begin
-    
+    new_data <= '0';
     CASE pr_state IS
         WHEN init_spi =>
-        new_data <= '0';
             -- output --
             spi_tx_ctl <= SET_CTRL1_XL;
             spi_tx_msg <= SET_CTRL1_ON;
@@ -329,7 +328,6 @@ begin
                 nx_state <= init_spi;
             end if;
         WHEN control =>
-        new_data <= '0';
             -- output --
  --           spi_tx_ctl <= "00000000";
  --           spi_tx_msg <= "00000000";
@@ -347,7 +345,6 @@ begin
             -- inner state to change what data to read
             CASE pr_data IS
             WHEN stup_initState =>
-            new_data <= '0';
                 spi_tx_ctl <= SET_CTRL1_XL;
                 spi_tx_msg <= SET_CTRL1_ON;
                 
@@ -358,8 +355,6 @@ begin
 		      end if;
                     
             WHEN get_acc_x =>
-            new_data <= '0';
-    
                 spi_tx_ctl <= GET_ACCX_H;
                 spi_tx_msg <= "00000000";
             
@@ -373,16 +368,14 @@ begin
             WHEN get_acc_y =>
                 spi_tx_ctl <= GET_ACCX_L;
                 spi_tx_msg <= "00000000";
-                new_data <= '0';
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_z;
-                    newAcc_Value(7 downto 0) <= spi_rx;
+                    newAcc_Value(7 downto 0) <= "00000000";
                     new_data <= '1';
                 else -- stay in the state
                     nx_data <= get_acc_y;
                 end if;
             WHEN get_acc_z =>
-                new_data <= '0';
  --               spi_tx_ctl <= GET_ACCZ_H;
 --                spi_tx_msg <= "00000000";
 

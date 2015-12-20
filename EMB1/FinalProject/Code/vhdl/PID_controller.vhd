@@ -46,7 +46,7 @@ end PID_controller;
 architecture Behavioral of PID_controller is
 
     
-    constant PGAIN : integer := 8;
+    constant PGAIN : integer := 2;
     constant MAXERROR : integer := (PGAIN * 256 * 256);
     --constant IGAIN : integer := 0;
     --constant DGAIN : integer := 0;
@@ -75,11 +75,11 @@ begin
     -- PID Control.
     if rising_edge(CLK) then
                
-        if errorAngle >= (DesiredAngle & "00000000") then
-            error_vec := errorAngle - ( DesiredAngle & "00000000");
+        if ErrorAngle(15 downto 8) >= DesiredAngle then
+            error_vec := ErrorAngle - ( DesiredAngle & "00000000");
             ispositive <= '1';
         else
-            error_vec := (DesiredAngle & "00000000") - errorAngle;
+            error_vec := (DesiredAngle & "00000000") - ErrorAngle;
             ispositive <= '0';
         end if; 
                 
