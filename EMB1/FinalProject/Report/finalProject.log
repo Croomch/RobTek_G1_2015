@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.17)  19 DEC 2015 15:29
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.17)  20 DEC 2015 21:36
 entering extended mode
 **finalProject.tex
 
@@ -1179,10 +1179,10 @@ Package rerunfilecheck Info: File `finalProject.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 121.
  ) 
 Here is how much of TeX's memory you used:
- 19283 strings out of 494045
- 378283 string characters out of 3145969
- 454273 words of memory out of 3000000
- 22131 multiletter control sequences out of 15000+200000
+ 19281 strings out of 494045
+ 378242 string characters out of 3145969
+ 454224 words of memory out of 3000000
+ 22129 multiletter control sequences out of 15000+200000
  15253 words of font info for 58 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  55i,11n,80p,461b,672s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1194,7 +1194,7 @@ ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Progr
 am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program F
 iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files
  (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on finalProject.pdf (11 pages, 129993 bytes).
+Output written on finalProject.pdf (11 pages, 131555 bytes).
 PDF statistics:
  198 PDF objects out of 1000 (max. 8388607)
  38 named destinations out of 1000 (max. 500000)

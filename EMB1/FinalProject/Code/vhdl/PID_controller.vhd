@@ -49,11 +49,11 @@ architecture Behavioral of PID_controller is
     constant PGAIN : integer := 50;
     constant SPEEDOFFSET : integer := 0;
     constant MAXERROR : integer := (256 * 256);
-    constant IGAIN : integer := 0;
+--    constant IGAIN : integer := 0;
     constant DGAIN : integer := 40;
     
-    constant IactionMAX : integer := 200;
-    constant IactionMIN : integer := -200;
+--    constant IactionMAX : integer := 200;
+--    constant IactionMIN : integer := -200;
      
     signal TotalAction_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     signal ispositive : STD_LOGIC := '0';
@@ -63,28 +63,27 @@ begin
 
 MotorOutput <= ispositive & totalAction_vec; 
 
-
 process(CLK)  
     variable error : integer range 0 to MAXERROR  := 0;
     variable TotalAction : integer range -MAXERROR to MAXERROR := 0;
     variable error_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     variable Paction, Daction : integer range 0 to MAXERROR := 0;
-    variable Iaction : integer range -MAXERROR to MAXERROR := 0;
+--    variable Iaction : integer range -MAXERROR to MAXERROR := 0;
     variable PreviousError : integer range 0 to 255 := 0;
-    variable IState : integer range -1023 to 1024 := 0;
+--    variable IState : integer range -1023 to 1024 := 0;
             
 begin  
     -- PID Control.
     if rising_edge(CLK) then
                
-        if errorAngle >= DesiredAngle then
-            error_vec := errorAngle - DesiredAngle;
+        if ErrorAngle >= DesiredAngle then
+            error_vec := ErrorAngle - DesiredAngle;
             ispositive <= '1';
-            IState := IState + error;               
+--            IState := IState + error;               
         else
-            error_vec := (DesiredAngle - errorAngle);
+            error_vec := (DesiredAngle - ErrorAngle);
             ispositive <= '0';
-            IState := IState - error;                  
+--            IState := IState - error;                  
         end if; 
                 
         -- P action: 
@@ -93,20 +92,20 @@ begin
         Paction := error * PGAIN;
            
         -- I action:
-        Iaction := IState * IGAIN;
+--        Iaction := IState * IGAIN;
         
-        if Iaction > IactionMAX then
-            Iaction := IactionMAX;
-        elsif Iaction < IactionMIN then
-            Iaction := IactionMIN;
-        end if;
+--        if Iaction > IactionMAX then
+--            Iaction := IactionMAX;
+--        elsif Iaction < IactionMIN then
+--            Iaction := IactionMIN;
+--        end if;
         
         
         Daction := (PreviousError - error) * DGAIN;
         PreviousError := error;
         
-        TotalAction := Paction - Daction - Iaction;
---        TotalAction := Paction - Daction;
+--        TotalAction := Paction - Daction - Iaction;
+        TotalAction := Paction - Daction;
 --        TotalAction := Paction;
         
         if TotalAction >= 255 then
