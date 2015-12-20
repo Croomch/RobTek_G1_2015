@@ -46,19 +46,17 @@ end PID_controller;
 architecture Behavioral of PID_controller is
 
     
-    constant PGAIN : integer := 10;
-    constant MAXERROR : integer := (PGAIN * 256);
---    constant IGAIN : integer := 0;
---    constant DGAIN : integer := 0;
+    constant PGAIN : integer := 50;
+    constant SPEEDOFFSET : integer := 0;
+    constant MAXERROR : integer := (256 * 256);
+    constant IGAIN : integer := 0;
+    constant DGAIN : integer := 40;
     
---    constant IactionMAX : integer := 511;
---    constant IactionMIN : integer := 0;
-    
-        signal Paction, Iaction, Daction : integer range -MAXERROR to MAXERROR := 0;
---        signal IState : integer range -1023 to 1024 := 0;
---        signal PreviousError : integer range -1023 to 1024 := 0;
-        signal TotalAction_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
-        signal ispositive : STD_LOGIC := '0';
+    constant IactionMAX : integer := 200;
+    constant IactionMIN : integer := -200;
+     
+    signal TotalAction_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    signal ispositive : STD_LOGIC := '0';
         
     
 begin
@@ -68,8 +66,13 @@ MotorOutput <= ispositive & totalAction_vec;
 
 process(CLK)  
     variable error : integer range 0 to MAXERROR  := 0;
-    variable TotalAction : integer range 0 to MAXERROR := 0;
+    variable TotalAction : integer range -MAXERROR to MAXERROR := 0;
     variable error_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    variable Paction, Daction : integer range 0 to MAXERROR := 0;
+    variable Iaction : integer range -MAXERROR to MAXERROR := 0;
+    variable PreviousError : integer range 0 to 255 := 0;
+    variable IState : integer range -1023 to 1024 := 0;
+            
 begin  
     -- PID Control.
     if rising_edge(CLK) then
@@ -77,44 +80,46 @@ begin
         if errorAngle >= DesiredAngle then
             error_vec := errorAngle - DesiredAngle;
             ispositive <= '1';
+            IState := IState + error;               
         else
-            error_vec := DesiredAngle - errorAngle;
+            error_vec := (DesiredAngle - errorAngle);
             ispositive <= '0';
+            IState := IState - error;                  
         end if; 
                 
         -- P action: 
         error := conv_integer(unsigned(error_vec));
-        Paction <= error * PGAIN;
+        
+        Paction := error * PGAIN;
            
         -- I action:
---        IState <= IState+error;
---        Iaction <= IState * IGAIN;
+        Iaction := IState * IGAIN;
         
---        if Iaction > IactionMAX then
---            Iaction <= IactionMAX;
---            else if Iaction < IactionMIN then
---                Iaction <= IactionMIN;
---            end if;
---        end if;
+        if Iaction > IactionMAX then
+            Iaction := IactionMAX;
+        elsif Iaction < IactionMIN then
+            Iaction := IactionMIN;
+        end if;
         
         
---        Daction <= (PreviousError - error) * DGAIN;
---        PreviousError <= error;
+        Daction := (PreviousError - error) * DGAIN;
+        PreviousError := error;
         
---        TotalAction := Paction+Daction+Iaction;
-
-        TotalAction := Paction;
+        TotalAction := Paction - Daction - Iaction;
+--        TotalAction := Paction - Daction;
+--        TotalAction := Paction;
         
-        if TotalAction >= (255) then
+        if TotalAction >= 255 then
             TotalAction := 255;
-        --elsif TotalAction < 20 then
-       --     TotalAction := 0;
+        elsif TotalAction <= 0 then
+            TotalAction := 0;
+        elsif TotalAction <= 20 then
+            TotalAction := 20;
         end if;        
            
         --Convert Action into 8 bits
         totalAction_vec <= std_logic_vector(to_unsigned(TotalAction,8));         
     end if;
-
 end process;
 
 --process(CLK)  

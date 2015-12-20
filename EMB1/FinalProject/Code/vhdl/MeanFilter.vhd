@@ -43,7 +43,8 @@ end MeanFilter;
 
 architecture Behavioral of MeanFilter is
 	signal val1, val2, val3, val4, val5, val6, val7, val8 : STD_LOGIC_VECTOR (10 downto 0) := "00000000000";
-    signal sumofvalues : STD_LOGIC_VECTOR(10 downto 0) := "00000000000"; 
+    signal sumofvalues : STD_LOGIC_VECTOR(10 downto 0) := "00000000000";
+    constant  zerog : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
 
 begin
 
@@ -56,11 +57,11 @@ begin
 
 	if rising_edge(newdata_sig) then
 	
-	if newdata_array >= "10000000" then
+	if newdata_array >= zerog then
 	   dataConverted := "11111111"-newdata_array;
 	   --dataConverted := "10000000"-dataConverted;
    else 
-	   dataConverted := newdata_array + "10000000";
+	   dataConverted := newdata_array + zerog;
    end if;
 
 
