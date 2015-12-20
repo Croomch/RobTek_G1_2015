@@ -36,30 +36,31 @@ use ieee.numeric_std.all;
 entity MeanFilter is
     Port ( 
         newdata_sig : in STD_LOGIC;
-	newdata_array : in STD_LOGIC_VECTOR (15 downto 0);
-	filtered : out STD_LOGIC_VECTOR (15 downto 0)
+	newdata_array : in STD_LOGIC_VECTOR (7 downto 0);
+	filtered : out STD_LOGIC_VECTOR (7 downto 0)
     );
 end MeanFilter;
 
 architecture Behavioral of MeanFilter is
-	signal val1, val2, val3, val4, val5, val6, val7, val8 : STD_LOGIC_VECTOR (15 downto 0) := "0000000000000000";
-    signal sumofvalues : STD_LOGIC_VECTOR(18 downto 0) := "0000000000000000000"; 
-
-    constant accoffset : STD_LOGIC_VECTOR(15 downto 0) := "1000000000000000"; 
+	signal val1, val2, val3, val4, val5, val6, val7, val8 : STD_LOGIC_VECTOR (10 downto 0) := "00000000000";
+    signal sumofvalues : STD_LOGIC_VECTOR(10 downto 0) := "00000000000"; 
 
 begin
 
-	process(newdata_sig)
-	   variable dataConverted : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
-	begin
+filtered <= sumofvalues(10 downto 3);
+sumofvalues <= val4 + val3 + val2 + val1+ val5 + val6 + val7 +val8;
+
+process(newdata_sig)
+	   variable dataConverted : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+begin
 
 	if rising_edge(newdata_sig) then
 	
-	if newdata_array >= accoffset then
-	   dataConverted := "1111111111111111" - newdata_array;
-	   --dataConverted := accoffset-dataConverted;
+	if newdata_array >= "10000000" then
+	   dataConverted := "11111111"-newdata_array;
+	   --dataConverted := "10000000"-dataConverted;
    else 
-	   dataConverted := newdata_array + accoffset;
+	   dataConverted := newdata_array + "10000000";
    end if;
 
 
@@ -70,14 +71,13 @@ begin
 		val4 <= val3;
 		val3 <= val2;
 		val2 <= val1;
-		val1 <= dataConverted;
+		val1 <= "000" & dataConverted;
 		
 	end if;
 
 	end process;
 
-    	sumofvalues <= val4 + val3 + val2 + val1+ val5 + val6 + val7 +val8;
-		filtered <= sumofvalues(18 downto 3);
+    	
 
 
 end Behavioral;

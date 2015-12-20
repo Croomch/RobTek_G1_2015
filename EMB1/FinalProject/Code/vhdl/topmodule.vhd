@@ -45,13 +45,13 @@ entity topmodule is
     SPI_CS : out STD_LOGIC;
     
     ALIVE : out STD_LOGIC;
-    TESTLED : out STD_LOGIC
---    LED_TEST : out STD_LOGIC_VECTOR(7 downto 0);
+--    TESTLED : out STD_LOGIC;
+    LED_TEST : out STD_LOGIC_VECTOR(7 downto 0);
     
---    XB_SERIAL_O   		: out	STD_LOGIC;                       -- Serial stream to PC
---    XB_SERIAL_I	   	: in	STD_LOGIC;                       -- Serial stream from PC
---    XB_LEDS_O			: out	STD_LOGIC_VECTOR(2 downto 0);    -- 3 LED's on expansion board
---    XB_PSW_I        : in  STD_LOGIC_VECTOR(3 downto 0)    -- 4 dip switches
+    XB_SERIAL_O   		: out	STD_LOGIC;                       -- Serial stream to PC
+    XB_SERIAL_I	   	: in	STD_LOGIC;                       -- Serial stream from PC
+    XB_LEDS_O			: out	STD_LOGIC_VECTOR(2 downto 0);    -- 3 LED's on expansion board
+    XB_PSW_I        : in  STD_LOGIC_VECTOR(3 downto 0)    -- 4 dip switches
     );
 end topmodule;
 
@@ -65,9 +65,9 @@ signal pr_data, nx_data : state_data;
 TYPE state_motor IS (fwd, back, pause);
 signal pr_motor, nx_motor : state_motor;
 -- data signals
---signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal acc_X : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
 -- reinitiate signal
---signal pr_reinitiate, nx_reinitiate: STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+signal pr_reinitiate, nx_reinitiate: STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 -- signals for PWM
 signal L_FWD, L_BACK, R_FWD, R_BACK : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 signal HIGH_L_FWD_PWM, HIGH_L_BACK_PWM, HIGH_R_FWD_PWM, HIGH_R_BACK_PWM : STD_LOGIC := '0';
@@ -83,16 +83,15 @@ signal spi_tx_msg : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 signal ALIVE_LED : STD_LOGIC := '0';
 -- PID signals --
 signal MotorDuty : STD_LOGIC_VECTOR(8 downto 0) := "000000000";
-signal actualAngle : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal actualAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 CONSTANT ZeroAngle : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
---CONSTANT DutyTest : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
+CONSTANT DutyTest : STD_LOGIC_VECTOR(7 downto 0) := "10000000";
 -- TosNet
---signal data_Bluetooth : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+signal data_Bluetooth : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
 -- Mean Filter
 signal new_data : STD_LOGIC := '0';
-signal newAcc_Value : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
-signal FilteredAngle : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
-signal start_timeout, end_timeout : std_logic := '0';
+signal newAcc_Value : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+signal FilteredAngle : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 
 
 ---- CONSTANTS ----
@@ -124,19 +123,20 @@ CONSTANT GET_GYRZ_L : STD_LOGIC_VECTOR(7 downto 0) := "10100111";
 
 ---- COMPONENTS ----
 -- Signals below is used to connect to the Pseudo TosNet Controller component  
---signal T_reg_ptr                 : std_logic_vector(2 downto 0);
---signal T_word_ptr                : std_logic_vector(1 downto 0);
---signal T_data_to_mem             : std_logic_vector(31 downto 0);
---signal T_data_from_mem           : std_logic_vector(31 downto 0);
---signal T_data_from_mem_latch     : std_logic;
+signal T_reg_ptr                 : std_logic_vector(2 downto 0);
+signal T_word_ptr                : std_logic_vector(1 downto 0);
+signal T_data_to_mem             : std_logic_vector(31 downto 0);
+signal T_data_from_mem           : std_logic_vector(31 downto 0);
+signal T_data_from_mem_latch     : std_logic;
 
----- Here we define the signals used by the top level design
---signal sys_cnt				: std_logic_vector(31 downto 0) := (others => '0');
---signal freq_gen          : std_logic_vector(31 downto 0) := (others => '0');
---signal freq_out          : std_logic := '0';
---signal bb_leds				: std_logic_vector(7 downto 0);  -- register for 8 leds
---signal dipsw             : std_logic_vector(3 downto 0);
---signal frq,flsh      : std_logic;
+-- Here we define the signals used by the top level design
+signal sys_cnt				: std_logic_vector(31 downto 0) := (others => '0');
+signal freq_gen          : std_logic_vector(31 downto 0) := (others => '0');
+signal freq_out          : std_logic := '0';
+signal bb_leds				: std_logic_vector(7 downto 0);  -- register for 8 leds
+signal dipsw             : std_logic_vector(3 downto 0);
+signal frq,flsh      : std_logic;
+signal start_timeout, end_timeout : std_logic := '0';
 
 COMPONENT motorcontrol IS
 Port (     CLK : in STD_LOGIC;        
@@ -148,18 +148,18 @@ END COMPONENT;
 
 -- Here we define the components we want to include in our design (there is only one)
 -- The Port description is just copied from the components own source file
---COMPONENT PseudoTosNet_ctrl is
---Port (
---    T_clk_50M							: in	STD_LOGIC;
---    T_serial_out						: out STD_LOGIC;
---    T_serial_in                   : in  STD_LOGIC;
---    T_reg_ptr							: out std_logic_vector(2 downto 0);
---    T_word_ptr							: out std_logic_vector(1 downto 0);
---    T_data_to_mem						: in  std_logic_vector(31 downto 0);
---    T_data_from_mem					: out std_logic_vector(31 downto 0);
---    T_data_from_mem_latch			: out std_logic
---    );
---END COMPONENT;
+COMPONENT PseudoTosNet_ctrl is
+Port (
+    T_clk_50M							: in	STD_LOGIC;
+    T_serial_out						: out STD_LOGIC;
+    T_serial_in                   : in  STD_LOGIC;
+    T_reg_ptr							: out std_logic_vector(2 downto 0);
+    T_word_ptr							: out std_logic_vector(1 downto 0);
+    T_data_to_mem						: in  std_logic_vector(31 downto 0);
+    T_data_from_mem					: out std_logic_vector(31 downto 0);
+    T_data_from_mem_latch			: out std_logic
+    );
+END COMPONENT;
 
 -- spi with gyro/acc --
 COMPONENT SPI IS
@@ -182,7 +182,7 @@ END COMPONENT;
 -- PID --
 COMPONENT PID_controller IS
     Port (  CLK : in STD_LOGIC;
-            errorAngle : in STD_LOGIC_VECTOR (15 downto 0);
+            errorAngle : in STD_LOGIC_VECTOR (7 downto 0);
             DesiredAngle : in STD_LOGIC_VECTOR (7 downto 0);
             MotorOutput : out STD_LOGIC_VECTOR (8 downto 0)
             );
@@ -192,8 +192,8 @@ END COMPONENT;
 COMPONENT MeanFilter is
     Port ( 
         newdata_sig : in STD_LOGIC;
-	newdata_array : in STD_LOGIC_VECTOR (15 downto 0);
-	filtered : out STD_LOGIC_VECTOR (15 downto 0)
+	newdata_array : in STD_LOGIC_VECTOR (7 downto 0);
+	filtered : out STD_LOGIC_VECTOR (7 downto 0)
     );
 END COMPONENT;
 
@@ -203,17 +203,17 @@ begin
 ---- Components ----
 --------------------
 -- Here we instantiate the Pseudo TosNet Controller component, and connect it's ports to signals	
---PseudoTosNet_ctrlInst : PseudoTosNet_ctrl
---Port map (
---    T_clk_50M          => CLK,
---	T_serial_out       => XB_SERIAL_O,
---	T_serial_in        => XB_SERIAL_I,
---	T_reg_ptr		     => T_reg_ptr,					
---	T_word_ptr		     => T_word_ptr,									
---	T_data_to_mem	     => T_data_to_mem,					
---	T_data_from_mem	     => T_data_from_mem,						
---	T_data_from_mem_latch => T_data_from_mem_latch
---);
+PseudoTosNet_ctrlInst : PseudoTosNet_ctrl
+Port map (
+    T_clk_50M          => CLK,
+	T_serial_out       => XB_SERIAL_O,
+	T_serial_in        => XB_SERIAL_I,
+	T_reg_ptr		     => T_reg_ptr,					
+	T_word_ptr		     => T_word_ptr,									
+	T_data_to_mem	     => T_data_to_mem,					
+	T_data_from_mem	     => T_data_from_mem,						
+	T_data_from_mem_latch => T_data_from_mem_latch
+);
 
 -- init the components needed
 MOTOR_CONTROL(0) <= ACTIVE_L_FWD;
@@ -287,18 +287,13 @@ filter : component MeanFilter
 -------------------
 ---- MAIN PART ----
 -------------------
-
--- Angle read
-actualAngle <= FilteredAngle;
---LED_TEST <= FilteredAngle(7 downto 0);
-
 -- lower FSM - flip-flop part, optn. add reset?! --
 process(CLK)
 begin
     if rising_edge(CLK) then -- update the state regularly
         pr_state <= nx_state;
         pr_data <= nx_data;
-    --    pr_reinitiate <= nx_reinitiate;
+        pr_reinitiate <= nx_reinitiate;
         pr_motor <= nx_motor;
     end if;
 end process;
@@ -348,47 +343,48 @@ begin
                 spi_tx_ctl <= SET_CTRL1_XL;
                 spi_tx_msg <= SET_CTRL1_ON;
                 
-              if spi_rx_sig = '1' then -- wait for timer run out signal
+                if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_x;
-		      else -- stay in the state
+		else -- stay in the state
                     nx_data <= stup_initState;
-		      end if;
+		end if;
                     
             WHEN get_acc_x =>
+    
                 spi_tx_ctl <= GET_ACCX_H;
                 spi_tx_msg <= "00000000";
             
                 if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= get_acc_y;
-		      -- Signal filtering
-		            newAcc_Value(15 downto 8) <= spi_rx;
+		-- Signal filtering
+		    new_data <= '1';
+		    newAcc_Value <= spi_rx;
                 else -- stay in the state
                     nx_data <= get_acc_x;
                 end if;
             WHEN get_acc_y =>
                 spi_tx_ctl <= GET_ACCX_L;
                 spi_tx_msg <= "00000000";
+
                 if spi_rx_sig = '1' then -- wait for timer run out signal
-                    nx_data <= get_acc_z;
-                    newAcc_Value(7 downto 0) <= "00000000";
-                    new_data <= '1';
+                    nx_data <= stup_initState;
                 else -- stay in the state
                     nx_data <= get_acc_y;
                 end if;
             WHEN get_acc_z =>
- --               spi_tx_ctl <= GET_ACCZ_H;
---                spi_tx_msg <= "00000000";
+                spi_tx_ctl <= GET_ACCZ_H;
+                spi_tx_msg <= "00000000";
 
---                if spi_rx_sig = '1' then -- wait for timer run out signal
+                if spi_rx_sig = '1' then -- wait for timer run out signal
                     nx_data <= stup_initState;
---                else -- stay in the state
- --                   nx_data <= get_acc_z;
- --               end if;
+                else -- stay in the state
+                    nx_data <= get_acc_z;
+                end if;
             END CASE;
             -- change state to control
             if spi_rx_sig = '1' then -- wait for timer run out signal
                 nx_state <= control;
- --               nx_reinitiate <= pr_reinitiate + 1;
+                nx_reinitiate <= pr_reinitiate + 1;
             else -- stay in the state
                 nx_state <= get_data;
             end if;
@@ -412,7 +408,9 @@ begin
     END CASE; 
 end process;
 
-
+-- Angle read
+actualAngle <= FilteredAngle;
+LED_TEST <= FilteredAngle(7 downto 0);
 ---------------------
 ---- Extra stuff ----
 ---------------------
@@ -453,7 +451,7 @@ WHEN fwd =>
     -- change state
     if MotorDuty(8) = '0' then
         nx_motor <= pause;
-        start_timeout <= '1';
+         start_timeout <= '1';
 
     else
         nx_motor <= fwd;
@@ -475,7 +473,7 @@ WHEN back =>
     -- change state
     if MotorDuty(8) = '1' then
         nx_motor <= pause;   
-        start_timeout <= '1';
+         start_timeout <= '1';
     else
         nx_motor <= back;
     end if;
@@ -496,7 +494,7 @@ WHEN pause =>
     
     -- change state
     if end_timeout = '1' then
-        start_timeout <= '1';
+         start_timeout <= '1';
         if MotorDuty(8) = '1' then 
             nx_motor <= fwd;
         else
@@ -510,28 +508,29 @@ END CASE;
 end process;
 
 --Set the time to wait to change direction of the motors
+--end_timeout <= start_timeout;
 process(CLK)
 variable counter : integer range 0 to 10 := 0;
 begin
     if rising_edge(CLK) then
       if start_timeout = '1' then
-	counter := counter + 1;
-        if counter >= 9 then
-	  end_timeout <= '1';
-	  counter := 0;
-	  else
-	  	  end_timeout <= '0';
+        if counter >= 8 then
+    	  end_timeout <= '1';
+     	  counter := 0;
+ 	    else
+ 	      counter := counter + 1;
+ 	  	  end_timeout <= '0';
         end if;
       else
-	counter := 0;
-		  end_timeout <= '0';
+      	 counter := 0;
+ 	     end_timeout <= '0';
       end if;
     end if;
 end process;
 
-testled <= start_timeout;
 
---testled <= "10101010";
+
+--testled <= startWaiting;
 -- alive timer --
 -- generate a regular blinking on the onboard led 
 ALIVE <= ALIVE_LED;
@@ -555,38 +554,38 @@ end process;
 ---------------------------------------------------------
 -- Clocked process, to take data off the controller bus	
 ----------------------------------------------------------
---  DatFromTosNet: 	
---  process(CLK)
---  begin -- process
---    if (CLK'event and CLK='1' and T_data_from_mem_latch='1') then
---	   case (T_reg_ptr & T_word_ptr) is                        -- The addresses are concatenated for compact code
---		  when "00000" => data_Bluetooth <= T_data_from_mem;               -- Register 0, word 0 - all 32 bits
-----		  when "00001" => pwm_value <= T_data_from_mem(15 downto 0);  -- Register 0, word 1 - low 16 bits
-----		                  flash     <= T_data_from_mem(31 downto 24); --                      high 8 bits
-----		  when "00100" => v_leds    <= T_data_from_mem;               -- Register 1, word 0 - all 32 bits
---          -- others
---		  when others =>
---		end case;
---	 end if;
---  end process;
+  DatFromTosNet: 	
+  process(CLK)
+  begin -- process
+    if (CLK'event and CLK='1' and T_data_from_mem_latch='1') then
+	   case (T_reg_ptr & T_word_ptr) is                        -- The addresses are concatenated for compact code
+		  when "00000" => data_Bluetooth <= T_data_from_mem;               -- Register 0, word 0 - all 32 bits
+--		  when "00001" => pwm_value <= T_data_from_mem(15 downto 0);  -- Register 0, word 1 - low 16 bits
+--		                  flash     <= T_data_from_mem(31 downto 24); --                      high 8 bits
+--		  when "00100" => v_leds    <= T_data_from_mem;               -- Register 1, word 0 - all 32 bits
+          -- others
+		  when others =>
+		end case;
+	 end if;
+  end process;
 
 ----------------------------------------------------------
 -- Unclocked process, to place data on the controller bus
 ----------------------------------------------------------
---   DatToTosNet:
---	process(T_reg_ptr,T_word_ptr)
---	begin
---		T_data_to_mem<="00000000000000000000000000000000";	-- default data
---		case (T_reg_ptr & T_word_ptr) is                   -- The addresses are concatenated for compact code
---		   -- Register 0, word 0-3 are hard coded to these values for test/demo purposes
---			when "00000" =>	T_data_to_mem <= "00000000000000000000000000000001"; -- 1
---			when "00001" =>	T_data_to_mem <= "00000000000000000000000000000010"; -- 2
---			when "00010" =>   T_data_to_mem <= "00000000000000000000000000000100"; -- 3
---			when "00011" => 	T_data_to_mem <= "00000000000000000000000000001000"; -- 4
---         -- Register 1
-----       Etc. etc. etc.
---			when others =>
---		end case;		
---	end process;
+   DatToTosNet:
+	process(T_reg_ptr,T_word_ptr)
+	begin
+		T_data_to_mem<="00000000000000000000000000000000";	-- default data
+		case (T_reg_ptr & T_word_ptr) is                   -- The addresses are concatenated for compact code
+		   -- Register 0, word 0-3 are hard coded to these values for test/demo purposes
+			when "00000" =>	T_data_to_mem <= "00000000000000000000000000000001"; -- 1
+			when "00001" =>	T_data_to_mem <= "00000000000000000000000000000010"; -- 2
+			when "00010" =>   T_data_to_mem <= "00000000000000000000000000000100"; -- 3
+			when "00011" => 	T_data_to_mem <= "00000000000000000000000000001000"; -- 4
+         -- Register 1
+--       Etc. etc. etc.
+			when others =>
+		end case;		
+	end process;
 
 end Behavioral;

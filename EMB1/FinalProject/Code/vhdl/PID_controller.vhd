@@ -36,7 +36,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity PID_controller is
     Port (  CLK : in STD_LOGIC;
-            ErrorAngle : in STD_LOGIC_VECTOR(15 downto 0);
+            ErrorAngle : in STD_LOGIC_VECTOR(7 downto 0);
             DesiredAngle : in STD_LOGIC_VECTOR(7 downto 0);
             
             MotorOutput : out STD_LOGIC_VECTOR(8 downto 0)
@@ -46,40 +46,39 @@ end PID_controller;
 architecture Behavioral of PID_controller is
 
     
-    constant PGAIN : integer := 2;
-    constant MAXERROR : integer := (PGAIN * 256 * 256);
-    --constant IGAIN : integer := 0;
-    --constant DGAIN : integer := 0;
+    constant PGAIN : integer := 10;
+    constant MAXERROR : integer := (PGAIN * 256);
+--    constant IGAIN : integer := 0;
+--    constant DGAIN : integer := 0;
     
-    --constant IactionMAX : integer := 511;
-    --constant IactionMIN : integer := 0;
+--    constant IactionMAX : integer := 511;
+--    constant IactionMIN : integer := 0;
     
-        signal Paction : integer range -MAXERROR to MAXERROR := 0;
-        --, Iaction, Daction
-        --signal IState : integer range -1023 to 1024 := 0;
-        --signal PreviousError : integer range -1023 to 1024 := 0;
-        signal TotalAction_vec : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+        signal Paction, Iaction, Daction : integer range -MAXERROR to MAXERROR := 0;
+--        signal IState : integer range -1023 to 1024 := 0;
+--        signal PreviousError : integer range -1023 to 1024 := 0;
+        signal TotalAction_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
         signal ispositive : STD_LOGIC := '0';
         
     
 begin
 
-MotorOutput <= ispositive & TotalAction_vec(15 downto 8); 
+MotorOutput <= ispositive & totalAction_vec; 
 
 
 process(CLK)  
     variable error : integer range 0 to MAXERROR  := 0;
     variable TotalAction : integer range 0 to MAXERROR := 0;
-    variable error_vec : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+    variable error_vec : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
 begin  
     -- PID Control.
     if rising_edge(CLK) then
                
-        if ErrorAngle(15 downto 8) >= DesiredAngle then
-            error_vec := ErrorAngle - ( DesiredAngle & "00000000");
+        if errorAngle >= DesiredAngle then
+            error_vec := errorAngle - DesiredAngle;
             ispositive <= '1';
         else
-            error_vec := (DesiredAngle & "00000000") - ErrorAngle;
+            error_vec := DesiredAngle - errorAngle;
             ispositive <= '0';
         end if; 
                 
@@ -106,14 +105,14 @@ begin
 
         TotalAction := Paction;
         
-        if TotalAction >= ((256 * 256) - 1) then
-            TotalAction := ((256 * 256) - 1);
-        --elsif TotalAction < 256 then
-        --    TotalAction := 0;
+        if TotalAction >= (255) then
+            TotalAction := 255;
+        --elsif TotalAction < 20 then
+       --     TotalAction := 0;
         end if;        
            
         --Convert Action into 8 bits
-        TotalAction_vec <= std_logic_vector(to_unsigned(TotalAction,16));         
+        totalAction_vec <= std_logic_vector(to_unsigned(TotalAction,8));         
     end if;
 
 end process;
