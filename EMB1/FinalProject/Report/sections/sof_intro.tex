@@ -28,9 +28,9 @@ This must data received must then be processed in order to control the motors ac
 
 % arrows inside FPGA
 \draw[<->] (segway) -- node[] {} (communiction) ;
-\draw[->] (segway) -- node[left] {16 bit} (filter) ;
-\draw[->] (filter) --  node[left] {16 bit} (pid) ;
-\draw[->] (segway) -- node[above right] {8 bit} (mc) ;
+\draw[->] (segway) -- node[left] {8 bit} (filter) ;
+\draw[->] (filter) --  node[left] {8 bit} (pid) ;
+\draw[->] (segway) -- node[above right] {9 bit} (mc) ;
 \draw[->] (pid) --(-0.2,-2.5)--(-0.2,2)-- node[below left] {9 bit} (segway) ;
  
 % arrows connected to the outside of FPGA
