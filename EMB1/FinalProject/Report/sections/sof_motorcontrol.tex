@@ -1,1 +1,36 @@
 \subsection{Motor Control}
+The Motor control unit controls the input to the eight different inputs on the two H-bridges.
+This control was implemented as the finite state machine seen in figure \ref{fig:motorcontrol_fsm}.
+
+The main purpose of the motor control unit is to set two of the ports of the motor low and the two others high depending on the direction the segway is moving.
+When controlling the speed a PWM signal is send to one of the ports of the H-bridge to control the speed depending on the value calculated in the PID controller.
+
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=2cm]
+
+% node circles
+\node[initial,accepting,state,name=fwd,minimum width=1.8cm] {Fwd}; 
+\node[state,name=wait,minimum width=1.8cm, right=of fwd] {Wait}; 
+\node[state,name=back,minimum width=1.8cm, right=of wait] {Back}; 
+
+% connections
+\draw[->] (fwd) to[out=50, in=130] node[midway,above] {Go back} (wait) ;
+\draw[->] (wait) to[out=50, in=130] node[midway,above] {Timeout, Go back} (back) ;
+\draw[<-] (fwd) to[out=-50, in=-130] node[midway,below] {Timeout, Go fwd} (wait) ;
+\draw[<-] (wait) to[out=-50, in=-130] node[midway,below] {Go fwd} (back) ;
+ 
+\end{tikzpicture}
+
+\caption{Finite state machine of the Motor Control module.}
+\label{fig:motorcontrol_fsm}
+\end{figure}
+
+
+As seen on figure \ref{fig:motorcontrol_fsm}, then a wait state is put between the two driving states, forward and backward.
+This was done to protect the motor when switching between the states.
+It is necessary to have a delay because of the turn of and turn on delays of the transistors.
+If this is not set it may result in all the transistors being open at once and thus damaging the motor.
+The delay was set to 160ns which is considerably more than the turn on and turn of delay of the transistors, but small enough that it should not be noticed when driving the motors.

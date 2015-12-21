@@ -1,1 +1,9 @@
 \subsection{SPI Module}
+To communicate with the IMU a SPI module was made.
+The module is made up of three phases.
+One being the phase where the slave is told what is going to happen.
+The second being the read or write phase where the FPGA either reads data from the IMU or sends data to the IMU.
+Finally there is the wait state where there is no communication amongst the two units.
+
+The SPI module was implemented as an 8 bit data transmitter and receiver.
+It is however possible to read multiple bytes in succession from the IMU, it was however deemed unnecessary to use all 16 bit the current version of the segway.
