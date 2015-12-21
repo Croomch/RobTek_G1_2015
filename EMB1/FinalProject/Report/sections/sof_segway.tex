@@ -1,1 +1,35 @@
 \subsection{Segway Control}
+The \textit{segway control} module is the top module of the design and in charge of the data transfer between the different underlying modules and the communication between the IMU.
+It is implemented as the state machine seen in figure \ref{fig:segwaycontrol_fsm}.
+
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=3cm]
+\node[circle, minimum width=4.5cm, name=c] {};
+
+% node circles
+\node[initial,accepting,state,name=init,minimum width=1.8cm] at (c.180)   {Init IMU}; 
+\node[state,name=xaxis,minimum width=1.8cm] at (c.60)   {Get X-axis}; 
+\node[state,name=yaxis,minimum width=1.8cm] at (c.-60)   {Get Y-axis}; 
+
+% connections
+\draw[->] (init) to[out=60, in=180] node[midway,above left] {Data Send} (xaxis) ;
+\draw[->] (xaxis) to[out=-30, in=30] node[midway,right] {Data Recived} (yaxis) ;
+\draw[->] (yaxis) to[out=-180, in=-60] node[midway,below left] {Data Recived} (init) ;
+ 
+\end{tikzpicture}
+
+\caption{Finite state machine of the Segway Control module.}
+\label{fig:segwaycontrol_fsm}
+\end{figure}
+
+The module is, as seen in figure \ref{fig:segwaycontrol_fsm}, looping between a set of states where it is communicating with the IMU.
+In this design only acceleration of the robot in the frontal/backward direction (x-axis) is considered due to time constraints.
+This is hence the only value stored and send onwards in the system.
+The values of interest are requested in the state machine and then send to the \textit{filter} module for further processing.
+
+In the state machine seen, the IMU is initiated every cycle.
+This was done to ensure that the IMU has the right configuration when data is requested due to the possibility that a short power break shuts down the IMU and forces it into its default sleep mode.
+

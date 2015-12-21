@@ -31,7 +31,7 @@ This must data received must then be processed in order to control the motors ac
 \draw[->] (segway) -- node[left] {8 bit} (filter) ;
 \draw[->] (filter) --  node[left] {8 bit} (pid) ;
 \draw[->] (segway) -- node[above right] {9 bit} (mc) ;
-\draw[->] (pid) --(-4.5,-2.5)--(-4.5,2.5)-- node[below left] {9 bit} (segway) ;
+\draw[->] (pid) --(-4.5,-2.5)--(-4.5,2.5)-- node[above left] {9 bit} (segway) ;
  
 % arrows connected to the outside of FPGA
 \draw[<->] (spi) -- node[] {} (communiction) ;
