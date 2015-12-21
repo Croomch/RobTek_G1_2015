@@ -15,16 +15,14 @@ In order to control them an H-bridge for both of the motors were constructed usi
 A full H-bridge is required in order to control the Segways movement in both directions such that it is able to both move and recover from a fall when moving around.
 Each motor is made with each their separate H-bridge in order to facilitate the rotation of the segway.
 
-A full H-bridge is required in order to control the Segways movement in both directions such that it is able to both move and recover from a fall when moving around.
-Each motor is made with each their separate H-bridge in order to facilitate the rotation of the segway.
-
 In a basic H-bridge, four transistors are used to drive the current on the motor in order to supply the motor with a virtual positive and negative power.
-In the case of using MOSFET stransistors, it is necesary to use two different voltage levels in the control signal.
-This is because the source of the high transistors is connected to the motor, which will suppose a certain voltage in the source when the motor is running.
-This voltage would automatically disable the MOSFET if the voltage on the gate is not big enough, what means, the voltage level of the high control signals should be refered to the motor voltage to control the MOSFETs.
-As it is pretended to control the H-bridge with the direct signal from the FPGA, it is needed to use a more complex design.
+In the case of using MOSFET transistors, it is necessary to use two different voltage levels in the control signal.
+This is because the source of the high transistors is connected to the motor, which will induce a certain voltage in the source when the motor is running.
+This voltage would automatically disable the MOSFET if the voltage on the gate is not big enough.
+Therefore the voltage level of the high control signals should be the same as to the motor voltage to control the MOSFETs.
+As the H-bridge is to be controlled with the direct signal from the FPGA, a more complex design is needed.
 
-The followed H-bridge design gives the possibility of controlling the motors using a 5V supply and a 3.3V control signal.
-Using two p-channel MOSFET in the high part of the driver, it is possible to open and close these MOSFET by setting their gate to ground or the power supply using a secondary n-channel MOSFET driven with a direct FPGA signal as shown in the schematics.
+The H-bridge design in figure \textbf{FIGURE} gives the possibility of controlling the motors using a 5V supply and a 3.3V control signal.
+Using two p-channel MOSFETs in the high part of the driver, it is possible to open and close these MOSFETs by setting their gate to ground or the power supply using a secondary n-channel MOSFET driven with the direct FPGA signal as shown in the schematics on figure \textbf{FIGURE}.
 
 \todo[inline]{write short about the h bridge design and different transistors used}
