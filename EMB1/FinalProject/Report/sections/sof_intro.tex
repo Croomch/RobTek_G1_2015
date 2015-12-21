@@ -8,7 +8,7 @@ This must data received must then be processed in order to control the motors ac
 
 \begin{tikzpicture}[node distance=1cm]
 % FPGA border
-\node[rectangle,draw,minimum width=9cm, minimum height=7cm, dashed, name=FPGA]  {};
+\node[rectangle,draw,minimum width=11cm, minimum height=7cm, dashed, name=FPGA]  {};
 
 % used to align the insides of FPGA
 \node[rectangle,minimum width=5cm, minimum height=5cm, name=FPGAaligne] {};
@@ -22,16 +22,16 @@ This must data received must then be processed in order to control the motors ac
 
 % nodes outside FPGA
 %\node [left=of utos,name=pc] {PC};
-\node [right=of communiction,name=spi] {IMU};
+\node [right=of communiction,name=spi] at (5,2.5) {IMU};
 %\node [left=of color,name=rgb] {RGB(2:0)};
-\node [right=of mc,name=motor] {DC Motors};
+\node [right=of mc,name=motor] at (5,-2.5){DC Motors};
 
 % arrows inside FPGA
 \draw[<->] (segway) -- node[] {} (communiction) ;
 \draw[->] (segway) -- node[left] {8 bit} (filter) ;
 \draw[->] (filter) --  node[left] {8 bit} (pid) ;
 \draw[->] (segway) -- node[above right] {9 bit} (mc) ;
-\draw[->] (pid) --(-0.2,-2.5)--(-0.2,2)-- node[below left] {9 bit} (segway) ;
+\draw[->] (pid) --(-4.5,-2.5)--(-4.5,2.5)-- node[below left] {9 bit} (segway) ;
  
 % arrows connected to the outside of FPGA
 \draw[<->] (spi) -- node[] {} (communiction) ;
