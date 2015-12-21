@@ -1,3 +1,9 @@
 
 \subsection{Power Supply}
-The power supply on the segway was made to...
+In order to obtain an stable voltage in the FPGA module used in the case of using batteries as a power source for the system, a power supply has been built.
+This circuit supplies a 5V voltage to the FPGA module, and it is this module the one in charge of supply 3.3V to the gyroscope/accelerometer and the bluetooth module.
+
+To obtain this 5V supply from a higher voltage, an LM2574 regulator is used connecting it with the configuration shown in figure \ref{__}.
+
+Although at the beginning this supply was chosen to drive the motors too, it was found that the power it can provide is not bug enough for the motors.
+For this reason, the motors should have an independent power supply or been powered directly from the batteries in case of having a reasonable voltage for them, as some excess of voltage can be virtually pulled down using the PWM signal on the driver's gates.

@@ -1,1 +1,8 @@
 \subsection{PID Controller}
+
+The PID module developed implements a PID controller using as a input a reference signal for the desired value of the accelerometer and the actual aceleration value as two logic vectors.
+
+As all the operations into the PID are calculated using integers, this vectors are converted into integers before the operations, and reconverted into a logic vector again representing the value of the duty cycle needed in the motors and their direction.
+This vector has now 9 bits, being the bits from 0 to 7 the ones representing the chosen duty cycle and the bit 8 a flag for the direction of the motors (positive or negative action needed means one or another motor direction).
+
+Three different values can be set to modify the PID performance: a gain for each proportional, integral and diferential action.

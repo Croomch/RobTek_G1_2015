@@ -1,1 +1,10 @@
 \subsection{Data Filter}
+
+The value in an accelerometer is often noisy, what can give some problems in case of having small movements of the device.
+To solve this problem, the commonly used solution is to use the value given by a gyroscope it with the accelerometer lectures to obtain a more accurate result.
+As this approach is complex and not really needed to obtain a simple control of the segway, a more simple solution has been selected.
+
+The accelerometer has been filtered using a mean filter.
+The filtering module calculates the mean of the last few readings from the accelerometer, giving as an output a 8 bit value.
+This 8 bits represent the value of aceleration obtained, being 0 m/s$^{2}$ the value 127, all the values above it positive and all the values under 127 negatives.
+This filter is also used as a converter from the value of acceleration given by the device into this new rank from -127 to 127.
