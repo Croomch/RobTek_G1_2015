@@ -26,7 +26,7 @@ It is implemented as the state machine seen in figure \ref{fig:segwaycontrol_fsm
 \end{figure}
 
 The module is, as seen in figure \ref{fig:segwaycontrol_fsm}, looping between a set of states where it is communicating with the IMU.
-In the current design only acceleration of the robot in the frontal/backward direction (x-axis) is considered.
+In the current design only acceleration of the robot in the frontal/backward direction (x-axis) is considered, as explained in section \ref{sec:controlproblem}.
 This is hence the only value stored and send onwards in the system.
 The values of interest are requested in the state machine and then send to the \textit{filter} module for further processing.
 
