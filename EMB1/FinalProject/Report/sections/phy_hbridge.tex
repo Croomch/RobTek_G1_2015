@@ -6,8 +6,7 @@ In order to control them an H-bridge for both of the motors were constructed usi
 
 \begin{figure}[H]
 \centering
-%\includegraphics[width = 0.9 \textwidth]{•}
-
+\includegraphics[width = 0.8 \textwidth]{images/hbridge_schematics}
 \caption{H-bridge schematics.}
 \label{fig:hbridge}
 \end{figure}
@@ -22,7 +21,6 @@ This voltage would automatically disable the MOSFET if the voltage on the gate i
 Therefore the voltage level of the high control signals should be the same as to the motor voltage to control the MOSFETs.
 As the H-bridge is to be controlled with the direct signal from the FPGA, a more complex design is needed.
 
-The H-bridge design in figure \textbf{FIGURE} gives the possibility of controlling the motors using a 5V supply and a 3.3V control signal.
-Using two p-channel MOSFETs in the high part of the driver, it is possible to open and close these MOSFETs by setting their gate to ground or the power supply using a secondary n-channel MOSFET driven with the direct FPGA signal as shown in the schematics on figure \textbf{FIGURE}.
+The H-bridge design in figure \ref{fig:hbridge} gives the possibility of controlling the motors using a 5V supply and a 3.3V control signal.
+Using two p-channel MOSFETs in the high part of the driver, it is possible to open and close these MOSFETs by setting their gate to ground or the power supply using a secondary n-channel MOSFET driven with the direct FPGA signal as shown in the schematics on figure \ref{fig:hbridge}.
 
-\todo[inline]{write short about the h bridge design and different transistors used}
