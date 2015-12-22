@@ -20,3 +20,7 @@ This would cause it to continuously drive forward, if it would be able to hold i
 
 Possibly one should also consider a different type of controller when stabilizing a segway.
 For this project it was chosen to implement the PID because of its simplicity, but it might be worthwhile considering other controllers such as a lead controller.
+
+Another cause of the instability may also be the use of the accelerometer data only.
+This is known to be a very noisy signal since it is affected by not only gravity but also vibrations of the motor, vibrations of the module itself, if not fixated probably, the terrain on which the robot drives may also affect the readings depending on if it is a smooth or rough surface.
+It should hence preferably be used in combination with the gyroscope data to give a better short term estimate of the angular change.

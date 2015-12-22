@@ -1,0 +1,17 @@
+The segway constructed has a physical design of such that it is deemed good enough.
+The only changes which should be made are replacements of the connectors which should be updated to give a more reliable connection to the motors and from the power supply to the H-bridge.
+
+Since the system was not able to balance itself, then it is probably the software system that is needing the biggest upgrade.
+This includes going away from only using only one axis of the accelerometer and trying to set its the gravitational effect of such to zero.
+To possibly using two axis of the accelerometer to predict the actual angle of the segway.
+This would require the implementation of the 'atan' function on the FPGA.
+Given that the current FPGA used only has 54k bits of block RAM, then this implementation has to be an approximation of the function since not enough space is present for a direct table lookup.
+
+Given that a successful implementation of the calculation of the angle of the segway has been found, then this can also be combined with the gyroscope data.
+This can then be used to implement a complimentary filter, Kalman filter or similar.
+
+It is furthermore possible to investigating other controller options to improve the performance of the segway or use different controllers when in different situations.
+That is having different PID controllers when the segways incline is within a certain range.
+
+Once the segway is able to stand by itself it would also be of interest to make it possible to control it through the bluetooth device.
+The encoders could then be used to control its odometry of the segway to turn it and drive it around a specific speeds.
