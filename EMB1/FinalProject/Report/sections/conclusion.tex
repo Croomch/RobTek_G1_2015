@@ -1,4 +1,4 @@
-A Segway was constructed using two DC motors, controlled by an H-bridge.
+A segway was constructed using two DC motors, controlled by an H-bridge.
 The segway also included a power supply circuit with an switching voltage regulator to convert the given voltage to a 5V supply to the FPGA.
 A IMU with an accelerometer and gyroscope was added to the system in order to keep it upright.
 The IMU was supplied by the 3.3V port on the FPGA.
@@ -9,5 +9,5 @@ A filter module was implemented to filter the data of the accelerometer in order
 The filtered data was then further processed in a PID component, converting the estimated angle into a percentage duty cycle for the motors and a direction.
 The Motor control unit converted the percentage duty cycle and direction into a PWM signal to the respective parts of the H-Bridge.
 
-Test were performed in order to test the Segways performance and fine tune the PID values.
-It was here found that the current arrangement is not sufficient to keep it stable and it was hence not possible to achieve a fully functional mini-Segway in this project.
+Test were performed in order to test the segways performance and fine tune the PID values.
+It was here found that the current arrangement is not sufficient to keep it stable and it was hence not possible to achieve a fully functional mini-segway in this project.

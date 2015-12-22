@@ -1,6 +1,6 @@
 
 \subsection{Sensors}
-In order to control and stabilize the Segway, then a set of sensors are required.
+In order to control and stabilize the segway, then a set of sensors are required.
 For this project it was decided to use a set of sensors to control the systems stability.
 % and also to implement a set of sensors into the system enabling the tracking of the Segways position.
 
@@ -16,8 +16,9 @@ To control the inclination of the segway and hold it stable, an accelerometer an
 The advantage of using a gyroscope is that it is reliable in the measure of angular displacement over short periods of time.
 When integrating over this it does, however, get troublesome due to drifts when performing the numerical integration.
 The accelerometer on the other hand is exposed to a lot of noise from all the surrounding forces working on the system and it is hence only becomes a reliable measure of the systems angle when used with a low-pass filter.
-It was therefore decided to use both in the project and combining them using a complimentary filter.
-This provides the system with both the short term accuracy of the gyroscope and the long term reliability of the accelerometer.
+It was therefore decided to buy an IMU with both in order to have the option of combining the two data readings.
+%in the project and combining them using a complimentary filter.
+This would provide the system with both the short term accuracy of the gyroscope and the long term reliability of the accelerometer.
 For this project it was decided to by an integrated circuit
 \footnote{ \href{https://www.sparkfun.com/products/13339}{IMU component}}
  including both gyroscope and accelerometer in the same component.
@@ -25,6 +26,5 @@ This ensures that the axis of the accelerometer and gyroscope are aligned within
 
 The IMU used comes as a break board and hence no further implementation of such on another breadboard is needed.
 The IMU is supplied using the 3.3V supply from the FPGA board and hence no further logic level conversions need to be applied between the communication of the FPGA and IMU.
-
 
 

@@ -1,5 +1,5 @@
 \subsection{Segway Control}
-The \textit{segway control} module is the top module of the design and in charge of the data transfer between the different underlying modules and the communication between the IMU.
+The segway control module is the top module of the design and in charge of the data transfer between the different underlying modules and the communication with the IMU.
 It is implemented as the state machine seen in figure \ref{fig:segwaycontrol_fsm}.
 
 
@@ -26,10 +26,10 @@ It is implemented as the state machine seen in figure \ref{fig:segwaycontrol_fsm
 \end{figure}
 
 The module is, as seen in figure \ref{fig:segwaycontrol_fsm}, looping between a set of states where it is communicating with the IMU.
-In this design only acceleration of the robot in the frontal/backward direction (x-axis) is considered due to time constraints.
+In the current design only acceleration of the robot in the frontal/backward direction (x-axis) is considered.
 This is hence the only value stored and send onwards in the system.
 The values of interest are requested in the state machine and then send to the \textit{filter} module for further processing.
 
 In the state machine seen, the IMU is initiated every cycle.
-This was done to ensure that the IMU has the right configuration when data is requested due to the possibility that a short power break shuts down the IMU and forces it into its default sleep mode.
+This was done to ensure that the IMU is configured correctly when data is requested due to the possibility that a short power break shuts down the IMU and forces it into its default sleep mode.
 
