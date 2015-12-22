@@ -1,3 +1,9 @@
 
 \subsection{Conclusion}
+A set of components were implemented to control the segway and communicate with the devices.
+The top module, segway control, was used to distribute data to the corresponding components and to be responsible for the higher level communication with the IMU.
+A SPI module was implemented to communicate with the IMU through the specified SPI interface implemented with an 8 bit send and receive package size.
 
+The data from the IMU is then processed in the filter module which rearranges the data and filters it using a mean filter over eight data samples.
+The output of the filter is then routed to the PID module calculating the duty cycle needed to drive the motors with in order to hold it upright.
+The duty cycle found by the PID module is then used in the Motor Control block where the H-bridge connected to the two motors is controlled.

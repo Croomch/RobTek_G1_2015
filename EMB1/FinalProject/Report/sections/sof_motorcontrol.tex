@@ -34,3 +34,5 @@ This was done to protect the motor when switching between the states.
 It is necessary to have a delay because of the turn of and turn on delays of the transistors.
 If this is not set it may result in all the transistors being open at once and thus damaging the motor.
 The delay was set to 160ns which is considerably more than the turn on and turn of delay of the transistors, but small enough that it should not be noticed when driving the motors.
+
+The PWM generated at the motors is based on a 8 bit signal and there are hence 256 different duty cycles to drive the motors with.
