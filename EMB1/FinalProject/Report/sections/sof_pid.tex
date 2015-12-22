@@ -5,7 +5,7 @@ The PID module developed implements a PID controller using as a input a referenc
 As all the operations in the PID are calculated using integers, then the data vectors are converted into integers before the operations and reconverted into a logic vector afterwards.
 %The  again representing the value of the duty cycle needed in the motors and their direction.
 The output vector generated is a 9 bit signal.
-The eight least significant bits representing the chosen duty cycle and the most significant bit the direction of the motors, that is positive for forward and negative backwards.
+The eight least significant bits representing the chosen duty cycle and the most significant bit the direction of the motors, that is high for forward and low for backwards.
 
 Three different values can then be set to modify the PID performance.
 The gain for the proportional, integral and differential part.

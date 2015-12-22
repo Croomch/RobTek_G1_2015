@@ -1,9 +1,34 @@
 \subsection{SPI Module}
 To communicate with the IMU a SPI module was made.
-The module is made up of three phases.
-One being the phase where the slave is told what is going to happen.
-The second being the read or write phase where the FPGA either reads data from the IMU or sends data to the IMU.
-Finally there is the wait state where there is no communication amongst the two units.
+The module is made up of three phases, these are seen in figure \ref{fig:spi_phases}.
+
+
+\begin{figure}[H]
+\centering
+
+\begin{tikzpicture}[node distance=3cm]
+\node[circle, minimum width=4.5cm, name=c] {};
+
+% node circles
+\node[initial,accepting,state,name=init,minimum width=1.8cm] at (c.180)   {Wait}; 
+\node[state,name=xaxis,minimum width=1.8cm] at (c.60)   {Command}; 
+\node[state,name=yaxis,minimum width=1.8cm] at (c.-60)   {Data transfer}; 
+
+% connections
+\draw[->] (init) to[out=60, in=180] node[midway,above left] {New message} (xaxis) ;
+\draw[->] (xaxis) to[out=-30, in=30] node[midway,right] {Command send} (yaxis) ;
+\draw[->] (yaxis) to[out=-180, in=-60] node[midway,below left] {Data read/written} (init) ;
+ 
+\end{tikzpicture}
+
+\caption{The three phases of the SPI module.}
+\label{fig:spi_phases}
+\end{figure}
+
+
+One being the phase where the slave is told what is going to happen (Command).
+The second being the read or write phase where the FPGA either reads data from the IMU or sends data to the IMU (Data transfer).
+Finally there is the wait state where there is no communication amongst the two units (Wait).
 
 The SPI module was implemented as an 8 bit data transmitter and receiver.
 It is however possible to read multiple bytes in succession from the IMU, it was however deemed unnecessary to use all 16 bit the current version of the segway.

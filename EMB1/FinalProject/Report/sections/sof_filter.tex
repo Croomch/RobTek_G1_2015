@@ -7,6 +7,6 @@ To solve this problem, the commonly used solution is to combine the value given 
 As this approach is complex and not really needed to obtain a simple control of the segway, a more simple solution was selected.
 
 The accelerometer data is filtered using a mean filter to reduce high frequency noise form the motor vibrations.
-The filtering module calculates the mean of the last eight readings from the accelerometer, giving as an output a 8 bit value.
-This 8 bits represent the value of acceleration obtained, being 0 m/s$^{2}$ the value 127, all the values above it positive and all the values below negative.
+The filtering module calculates the mean of the last eight readings from the accelerometer, outputting a 8 bit value.
+These 8 bits represent the value of acceleration obtained, being 0 m/s$^{2}$ the value 127, all the values above it positive and all the values below negative.
 This filter module is also used to converter the data from the accelerometers format into this new data representation going from negative acceleration at 0 to positive acceleration at 256 and zero acceleration at 127.
